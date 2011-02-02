@@ -311,6 +311,7 @@ void msm_decode_frame(char *frame, int length) {
 
 void msm_loop()
 {
+	unsigned char frame_len;
 	char *buf = malloc(1024);
 	if(!buf) {
 		printf("Failed to alloc receive buf\n");
@@ -329,11 +330,11 @@ void msm_loop()
 		char *p = buf;
 		char *frame = NULL;
 
-		/* Fixme: escaping of flags in message body */
 		while(p < (buf+num_read)) {
-			if(*p == FRAME_START)
+			if(*p == FRAME_START) {
 				frame = (p+1);
-			else if(*p == FRAME_END) {
+				frame_len = *frame;
+			} else if(*p == FRAME_END && p == (frame+frame_len)) {
 				msm_decode_frame(frame, (p - frame));
 			}
 
