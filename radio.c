@@ -269,7 +269,7 @@ void msm_decode_frame(char *frame, int length) {
 	char *data = frame + sizeof(*header);
 
 	unsigned short data_len = (header->frame_len - sizeof(*header));
-	int request_id = header->reqid;
+	unsigned char request_id = header->reqid;
 
 	struct msm_request_info request_info;
 	request_info.type = FRAME_ID(header);
