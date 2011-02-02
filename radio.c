@@ -304,6 +304,9 @@ void msm_decode_frame(char *frame, int length) {
 		case MSM_NET_REGIST:
 			msm_rx_net_regist(&request_info, data, data_len);
 			break;
+		default:
+			msm_rx_callback(&request_info);
+			break;
 	}
 
 	printf("\n");
