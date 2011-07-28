@@ -44,12 +44,12 @@ void msm_rx_misc_me_sn(struct msm_request_info *info, char *data, int len)
 
 void msm_rx_misc_time_info(struct msm_request_info *info, char *data, int len)
 {
-	if(len != sizeof(struct msm_time_info)) {
+	if(len != sizeof(struct msm_misc_time_info)) {
 		printf("Invalid NITZ message length\n");
 		return;
 	}
 
-	struct msm_time_info *nitz = (struct msm_time_info*)data;
+	struct msm_misc_time_info *nitz = (struct msm_misc_time_info*)data;
 	printf("%s: %02u-%02u-%04u %02u:%02u:%02u %02u\n",
 		__FUNCTION__, nitz->day, nitz->mon, (2000 + nitz->year),
 		nitz->hour, nitz->min, nitz->sec, nitz->tz);

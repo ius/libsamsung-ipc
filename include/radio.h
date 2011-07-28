@@ -21,6 +21,13 @@
 #ifndef __RADIO_H__
 #define __RADIO_H__
 
+#include "call.h"
+#include "disp.h"
+#include "misc.h"
+#include "net.h"
+#include "sec.h"
+#include "sms.h"
+
 /* AP -> Baseband */
 #define MSM_TYPE_EXEC		                        0x01
 #define MSM_TYPE_GET		                        0x02
@@ -33,7 +40,7 @@
 #define MSM_TYPE_RESP		                        0x02
 #define MSM_TYPE_NOTI		                        0x03
 
-/* MSM message groups */
+/* Message groups */
 #define MSM_GROUP_PWR		                        0x01
 #define MSM_GROUP_CALL		                        0x02
 #define MSM_GROUP_SMS		                        0x04
@@ -61,48 +68,6 @@
 #define MSM_PWR_BATT_COMP				0x0106
 #define MSM_PWR_PHONE_ONLINE				0x0107
 
-/* Call */
-#define MSM_CALL_OUTGOING				0x0201
-#define MSM_CALL_INCOMING				0x0202
-#define MSM_CALL_RELEASE				0x0203
-#define MSM_CALL_ANSWER					0x0204
-#define MSM_CALL_STATUS					0x0205
-#define MSM_CALL_LIST					0x0206
-#define MSM_CALL_BURST_DTMF				0x0207
-#define MSM_CALL_CONT_DTMF				0x0208
-#define MSM_CALL_WAITING				0x0209
-#define MSM_CALL_LINE_ID				0x020A
-
-/* SMS */
-#define MSM_SMS_SEND_MSG				0x0401
-#define MSM_SMS_INCOMING_MSG				0x0402
-#define MSM_SMS_READ_MSG				0x0403
-#define MSM_SMS_SAVE_MSG				0x0404
-#define MSM_SMS_DEL_MSG					0x0405
-#define MSM_SMS_DELIVER_REPORT				0x0406
-#define MSM_SMS_DEVICE_READY				0x0407
-#define MSM_SMS_SEL_MEM					0x0408
-#define MSM_SMS_STORED_MSG_COUNT			0x0409
-#define MSM_SMS_SVC_CENTER_ADDR				0x040A
-#define MSM_SMS_SVC_OPTION				0x040B
-#define MSM_SMS_MEM_STATUS				0x040C
-#define MSM_SMS_CBS_MSG					0x040D
-#define MSM_SMS_CBS_CONFIG				0x040E
-#define MSM_SMS_STORED_MSG_STATUS			0x040F
-#define MSM_SMS_PARAM_COUNT				0x0410
-#define MSM_SMS_PARAM					0x0411
-
-/* Sec */
-#define MSM_SEC_PIN_STATUS				0x0501
-#define MSM_SEC_PHONE_LOCK				0x0502
-#define MSM_SEC_CHANGE_LOCKING_PW			0x0503
-#define MSM_SEC_SIM_LANG				0x0504
-#define MSM_SEC_RSIM_ACCESS				0x0505
-#define MSM_SEC_GSIM_ACCESS				0x0506
-#define MSM_SEC_SIM_ICC_TYPE				0x0507
-#define MSM_SEC_LOCK_INFO				0x0508
-#define MSM_SEC_ISIM_AUTH				0x0509
-
 /* Pb */
 #define MSM_PB_ACCESS					0x0601
 #define MSM_PB_STORAGE					0x0602
@@ -110,30 +75,17 @@
 #define MSM_PB_ENTRY_INFO				0x0604
 #define MSM_PB_CAPABILITY_INFO				0x0605
 
-/* Disp */
-#define MSM_DISP_ICON_INFO				0x0701
-#define MSM_DISP_HOMEZONE_INFO				0x0702
-
-/* Net */
-#define MSM_NET_PREF_PLMN				0x0801
-#define MSM_NET_PLMN_SEL				0x0802
-#define MSM_NET_CURRENT_PLMN				0x0803
-#define MSM_NET_PLMN_LIST				0x0804
-#define MSM_NET_REGIST					0x0805
-#define MSM_NET_SUBSCRIBER_NUM				0x0806
-#define MSM_NET_BAND_SEL				0x0807
-#define MSM_NET_SERVICE_DOMAIN_CONFIG			0x0808
-#define MSM_NET_POWERON_ATTACH				0x0809
-#define MSM_NET_MODE_SEL				0x080A
-#define MSM_NET_ACQ_ORDER				0x080B
-#define MSM_NET_IDENTITY				0x080C
-#define MSM_NET_CURRENT_RRC_STATUS			0x080D
-
-/* Misc */
-#define MSM_MISC_ME_VERSION				0x0A01
-#define MSM_MISC_ME_IMSI				0x0A02
-#define MSM_MISC_ME_SN					0x0A03
-#define MSM_MISC_TIME_INFO				0x0A07
+/* SS */
+#define MSM_SS_WAITING					0x0C01
+#define MSM_SS_CLI					0x0C02
+#define MSM_SS_BARRING					0x0C03
+#define MSM_SS_BARRING_PW				0x0C04
+#define MSM_SS_FORWARDING				0x0C05
+#define MSM_SS_INFO					0x0C06
+#define MSM_SS_MANAGE_CALL				0x0C07
+#define MSM_SS_USSD					0x0C08
+#define MSM_SS_AOC					0x0C09
+#define MSM_SS_RELEASE_COMPLETE				0x0C0A
 
 /* GPRS */
 #define MSM_GPRS_DEFINE_PDP_CONTEXT			0x0D01
@@ -170,51 +122,6 @@
 #define MSM_IMEI_START					0x1001
 #define MSM_IMEI_CHECK_DEVICE_INFO			0x1002
 
-/* Call info */
-#define MSM_CALL_TYPE_VOICE				0x01
-#define MSM_CALL_TYPE_DATA				0x03
-
-#define MSM_CALL_IDENTITY_DEFAULT			0x00
-#define MSM_CALL_IDENTITY_HIDE				0x01
-#define MSM_CALL_IDENTITY_SHOW				0x02
-
-#define MSM_CALL_PREFIX_NONE				0x00
-#define MSM_CALL_PREFIX_INTL				0x11
-
-#define MSM_CALL_STATE_DIALING				0x00
-#define MSM_CALL_STATE_IGNORING_INCOMING_STATUS		0x01
-#define MSM_CALL_STATE_CONNECTED			0x02
-#define MSM_CALL_STATE_RELEASED				0x03
-#define MSM_CALL_STATE_CONNECTING			0x04
-
-/* Sec pin status */
-#define MSM_SEC_PIN_SIM_INITIALIZING			0x00
-#define MSM_SEC_PIN_SIM_NSIDE_PF_ERROR			0x02
-#define MSM_SEC_PIN_SIM_LOCK_SC				0x03
-#define MSM_SEC_PIN_SIM_LOCK_FD				0x04
-#define MSM_SEC_PIN_SIM_CARD_NOT_PRESENT		0x80
-#define MSM_SEC_PIN_SIM_CARD_ERROR			0x81
-#define MSM_SEC_PIN_SIM_INIT_COMPLETE			0x82
-#define MSM_SEC_PIN_SIM_PB_INIT_COMPLETE		0x83
-
-#define MSM_SEC_PIN_SIM_LOCK_SC_PIN1_REQ		0x01
-#define MSM_SEC_PIN_SIM_LOCK_SC_PUK_REQ			0x02
-#define MSM_SEC_PIN_SIM_LOCK_SC_CARD_BLOCKED		0x05
-
-/* Network info */
-#define MSM_NET_SERVICE_TYPE_GSM			0x01
-#define MSM_NET_SERVICE_TYPE_GSM2			0x02
-#define MSM_NET_SERVICE_TYPE_GPRS			0x03
-#define MSM_NET_SERVICE_TYPE_EDGE			0x04
-#define MSM_NET_SERVICE_TYPE_UMTS			0x05
-
-#define MSM_NET_SERVICE_LEVEL_NONE			0x01
-#define MSM_NET_SERVICE_LEVEL_HOME			0x02
-#define MSM_NET_SERVICE_LEVEL_SEARCHING			0x03
-#define MSM_NET_SERVICE_LEVEL_EMERGENCY			0x04
-#define MSM_NET_SERVICE_LEVEL_NONE2			0x05
-#define MSM_NET_SERVICE_LEVEL_ROAMING			0x06
-
 #define FRAME_START	0x7f
 #define FRAME_END	0x7e
 
@@ -237,76 +144,12 @@ struct msm_info {
 	void (*on_receive)(struct msm_request_info *info);
 };
 
-struct msm_time_info {
-	char unk[2];
-	unsigned char year, mon, day;
-	unsigned char hour, min, sec;
-	unsigned char unk2, tz, unk3;
-	unsigned char plmn[6];
-} __attribute__((__packed__));
-
-struct msm_pin_status {
-	unsigned char type;
-	unsigned char key;
-} __attribute__((__packed__));
-
-struct msm_call_outgoing {
-	unsigned char type, identity;
-	unsigned char length, prefix;
-	unsigned char number[86];
-} __attribute__((__packed__));
-
-struct msm_call_incoming {
-	unsigned char type, id, line;
-} __attribute__((__packed__));
-
-struct msm_call_status {
-	unsigned char type, id, state;
-	unsigned char reason, end_cause;
-} __attribute__((__packed__));
-
-struct msm_disp_icon_info {
-	unsigned char rssi, battery, act, reg;
-} __attribute__((__packed__));
-
-struct msm_net_current_plmn {
-	char unk;
-	unsigned char slevel;
-	unsigned char plmn[6];
-	unsigned char type;
-	unsigned short lac;
-} __attribute__((__packed__));
-
-struct msm_net_regist {
-	unsigned char act, unk0, status, unk1;
-	unsigned short lac;
-	unsigned int cid;
-	char unk2;
-} __attribute__((__packed__));
-
-struct msm_net_plmn_entry {
-	unsigned char slevel;
-	unsigned char plmn[6];
-	unsigned char type;
-	char unk[2];
-} __attribute__((__packed__));
-
-struct msm_net_plmn_entries {
-	unsigned char num;
-	struct msm_net_plmn_entry *data;
-};
-
 void msm_register(struct msm_info *msm);
 void msm_open();
 void msm_close();
 void msm_power_on();
 void msm_power_off();
 void msm_loop();
-
-void msm_misc_me_sn(int request_id);
-void msm_net_current_plmn(int request_id);
-void msm_net_plmn_list(int request_id);
-void msm_net_identity(int request_id);
 
 #endif
 

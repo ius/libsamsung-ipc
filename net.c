@@ -49,7 +49,7 @@ void msm_rx_net_plmn_list(struct msm_request_info *info, char *data, int len)
 
 	struct msm_net_plmn_entries entries;
 	entries.num = num_entries;
-	entries.data = (struct msm_net_current_plmn*)(data+1);
+	entries.data = (struct msm_net_plmn_entry*)(data+1);
 
 	info->data = &entries;
 	info->length = sizeof(entries);

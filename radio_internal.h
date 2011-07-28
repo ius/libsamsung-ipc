@@ -42,7 +42,8 @@
 void msm_rx_callback(struct msm_request_info *info);
 
 void msm_send_get(const int type, int request_id);
-void msm_send(const int type, const int method, const char *data, const int data_length, int request_id);
+void msm_send_exec(const int type, int request_id);
+void msm_send(const int type, const int method, const unsigned char *data, const int data_length, int request_id);
 
 /* Misc */
 void msm_rx_misc_me_sn(struct msm_request_info *info, char *data, int len);
@@ -56,7 +57,7 @@ void msm_rx_net_regist(struct msm_request_info *info, const char *data, int len)
 
 struct msm_hdr {
 	unsigned short frame_len;
-	unsigned char unk2;
+	unsigned char unk;
 	unsigned short len;
 	unsigned char seqnum, reqid, group, index, type;
 } __attribute__((__packed__));

@@ -158,6 +158,16 @@ const char *msm_str(struct msm_hdr *frame) {
 		FRAME_STR(MSM_MISC_ME_IMSI)
 		FRAME_STR(MSM_MISC_ME_SN)
 		FRAME_STR(MSM_MISC_TIME_INFO)
+		FRAME_STR(MSM_SS_WAITING)
+		FRAME_STR(MSM_SS_CLI)
+		FRAME_STR(MSM_SS_BARRING)
+		FRAME_STR(MSM_SS_BARRING_PW)
+		FRAME_STR(MSM_SS_FORWARDING)
+		FRAME_STR(MSM_SS_INFO)
+		FRAME_STR(MSM_SS_MANAGE_CALL)
+		FRAME_STR(MSM_SS_USSD)
+		FRAME_STR(MSM_SS_AOC)
+		FRAME_STR(MSM_SS_RELEASE_COMPLETE)
 		FRAME_STR(MSM_GPRS_DEFINE_PDP_CONTEXT)
 		FRAME_STR(MSM_GPRS_QOS)
 		FRAME_STR(MSM_GPRS_PS)
@@ -202,13 +212,14 @@ void msm_tx(const char *data, const int length)
 
 	memcpy(hdlc+1, data, length);
 
-	printf("\n%s\n", __FUNCTION__);
 	hex_dump(hdlc, frame_len);
+	printf("\n");
+
 	write(fd, hdlc, frame_len);
 	free(hdlc);
 }
 
-void msm_send(const int type, const int method, const char *data, const int data_length, int request_id)
+void msm_send(const int type, const int method, const unsigned char *data, const int data_length, int request_id)
 {
 	struct msm_hdr header;
 	unsigned int len = sizeof(header);
@@ -227,6 +238,7 @@ void msm_send(const int type, const int method, const char *data, const int data
 	memcpy(frame, &header, sizeof(header));
 	memcpy(frame+len, data, data_length);
 
+	printf("\n%s: %s\n", __FUNCTION__, msm_str(&header));
 	msm_tx(frame, frame_length);
 	free(frame);
 }
@@ -236,28 +248,16 @@ void msm_send_get(const int type, int request_id)
 	msm_send(type, MSM_TYPE_GET, NULL, 0, request_id);
 }
 
-void mem_pwr_phone_pwr_up(struct msm_request_info *info, const char *data, const int len)
+void msm_send_exec(const int type, int request_id)
 {
-	usleep(25000);
-	msm_rx_callback(info);
+	msm_send(type, MSM_TYPE_EXEC, NULL, 0, request_id);
 }
 
-void msm_call_outgoing(const char *number, int request_id)
+void msm_pwr_phone_pwr_up(struct msm_request_info *info, const char *data, const int len)
 {
-	if(strlen(number) > 82) {
-		printf("Outgoing call number too long\n");
-		return;
-	}
-
-	struct msm_call_outgoing call;
-	memset(&call, 0x00, sizeof(call));
-	call.type = MSM_CALL_TYPE_VOICE;
-	call.identity = MSM_CALL_IDENTITY_DEFAULT;
-	call.length = strlen(number);
-	call.prefix = MSM_CALL_PREFIX_NONE;
-	memcpy(call.number, number, call.length);
-
-	msm_send(MSM_CALL_OUTGOING, MSM_TYPE_EXEC, (const char*)&call, sizeof(call), request_id);
+	/* Modem reports bogus IMEI if queried right after powerup */
+	usleep(25000);
+	msm_rx_callback(info);
 }
 
 void msm_sec_pin_status(char *data, int len)
@@ -275,13 +275,17 @@ void msm_decode_frame(char *frame, int length) {
 	request_info.type = FRAME_ID(header);
 	request_info.id = request_id;
 
+	/* FIXME: These args are also passed to each handler below? */
+	request_info.data = data;
+	request_info.length = data_len;
+
 	printf("%s %s (%u/%u) seq=%d req=%d\n", msm_str(header), msm_type(header), header->frame_len, data_len, header->seqnum, header->reqid);
 	hex_dump(frame, length);
 
 	switch(request_info.type) {
 		/* Power */
 		case MSM_PWR_PHONE_PWR_UP:
-			mem_pwr_phone_pwr_up(&request_info, data, data_len);
+			msm_pwr_phone_pwr_up(&request_info, data, data_len);
 			break;
 		/* Misc */
 		case MSM_MISC_ME_SN:
