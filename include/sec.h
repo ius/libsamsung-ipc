@@ -44,6 +44,10 @@
 #define MSM_SEC_PIN_SIM_LOCK_SC_PUK_REQ			0x02
 #define MSM_SEC_PIN_SIM_LOCK_SC_CARD_BLOCKED		0x05
 
+#define MSM_SEC_SIM_CARD_TYPE_UNKNOWN			0x00
+#define MSM_SEC_SIM_CARD_TYPE_SIM			0x01
+#define MSM_SEC_SIM_CARD_TYPE_USIM			0x02
+
 struct msm_sec_pin_status {
 	unsigned char type;
 	unsigned char key;
