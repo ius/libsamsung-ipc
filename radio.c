@@ -260,10 +260,6 @@ void msm_pwr_phone_pwr_up(struct msm_request_info *info, const char *data, const
 	msm_rx_callback(info);
 }
 
-void msm_sec_pin_status(char *data, int len)
-{
-}
-
 void msm_decode_frame(char *frame, int length) {
 	struct msm_hdr *header = (struct msm_hdr*)frame;
 	char *data = frame + sizeof(*header);
@@ -293,10 +289,6 @@ void msm_decode_frame(char *frame, int length) {
 			break;
 		case MSM_MISC_TIME_INFO:
 			msm_rx_misc_time_info(&request_info, data, data_len);
-			break;
-		/* Sec */
-		case MSM_SEC_PIN_STATUS:
-			msm_sec_pin_status(data, data_len); //fixme
 			break;
 		/* Net */
 		case MSM_NET_CURRENT_PLMN:
