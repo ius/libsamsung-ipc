@@ -70,3 +70,8 @@ void msm_net_identity(int request_id)
 	msm_send_get(MSM_NET_IDENTITY, request_id);
 }
 
+void msm_net_regist(int request_id)
+{
+	msm_send_get(MSM_NET_REGIST, request_id);
+}
+

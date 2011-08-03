@@ -82,6 +82,7 @@ struct msm_net_plmn_entries {
 void msm_net_current_plmn(int request_id);
 void msm_net_plmn_list(int request_id);
 void msm_net_identity(int request_id);
+void msm_net_regist(int request_id);
 
 #endif
 
