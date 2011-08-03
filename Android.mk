@@ -6,6 +6,7 @@ libmsm-h1_files := \
 	util.c \
 	hexdump.c \
 	call.c \
+	sim.c \
 	sms.c \
 	net.c \
 	misc.c

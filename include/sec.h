@@ -59,5 +59,20 @@ struct msm_sec_pin_status {
 	unsigned char key;
 } __attribute__((__packed__));
 
+struct msm_sec_rsim_access_request {
+	unsigned char command;
+	unsigned short fileid;
+	unsigned char p1, p2, p3;
+} __attribute__((__packed__));
+
+struct msm_sec_rsim_access_response {
+	unsigned char sw1, sw2;
+	unsigned char len;
+} __attribute__((__packed__));
+
+void msm_sec_rsim_access(unsigned char command, unsigned short file_id,
+			 unsigned char p1, unsigned char p2, unsigned char p3,
+			 unsigned char *rdata, unsigned int length, int request_id);
+
 #endif
 
