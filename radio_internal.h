@@ -43,7 +43,6 @@ void msm_rx_callback(struct msm_request_info *info);
 
 void msm_send_get(const int type, int request_id);
 void msm_send_exec(const int type, int request_id);
-void msm_send(const int type, const int method, const unsigned char *data, const int data_length, int request_id);
 
 /* Misc */
 void msm_rx_misc_me_sn(struct msm_request_info *info, char *data, int len);

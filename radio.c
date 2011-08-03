@@ -270,6 +270,7 @@ void msm_decode_frame(char *frame, int length) {
 	struct msm_request_info request_info;
 	request_info.type = FRAME_ID(header);
 	request_info.id = request_id;
+	request_info.method = header->type;
 
 	/* FIXME: These args are also passed to each handler below? */
 	request_info.data = data;

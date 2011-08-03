@@ -134,6 +134,7 @@
 
 struct msm_request_info {
 	unsigned short type;
+	unsigned char method;
 	unsigned char id;
 	void *data;
 	int length;
@@ -150,6 +151,8 @@ void msm_close();
 void msm_power_on();
 void msm_power_off();
 void msm_loop();
+
+void msm_send(const int type, const int method, const unsigned char *data, const int data_length, int request_id);
 
 #endif
 
