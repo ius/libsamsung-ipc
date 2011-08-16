@@ -22,6 +22,16 @@
 #include <radio.h>
 #include "radio_internal.h"
 
+void msm_misc_me_version(int request_id)
+{
+	msm_send_get(MSM_MISC_ME_VERSION, request_id);
+}
+
+void msm_misc_me_imsi(int request_id)
+{
+	msm_send_get(MSM_MISC_ME_IMSI, request_id);
+}
+
 /**
  * Requests the device's IMEI/IMEISV
  */

@@ -26,14 +26,23 @@
 #define MSM_MISC_ME_SN					0x0A03
 #define MSM_MISC_TIME_INFO				0x0A07
 
+struct msm_misc_me_version {
+	char sw_version[32];
+	char hw_version[32];
+	char cal_date[32];
+	char misc[32];
+} __attribute__((__packed__));
+
 struct msm_misc_time_info {
-	unsigned char tzv, dlv;
+	unsigned char tz_valid, daylight_valid;
 	unsigned char year, mon, day;
 	unsigned char hour, min, sec;
 	unsigned char tz, dl, dv;
 	char plmn[6];
 } __attribute__((__packed__));
 
+void msm_misc_me_version(int request_id);
+void msm_misc_me_imsi(int request_id);
 void msm_misc_me_sn(int request_id);
 
 #endif
