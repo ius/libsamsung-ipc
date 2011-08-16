@@ -52,6 +52,9 @@
 #define MSM_NET_PLMN_STATUS_CURRENT			3
 #define MSM_NET_PLMN_STATUS_FORBIDDEN			4
 
+#define MSM_NET_PLMN_SEL_MANUAL				0
+#define MSM_NET_PLMN_SEL_AUTO				1
+
 struct msm_net_current_plmn {
 	char unk;
 	unsigned char slevel;
@@ -60,11 +63,17 @@ struct msm_net_current_plmn {
 	unsigned short lac;
 } __attribute__((__packed__));
 
+struct msm_net_regist_set {
+	unsigned char net;
+	unsigned char domain;
+} __attribute__((__packed__));
+
+
 struct msm_net_regist {
-	unsigned char act, unk0, status, unk1;
+	unsigned char act, domain, status, edge;
 	unsigned short lac;
 	unsigned int cid;
-	char unk2;
+	char rej_cause;
 } __attribute__((__packed__));
 
 struct msm_net_plmn_entry {
@@ -82,7 +91,7 @@ struct msm_net_plmn_entries {
 void msm_net_current_plmn(int request_id);
 void msm_net_plmn_list(int request_id);
 void msm_net_identity(int request_id);
-void msm_net_regist(int request_id);
+void msm_net_regist(int request_id, unsigned char type);
 
 #endif
 

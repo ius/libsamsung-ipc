@@ -70,8 +70,14 @@ void msm_net_identity(int request_id)
 	msm_send_get(MSM_NET_IDENTITY, request_id);
 }
 
-void msm_net_regist(int request_id)
+void msm_net_regist(int request_id, unsigned char type)
 {
-	msm_send_get(MSM_NET_REGIST, request_id);
+	unsigned char data[] = { 0xff, 0x00 };
+	if(type == 0) {
+		msm_send_get(MSM_NET_REGIST, request_id);
+	} else {
+		data[1] = type;
+		msm_send(MSM_NET_REGIST, MSM_TYPE_GET, data, sizeof(data), request_id);
+	}
 }
 
