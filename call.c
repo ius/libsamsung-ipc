@@ -37,7 +37,7 @@ void msm_call_outgoing(const char *number, int identity, int request_id)
 	call.prefix = MSM_CALL_PREFIX_NONE;
 
 	call.length = strlen(number);
-	memcpy(call.number, number, call.length);
+	memcpy(call.number, number, strlen(number));
 
 	msm_send(MSM_CALL_OUTGOING, MSM_TYPE_EXEC, (unsigned char*)&call, sizeof(call), request_id);
 }

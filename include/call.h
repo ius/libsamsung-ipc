@@ -44,11 +44,15 @@
 #define MSM_CALL_PREFIX_NONE				0x00
 #define MSM_CALL_PREFIX_INTL				0x11
 
+/* Only for msm_call_status, NOT call_list */
 #define MSM_CALL_STATE_DIALING				0x01
 #define MSM_CALL_STATE_IGNORING_INCOMING_STATUS		0x02
 #define MSM_CALL_STATE_CONNECTED			0x03
 #define MSM_CALL_STATE_RELEASED				0x04
 #define MSM_CALL_STATE_CONNECTING			0x05
+
+#define MSM_CALL_TERM_MO				0x01
+#define MSM_CALL_TERM_MT				0x02
 
 struct msm_call_outgoing {
 	unsigned char type, identity;
@@ -62,7 +66,7 @@ struct msm_call_incoming {
 
 struct msm_call_list_entry {
 	unsigned char type, idx;
-	unsigned char term, state, unk3;
+	unsigned char term, state, mpty;
 	unsigned char number_len;
 	unsigned char unk4;
 } __attribute__((__packed__));
