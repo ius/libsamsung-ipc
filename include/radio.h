@@ -58,6 +58,7 @@
 #define MSM_GROUP_IMEI	                        	0x10
 #define MSM_GROUP_GPS	                        	0x11
 #define MSM_GROUP_SAP		                        0x12
+#define MSM_GROUP_GEN		                        0x80
 
 /* Power */
 #define MSM_PWR_PHONE_PWR_UP				0x0101
@@ -122,6 +123,9 @@
 #define MSM_IMEI_START					0x1001
 #define MSM_IMEI_CHECK_DEVICE_INFO			0x1002
 
+/* Gen */
+#define MSM_GEN_PHONE_RES				0x8001
+
 #define FRAME_START	0x7f
 #define FRAME_END	0x7e
 
@@ -144,6 +148,12 @@ struct msm_info {
 	char *tty;
 	void (*on_receive)(struct msm_request_info *info);
 };
+
+struct msm_gen_phone_res {
+	unsigned char group, type;
+	unsigned short code;
+	unsigned char unk;
+} __attribute__((__packed__));
 
 void msm_register(struct msm_info *msm);
 void msm_open();

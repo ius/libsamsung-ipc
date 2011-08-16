@@ -197,6 +197,7 @@ const char *msm_str(struct msm_hdr *frame) {
 		FRAME_STR(MSM_SAT_CALL_PROCESSING)
 		FRAME_STR(MSM_IMEI_START)
 		FRAME_STR(MSM_IMEI_CHECK_DEVICE_INFO)
+		FRAME_STR(MSM_GEN_PHONE_RES)
 		default:
 			return "UNKNOWN_FRAME";
 	}
