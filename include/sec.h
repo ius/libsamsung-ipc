@@ -50,13 +50,29 @@
 #define MSM_SEC_PIN_SIM_LOCK_SC_PUK_REQ			0x02
 #define MSM_SEC_PIN_SIM_LOCK_SC_CARD_BLOCKED		0x05
 
+#define MSM_SEC_PIN_TYPE_PIN1				0x03
+#define MSM_SEC_PIN_TYPE_PIN2				0x09
+
 #define MSM_SEC_SIM_CARD_TYPE_UNKNOWN			0x00
 #define MSM_SEC_SIM_CARD_TYPE_SIM			0x01
 #define MSM_SEC_SIM_CARD_TYPE_USIM			0x02
 
-struct msm_sec_pin_status {
+struct msm_sec_pin_status_noti {
 	unsigned char type;
 	unsigned char key;
+} __attribute__((__packed__));
+
+struct msm_sec_pin_status_set {
+	unsigned char type;
+	unsigned char length1;
+	unsigned char length2;
+	unsigned char pin1[8];
+	unsigned char pin2[8];
+} __attribute__((__packed__));
+
+struct msm_sec_phone_lock {
+	unsigned char type;
+	unsigned char status;
 } __attribute__((__packed__));
 
 struct msm_sec_rsim_access_request {
@@ -68,6 +84,13 @@ struct msm_sec_rsim_access_request {
 struct msm_sec_rsim_access_response {
 	unsigned char sw1, sw2;
 	unsigned char len;
+} __attribute__((__packed__));
+
+struct msm_sec_lock_info {
+	unsigned char num;
+	unsigned char type;
+	unsigned char key;
+	unsigned char attempts;
 } __attribute__((__packed__));
 
 void msm_sec_rsim_access(unsigned char command, unsigned short file_id,
