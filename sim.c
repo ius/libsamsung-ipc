@@ -1,31 +1,31 @@
 /**
- * This file is part of libmsm-h1.
+ * This file is part of libsamsung-ipc.
  *
  * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
  *
- * libmsm-h1 is free software: you can redistribute it and/or modify
+ * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * libmsm-h1 is distributed in the hope that it will be useful,
+ * libsamsung-ipc is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with libmsm-h1.  If not, see <http://www.gnu.org/licenses/>.
+ * along with libsamsung-ipc.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
 #include "radio_internal.h"
 
-void msm_sec_rsim_access(unsigned char command, unsigned short file_id,
+void ipc_sec_rsim_access(unsigned char command, unsigned short file_id,
 			 unsigned char p1, unsigned char p2, unsigned char p3,
 			 unsigned char *rdata, unsigned int length, int request_id)
 {
 	unsigned char msg[262];
-	struct msm_sec_rsim_access_request *rsim_req = (struct msm_sec_rsim_access_request*)&msg[0];
+	struct ipc_sec_rsim_access_request *rsim_req = (struct ipc_sec_rsim_access_request*)&msg[0];
 	unsigned char *data = (msg + sizeof(*rsim_req));
 
 	memset(msg, 0, sizeof(msg));
@@ -42,6 +42,6 @@ void msm_sec_rsim_access(unsigned char command, unsigned short file_id,
 
 	memcpy(data, rdata, length);
 
-	msm_send(MSM_SEC_RSIM_ACCESS, MSM_TYPE_GET, msg, sizeof(msg), request_id);
+	ipc_send(IPC_SEC_RSIM_ACCESS, IPC_TYPE_GET, msg, sizeof(msg), request_id);
 }
 

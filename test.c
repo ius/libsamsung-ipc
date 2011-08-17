@@ -1,43 +1,43 @@
 /**
- * This file is part of libmsm-h1.
+ * This file is part of libsamsung-ipc.
  *
  * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
  *
- * libmsm-h1 is free software: you can redistribute it and/or modify
+ * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * libmsm-h1 is distributed in the hope that it will be useful,
+ * libsamsung-ipc is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with libmsm-h1.  If not, see <http://www.gnu.org/licenses/>.
+ * along with libsamsung-ipc.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
 #include <radio.h>
 
-static void on_receive(struct msm_request_info *info)
+static void on_receive(struct ipc_request_info *info)
 {
 }
 
-static struct msm_info msm = {
+static struct ipc_info ipc = {
 	.tty		= "/dev/dpram0",
 	.on_receive	= on_receive,
 };
 
 int main(int argc, char *argv[])
 {
-	msm_register(&msm);
-	msm_open();
-	msm_power_on();
+	ipc_register(&ipc);
+	ipc_open();
+	ipc_power_on();
 
-	msm_loop();
+	ipc_loop();
 
-	msm_close();
+	ipc_close();
 
 	return 0;
 }

@@ -1,7 +1,7 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
-libmsm-h1_files := \
+libsamsung-ipc_files := \
 	radio.c \
 	util.c \
 	hexdump.c \
@@ -11,11 +11,11 @@ libmsm-h1_files := \
 	net.c \
 	misc.c
 
-LOCAL_MODULE := libmsm-h1
+LOCAL_MODULE := libsamsung-ipc
 LOCAL_MODULE_TAGS := optional
 
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
 
-LOCAL_SRC_FILES := $(libmsm-h1_files)
+LOCAL_SRC_FILES := $(libsamsung-ipc_files)
 include $(BUILD_STATIC_LIBRARY)
 
