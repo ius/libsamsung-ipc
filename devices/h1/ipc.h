@@ -18,7 +18,7 @@
  *
  */
 
-#include "../../include/radio.h"
+#include <radio.h>
 
 #define DPRAM_TTY			"/dev/dpram0"
 
