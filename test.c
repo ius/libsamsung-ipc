@@ -17,27 +17,69 @@
  * along with libsamsung-ipc.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
 #include <radio.h>
 
-static void on_receive(struct ipc_request_info *info)
+void handle_msg(struct ipc_response *response)
 {
-}
+	if(response->command == IPC_PWR_PHONE_PWR_UP &&
+		response->type == IPC_TYPE_NOTI) {
+		printf(">> received PWR_PHONE_ONLINE, requesting IMEI\n");
 
-static struct ipc_info ipc = {
-	.tty		= "/dev/dpram0",
-	.on_receive	= on_receive,
-};
+		/* h1 requires a short delay for nvram to be available */
+		usleep(25000);
+		ipc_msg_send(IPC_MISC_ME_SN, IPC_TYPE_GET, NULL, 0, 0x42);
+	}
+}
 
 int main(int argc, char *argv[])
 {
-	ipc_register(&ipc);
-	ipc_open();
+	struct ipc_response response;
+	int error;
+
+	printf("ipc_open\n");
+	error = ipc_open();
+
+	if(error) {
+		fprintf(stderr, "ipc_open failed!\n");
+		return 1;
+	}
+
+	printf("ipc_power_on\n");
 	ipc_power_on();
 
-	ipc_loop();
+	printf("entering recv loop...\n");
 
-	ipc_close();
+	while(1) {
+		error = ipc_recv(&response);
+
+		if(!error) {
+			printf("%s %s (%u/%u) type=%04x mseq=%02x aseq=%02x\n",
+				ipc_str(&response), ipc_response_type(&response),
+				(response.data_length + 7), response.data_length,
+				response.type, response.mseq, response.aseq);
+
+			hex_dump(response.data, response.data_length);
+			printf("\n");
+
+			handle_msg(&response);
+
+			free(response.data);
+		} else {
+			fprintf(stderr, "ipc_recv failed!\n");
+			return 1;
+		}
+	}
+
+	error = ipc_close();
+
+	if(error) {
+		fprintf(stderr, "ipc_close failed!\n");
+		return 1;
+	}
 
 	return 0;
 }

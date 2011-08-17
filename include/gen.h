@@ -18,30 +18,16 @@
  *
  */
 
-#include "radio_internal.h"
+#ifndef __GEN_H__
+#define __GEN_H__
 
-void ipc_sec_rsim_access(unsigned char command, unsigned short file_id,
-			 unsigned char p1, unsigned char p2, unsigned char p3,
-			 unsigned char *rdata, unsigned int length, int request_id)
-{
-	unsigned char msg[262];
-	struct ipc_sec_rsim_access_request *rsim_req = (struct ipc_sec_rsim_access_request*)&msg[0];
-	unsigned char *data = (msg + sizeof(*rsim_req));
+#define IPC_GEN_PHONE_RES				0x8001
 
-	memset(msg, 0, sizeof(msg));
+struct ipc_gen_phone_res {
+	unsigned char group, type;
+	unsigned short code;
+	unsigned char unk;
+} __attribute__((__packed__));
 
-	rsim_req->command = command;
-	rsim_req->fileid = file_id;
-	rsim_req->p1 = p1;
-	rsim_req->p2 = p2;
-	rsim_req->p3 = p3;
-
-	if(length > 256) {
-		length = 256;
-	}
-
-	memcpy(data, rdata, length);
-
-	ipc_send(IPC_SEC_RSIM_ACCESS, IPC_TYPE_GET, msg, sizeof(msg), request_id);
-}
+#endif
 

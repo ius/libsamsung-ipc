@@ -21,9 +21,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "hexdump.h"
 
-#ifdef ANDROID
+#if defined(ANDROID) && !defined(LOG_STDOUT)
 
 #define LOG_TAG "RIL"
 #include <utils/Log.h>

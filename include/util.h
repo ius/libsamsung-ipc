@@ -18,6 +18,7 @@
  *
  */
 
+void hex_dump(void *data, int size);
 const char *plmn_lookup(const char *plmn);
 char *plmn_string(const char *plmn);
 

@@ -18,5 +18,36 @@
  *
  */
 
-void hex_dump(void *data, int size);
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#include <radio.h>
+
+/* Convenience functions for ipc_send */
+inline void ipc_msg_send_get(const int command, unsigned char aseq)
+{
+	ipc_msg_send(command, IPC_TYPE_GET, 0, 0, aseq);
+}
+
+inline void ipc_msg_send_exec(const int command, unsigned char aseq)
+{
+	ipc_msg_send(command, IPC_TYPE_EXEC, 0, 0, aseq);
+}
+
+/* Wrapper for ipc_send */
+void ipc_msg_send(const int command, const int type, unsigned char *data, const int length, unsigned char aseq)
+{
+	struct ipc_request request;
+
+	request.mseq = 0xff;
+	request.aseq = aseq;
+	request.group = IPC_GROUP(command);
+	request.index = IPC_INDEX(command);
+	request.type = type;
+	request.length = length;
+	request.data = data;
+
+	ipc_send(&request);
+}
 
