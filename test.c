@@ -67,7 +67,9 @@ int main(int argc, char *argv[])
 
 			handle_msg(&response);
 
-			free(response.data);
+			if(response.data) {
+				free(response.data);
+			}
 		} else {
 			fprintf(stderr, "ipc_recv failed!\n");
 			return 1;
