@@ -36,12 +36,12 @@ inline void ipc_msg_send_exec(const int command, unsigned char aseq)
 }
 
 /* Wrapper for ipc_send */
-void ipc_msg_send(const int command, const int type, unsigned char *data, const int length, unsigned char aseq)
+void ipc_msg_send(const int command, const int type, unsigned char *data, const int length, unsigned char mseq)
 {
 	struct ipc_request request;
 
-	request.mseq = 0xff;
-	request.aseq = aseq;
+	request.mseq = mseq;
+	request.aseq = 0xff;
 	request.group = IPC_GROUP(command);
 	request.index = IPC_INDEX(command);
 	request.type = type;

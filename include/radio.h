@@ -61,7 +61,7 @@ void ipc_send(struct ipc_request *request);
 int ipc_recv(struct ipc_response *response);
 
 /* Convenience functions for ipc_send */
-void ipc_msg_send(const int command, const int type, unsigned char *data, const int length, unsigned char aseq);
+void ipc_msg_send(const int command, const int type, unsigned char *data, const int length, unsigned char mseq);
 void ipc_msg_send_get(const int command, unsigned char aseq);
 void ipc_msg_send_exec(const int command, unsigned char aseq);
 
