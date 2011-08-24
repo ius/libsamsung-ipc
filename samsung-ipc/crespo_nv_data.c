@@ -28,8 +28,8 @@
 
 #include <openssl/md5.h>
 
-#include "nv_data.h"
-#include "ipc.h"
+#include "crespo_nv_data.h"
+#include "crespo_ipc.h"
 
 void md5hash2string(char *out, uint8_t *in)
 {
@@ -90,7 +90,7 @@ void nv_data_backup_create(void)
 	/* Read the content of nv_data.bin. */
 	nv_data_p=file_read("/efs/nv_data.bin", NV_DATA_SIZE, NV_DATA_SIZE / 10);
 
-	fd=open("/efs/.nv_data.bak", O_RDWR | O_CREAT);
+	fd=open("/efs/.nv_data.bak", O_RDWR | O_CREAT, 0644);
 
 	data_p=nv_data_p;
 
@@ -120,7 +120,7 @@ void nv_data_backup_create(void)
 	free(nv_data_p);
 
 	/* Write the MD5 hash in nv_data.bin.md5. */
-	fd=open("/efs/.nv_data.bak.md5", O_RDWR | O_CREAT);
+	fd=open("/efs/.nv_data.bak.md5", O_RDWR | O_CREAT, 0644);
 
 	write(fd, nv_data_md5_hash_string, MD5_STRING_SIZE);
 
@@ -128,7 +128,7 @@ void nv_data_backup_create(void)
 	free(nv_data_md5_hash_string);
 
 	/* Write ASCII 1 on the state file. */
-	fd=open("/efs/.nv_state", O_RDWR | O_CREAT);
+	fd=open("/efs/.nv_state", O_RDWR | O_CREAT, 0644);
 
 	data='1';
 	write(fd, &data, sizeof(data));
@@ -173,7 +173,7 @@ void nv_data_backup_restore(void)
 	/* Read the content of the backup file. */
 	nv_data_p=file_read("/efs/.nv_data.bak", NV_DATA_SIZE, NV_DATA_SIZE / 10);
 	
-	fd=open("/efs/nv_data.bin", O_RDWR | O_CREAT);
+	fd=open("/efs/nv_data.bin", O_RDWR | O_CREAT, 0644);
 	
 	data_p=nv_data_p;
 
@@ -227,7 +227,7 @@ void nv_data_backup_restore(void)
 	close(fd);
 
 	/* Write the MD5 hash in nv_data.bin.md5. */
-	fd=open("/efs/nv_data.bin.md5", O_RDWR | O_CREAT);
+	fd=open("/efs/nv_data.bin.md5", O_RDWR | O_CREAT, 0644);
 
 	write(fd, nv_data_md5_hash_string, MD5_STRING_SIZE);
 
@@ -236,7 +236,7 @@ void nv_data_backup_restore(void)
 	free(nv_data_md5_hash_string);
 	free(nv_data_md5_hash_read);
 
-	fd=open("/efs/.nv_state", O_RDWR | O_CREAT);
+	fd=open("/efs/.nv_state", O_RDWR | O_CREAT, 0644);
 
 	data='1';
 	write(fd, &data, sizeof(data));
