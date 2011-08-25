@@ -22,11 +22,12 @@
 #include <unistd.h>
 #include <fcntl.h>
 
+#include "ipc.h"
 #include "h1_ipc.h"
 
 static int fd = 0;
 
-int ipc_open()
+int h1_ipc_open()
 {
 	struct termios termios;
 
@@ -43,7 +44,7 @@ int ipc_open()
 	return 0;
 }
 
-int ipc_close()
+int h1_ipc_close()
 {
 	if(fd) {
 		return close(fd);
@@ -52,17 +53,17 @@ int ipc_close()
 	return 1;
 }
 
-void ipc_power_on()
+void h1_ipc_power_on()
 {
 	ioctl(fd, IOCTL_PHONE_ON);
 }
 
-void ipc_power_off()
+void h1_ipc_power_off()
 {
 	ioctl(fd, IOCTL_PHONE_OFF);
 }
 
-void ipc_send(struct ipc_request *request)
+void h1_ipc_send(struct ipc_request *request)
 {
 	struct hdlc_header *hdlc;
 	unsigned char *frame;
@@ -95,7 +96,7 @@ void ipc_send(struct ipc_request *request)
 	free(frame);
 }
 
-int ipc_recv(struct ipc_response *response)
+int h1_ipc_recv(struct ipc_response *response)
 {
 	unsigned char buf[4];
 	unsigned char *data;
@@ -131,3 +132,11 @@ int ipc_recv(struct ipc_response *response)
 	return 1;
 }
 
+struct ipc_ops h1_ipc_ops = {
+    .open = h1_ipc_open,
+    .close = h1_ipc_close,
+    .power_on = h1_ipc_power_on,
+    .power_off = h1_ipc_power_off,
+    .send = h1_ipc_send,
+    .recv = h1_ipc_recv,
+};

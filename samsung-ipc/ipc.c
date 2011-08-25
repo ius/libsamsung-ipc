@@ -24,6 +24,33 @@
 
 #include <radio.h>
 
+#include "ipc.h"
+
+struct ipc_ops *ops = NULL;
+
+extern struct ipc_ops crespo_ipc_ops;
+extern struct ipc_ops h1_ipc_ops;
+
+int ipc_init(int client_type)
+{
+    int rc = 0;
+
+    switch (client_type)
+    {
+        case IPC_CLIENT_TYPE_CRESPO:
+            ops = &crespo_ipc_ops;
+            break;
+        case IPC_CLIENT_TYPE_H1:
+            ops = &h1_ipc_ops;
+            break;
+        default:
+            rc = -1;
+            break;
+    }
+
+    return rc;
+}
+
 /* Convenience functions for ipc_send */
 inline void ipc_msg_send_get(const int command, unsigned char aseq)
 {
