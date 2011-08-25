@@ -24,6 +24,9 @@
 #include "types.h"
 #include "util.h"
 
+#define IPC_CLIENT_TYPE_CRESPO      1
+#define IPC_CLIENT_TYPE_H1          2
+
 #define IPC_COMMAND(f)	((f->group << 8) | f->index)
 #define IPC_GROUP(m)	(m >> 8)
 #define IPC_INDEX(m)	(m & 0xff)
@@ -51,6 +54,7 @@ struct ipc_response {
 	unsigned char *data;
 };
 
+int ipc_init(int client_type);
 int ipc_open();
 int ipc_close();
 
