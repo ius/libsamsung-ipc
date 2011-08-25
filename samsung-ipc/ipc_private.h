@@ -24,8 +24,8 @@
 struct ipc_ops {
     int (*open)(void);
     int (*close)(void);
-    int (*power_on)(void);
-    int (*power_off)(void);
+    void (*power_on)(void);
+    void (*power_off)(void);
     int (*send)(struct ipc_request*);
     int (*recv)(struct ipc_response*);
 };
