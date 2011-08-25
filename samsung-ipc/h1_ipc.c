@@ -22,7 +22,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#include "ipc.h"
+#include "ipc_private.h"
 #include "h1_ipc.h"
 
 static int fd = 0;

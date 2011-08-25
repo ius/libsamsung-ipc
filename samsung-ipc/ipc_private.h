@@ -18,8 +18,8 @@
  *
  */
 
-#ifndef __IPC_H__
-#define __IPC_H__
+#ifndef __IPC_PRIVATE_H__
+#define __IPC_PRIVATE_H__
 
 struct ipc_ops {
     int (*open)(void);
@@ -29,8 +29,5 @@ struct ipc_ops {
     int (*send)(struct ipc_request*);
     int (*recv)(struct ipc_response*);
 };
-
-#define IPC_CLIENT_TYPE_CRESPO      1
-#define IPC_CLIENT_TYPE_H1          2
 
 #endif

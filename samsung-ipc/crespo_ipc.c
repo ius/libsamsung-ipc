@@ -38,7 +38,7 @@
 #include "crespo_modem_ctl.h"
 #include "crespo_nv_data.h"
 #include "crespo_ipc.h"
-#include "ipc.h"
+#include "ipc_private.h"
 
 int s3c2410_serial3_fd=	-1;
 int modem_ctl_fd=	-1;

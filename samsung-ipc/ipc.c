@@ -24,7 +24,7 @@
 
 #include <radio.h>
 
-#include "ipc.h"
+#include "ipc_private.h"
 
 struct ipc_ops *ops = NULL;
 
