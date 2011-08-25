@@ -4,8 +4,6 @@ Makefile
 *.lo
 *.loT
 *.la
-*.c
-*.h
 .*.swp
 *.stamp
 *.gir
