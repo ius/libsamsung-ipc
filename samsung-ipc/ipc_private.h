@@ -22,12 +22,14 @@
 #define __IPC_PRIVATE_H__
 
 struct ipc_ops {
-    int (*open)(void);
-    int (*close)(void);
-    void (*power_on)(void);
-    void (*power_off)(void);
-    int (*send)(struct ipc_request*);
-    int (*recv)(struct ipc_response*);
+	int (*bootstrap)(void);
+	int (*open)(void);
+	int (*close)(void);
+	void (*power_on)(void);
+	void (*power_off)(void);
+	int (*send)(struct ipc_request*);
+	int (*recv)(struct ipc_response*);
+	int (*fd_get)(void);
 };
 
 #endif

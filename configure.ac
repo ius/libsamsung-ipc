@@ -23,6 +23,7 @@ PKG_PROG_PKG_CONFIG
 
 AC_CONFIG_FILES([
 	Makefile
+	samsung-ipc-1.0.pc
 	include/Makefile
 	samsung-ipc/Makefile
 ])

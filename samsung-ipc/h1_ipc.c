@@ -53,6 +53,11 @@ int h1_ipc_close()
 	return 1;
 }
 
+int h1_ipc_fd_get()
+{
+    return fd;
+}
+
 void h1_ipc_power_on()
 {
 	ioctl(fd, IOCTL_PHONE_ON);
@@ -139,4 +144,5 @@ struct ipc_ops h1_ipc_ops = {
     .power_off = h1_ipc_power_off,
     .send = h1_ipc_send,
     .recv = h1_ipc_recv,
+    .fd_get = h1_ipc_fd_get,
 };

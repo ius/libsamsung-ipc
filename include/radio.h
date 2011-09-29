@@ -55,11 +55,13 @@ struct ipc_response {
 };
 
 int ipc_init(int client_type);
-int ipc_open();
-int ipc_close();
+int ipc_boostrap(void);
+int ipc_open(void);
+int ipc_close(void);
+int ipc_fd_get(void);
 
-void ipc_power_on();
-void ipc_power_off();
+void ipc_power_on(void);
+void ipc_power_off(void);
 
 void ipc_send(struct ipc_request *request);
 int ipc_recv(struct ipc_response *response);

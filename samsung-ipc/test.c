@@ -40,6 +40,8 @@ int main(int argc, char *argv[])
 	struct ipc_response response;
 	int error;
 
+	ipc_init(IPC_CLIENT_TYPE_CRESPO);
+
 	printf("ipc_open\n");
 	error = ipc_open();
 

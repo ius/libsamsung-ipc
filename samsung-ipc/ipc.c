@@ -51,6 +51,11 @@ int ipc_init(int client_type)
     return rc;
 }
 
+int ipc_bootstrap(void)
+{
+    return ops != NULL && ops->bootstrap != NULL ? ops->bootstrap() : -1;
+}
+
 int ipc_open(void)
 {
     return ops != NULL && ops->open != NULL ? ops->open() : -1;
@@ -77,6 +82,13 @@ void ipc_send(struct ipc_request *request)
 {
     if (ops != NULL && ops->send != NULL)
         ops->send(request);
+}
+
+int ipc_fd_get()
+{
+    if (ops != NULL && ops->fd_get != NULL)
+        return ops->fd_get();
+    return -1;
 }
 
 /* Convenience functions for ipc_send */
