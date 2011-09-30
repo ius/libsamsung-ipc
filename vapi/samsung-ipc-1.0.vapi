@@ -70,6 +70,8 @@ namespace SamsungIpc
     public void open();
     [CCode (cname = "ipc_close", cheader_filename = "radio.h")]
     public void close();
+    [CCode (cname = "ipc_fd_set", cheader_filename = "radio.h")]
+    public void fd_set(int fd);
     [CCode (cname = "ipc_fd_get", cheader_filename = "radio.h")]
     public int fd_get();
     [CCode (cname = "ipc_power_on", cheader_filename = "radio.h")]

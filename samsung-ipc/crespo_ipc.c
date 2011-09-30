@@ -383,6 +383,11 @@ int crespo_ipc_open(void)
     return modem_fmt_fd > 0 ? 0 : -1;
 }
 
+void crespo_ipc_fd_set(int fd)
+{
+    modem_fmt_fd = fd;
+}
+
 int crespo_ipc_close(void)
 {
 	close(modem_fmt_fd);
@@ -536,4 +541,6 @@ struct ipc_ops crespo_ipc_ops = {
     .power_off = crespo_ipc_power_off,
     .send = crespo_ipc_send,
     .recv = crespo_ipc_recv,
+    .fd_set = crespo_ipc_fd_set,
+    .fd_get = crespo_ipc_fd_get,
 };

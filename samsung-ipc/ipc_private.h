@@ -24,6 +24,7 @@
 struct ipc_ops {
 	int (*bootstrap)(void);
 	int (*open)(void);
+	void (*fd_set)(int);
 	int (*close)(void);
 	void (*power_on)(void);
 	void (*power_off)(void);
