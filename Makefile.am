@@ -3,6 +3,7 @@ NULL =
 SUBDIRS = \
 	samsung-ipc \
 	include \
+	tools \
 	$(NULL)
 
 pkgconfigdir = $(libdir)/pkgconfig

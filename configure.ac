@@ -35,5 +35,6 @@ AC_CONFIG_FILES([
 	samsung-ipc-1.0.pc
 	include/Makefile
 	samsung-ipc/Makefile
+	tools/Makefile
 ])
 AC_OUTPUT
