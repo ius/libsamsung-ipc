@@ -14,10 +14,19 @@ AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
 AC_SUBST(LDFLAGS)
 
+OPENSSL_REQUIRED=0.0.0
+
 #------------------------------------------------------------------------------
 # pkg-config
 
 PKG_PROG_PKG_CONFIG
+
+#------------------------------------------------------------------------------
+# openssl
+
+PKG_CHECK_MODULES(OPENSSL, openssl >= OPENSSL_REQUIRED)
+AC_SUBST(OPENSSL_CFLAGS)
+AC_SUBST(OPENSSL_LIBS)
 
 #------------------------------------------------------------------------------
 

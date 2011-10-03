@@ -3,6 +3,7 @@ NULL =
 AM_CFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/samsung-ipc \
+	$(OPENSSL_CFLAGS) \
 	$(NULL)
 
 lib_LTLIBRARIES = \
@@ -19,4 +20,5 @@ libsamsung_ipc_la_SOURCES = \
 	$(NULL)
 
 libsamsung_ipc_la_LIBADD = \
+	$(OPENSSL_LIBS) \
 	$(NULL)
