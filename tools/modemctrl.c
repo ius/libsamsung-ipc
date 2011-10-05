@@ -42,6 +42,8 @@ int main(int argc, char *argv[])
 
 	ipc_init(IPC_CLIENT_TYPE_CRESPO);
 
+	ipc_bootstrap();
+
 	printf("ipc_open\n");
 	error = ipc_open();
 
