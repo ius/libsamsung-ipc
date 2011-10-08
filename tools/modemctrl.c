@@ -2,6 +2,7 @@
  * This file is part of libsamsung-ipc.
  *
  * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
+ *               2011 Simon Busch <morphis@gravedo.de>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -15,24 +16,21 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with libsamsung-ipc.  If not, see <http://www.gnu.org/licenses/>.
- *
  */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
 
 #include <radio.h>
 
-void handle_msg(struct ipc_response *response)
+void print_help()
 {
-	if(response->command == IPC_PWR_PHONE_PWR_UP &&
-		response->type == IPC_TYPE_NOTI) {
-		printf(">> received PWR_PHONE_ONLINE, requesting IMEI\n");
-
-		/* h1 requires a short delay for nvram to be available */
-		usleep(25000);
-		ipc_msg_send(IPC_MISC_ME_SN, IPC_TYPE_GET, NULL, 0, 0x42);
-	}
+	printf("usage: modemctrl <command>\n");
+	printf("commands:\n");
+	printf("\tbootstrap             bootstrap modem to be ready for processing\n");
+	printf("\tpower-on              power on the modem\n");
+	printf("\tpower-off             power off the modem\n");
 }
 
 int main(int argc, char *argv[])
@@ -40,51 +38,25 @@ int main(int argc, char *argv[])
 	struct ipc_response response;
 	int error;
 
+	if (argc != 2) {
+		print_help();
+		exit(1);
+	}
+
 	ipc_init(IPC_CLIENT_TYPE_CRESPO);
 
-	ipc_bootstrap();
-
-	printf("ipc_open\n");
-	error = ipc_open();
-
-	if(error) {
-		fprintf(stderr, "ipc_open failed!\n");
-		return 1;
+	if (!strncmp(argv[1], "bootstrap", 9)) {
+		ipc_bootstrap();
 	}
-
-	printf("ipc_power_on\n");
-	ipc_power_on();
-
-	printf("entering recv loop...\n");
-
-	while(1) {
-		error = ipc_recv(&response);
-
-		if(!error) {
-			printf("%s %s (%u/%u) type=%04x mseq=%02x aseq=%02x\n",
-				ipc_str(&response), ipc_response_type(&response),
-				(response.data_length + 7), response.data_length,
-				response.type, response.mseq, response.aseq);
-
-			hex_dump(response.data, response.data_length);
-			printf("\n");
-
-			handle_msg(&response);
-
-			if(response.data) {
-				free(response.data);
-			}
-		} else {
-			fprintf(stderr, "ipc_recv failed!\n");
-			return 1;
-		}
+	else if (!strncmp(argv[1], "power-on", 8)) {
+		ipc_open();
+		ipc_power_on();
+		ipc_close();
 	}
-
-	error = ipc_close();
-
-	if(error) {
-		fprintf(stderr, "ipc_close failed!\n");
-		return 1;
+	else if (!strncmp(argv[1], "power-off", 9)) {
+		ipc_open();
+		ipc_power_off();
+		ipc_close();
 	}
 
 	return 0;
