@@ -2,6 +2,7 @@
  * This file is part of libsamsung-ipc.
  *
  * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
+ *               2011 Simon Busch <morphis@gravedo.de>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,100 +27,126 @@
 
 #include "ipc_private.h"
 
-struct ipc_ops *ops = NULL;
-
 extern struct ipc_ops crespo_ipc_ops;
-extern struct ipc_ops h1_ipc_ops;
+// extern struct ipc_ops h1_ipc_ops;
 
-int ipc_init(int client_type)
+
+struct ipc_client* ipc_client_new(int client_type)
 {
-    int rc = 0;
+    struct ipc_client *client;
+    struct ips_ops *ops = NULL;
 
     switch (client_type)
     {
-        case IPC_CLIENT_TYPE_CRESPO:
+        case IPC_CLIENT_TYPE_CRESPO_FMT:
+        case IPC_CLIENT_TYPE_CRESPO_RFS:
             ops = &crespo_ipc_ops;
             break;
         case IPC_CLIENT_TYPE_H1:
-            ops = &h1_ipc_ops;
+            // ops = &h1_ipc_ops;
             break;
         default:
-            rc = -1;
             break;
     }
 
-    return rc;
+    client = (struct ipc_client*) malloc(sizeof(struct ipc_client));
+    client->type = client_type;
+    client->ops = ops;
+
+    return client;
 }
 
-int ipc_bootstrap(void)
+int ipc_client_free(struct ipc_client *client)
 {
-    return ops != NULL && ops->bootstrap != NULL ? ops->bootstrap() : -1;
+    free(client);
+    client = NULL;
+    return 0;
 }
 
-int ipc_open(void)
+int ipc_client_transport_callback_set(struct ipc_client *client,
+                                      ipc_client_transport_cb write, void *write_data,
+                                      ipc_client_transport_cb read, void *read_data)
 {
-    return ops != NULL && ops->open != NULL ? ops->open() : -1;
+    if (client == NULL)
+        return -1;
+
+    client->read = read;
+    client->read_data = read_data;
+    client->write = write;
+    client->write_data = write_data;
+
+    return 0;
 }
 
-int ipc_close(void)
+int ipc_client_bootstrap_modem(struct ipc_client *client)
 {
-    return ops != NULL && ops->close != NULL ? ops->close() : -1;
+    if (client == NULL ||
+        client->ops == NULL ||
+        client->ops->bootstrap == NULL)
+        return -1;
+
+    return client->ops->bootstrap(client);
 }
 
-void ipc_power_on(void)
+int ipc_client_open(struct ipc_client *client)
 {
-    if (ops != NULL && ops->power_on != NULL)
-        ops->power_on();
+    if (client == NULL ||
+        client->ops == NULL ||
+        client->ops->open == NULL)
+        return -1;
+
+    return client->ops->open(client);
 }
 
-void ipc_power_off(void)
+int ipc_client_close(struct ipc_client *client)
 {
-    if (ops != NULL && ops->power_off != NULL)
-        ops->power_off();
+    if (client == NULL ||
+        client->ops == NULL ||
+        client->ops->close == NULL)
+        return -1;
+
+    return client->ops->close(client);
 }
 
-void ipc_send(struct ipc_request *request)
+int _ipc_client_send(struct ipc_client *client, struct ipc_request *request)
 {
-    if (ops != NULL && ops->send != NULL)
-        ops->send(request);
-}
+    if (client == NULL ||
+        client->ops == NULL ||
+        client->ops->send == NULL)
+        return -1;
 
-int ipc_fd_get()
-{
-    if (ops != NULL && ops->fd_get != NULL)
-        return ops->fd_get();
-    return -1;
+    return client->ops->send(client, request);
 }
 
 /* Convenience functions for ipc_send */
-inline void ipc_msg_send_get(const int command, unsigned char aseq)
+inline void ipc_client_send_get(struct ipc_client *client, const int command, unsigned char aseq)
 {
-	ipc_msg_send(command, IPC_TYPE_GET, 0, 0, aseq);
+    ipc_client_send(client, command, IPC_TYPE_GET, 0, 0, aseq);
 }
 
-inline void ipc_msg_send_exec(const int command, unsigned char aseq)
+inline void ipc_client_send_exec(struct ipc_client *client, const int command, unsigned char aseq)
 {
-	ipc_msg_send(command, IPC_TYPE_EXEC, 0, 0, aseq);
+    ipc_client_send(client, command, IPC_TYPE_EXEC, 0, 0, aseq);
 }
 
 /* Wrapper for ipc_send */
-void ipc_msg_send(const int command, const int type, unsigned char *data, const int length, unsigned char mseq)
+void ipc_client_send(struct ipc_client *client, const int command, const int type, unsigned char *data, const int length, unsigned char mseq)
 {
-	struct ipc_request request;
+    struct ipc_request request;
 
-	request.mseq = mseq;
-	request.aseq = 0xff;
-	request.group = IPC_GROUP(command);
-	request.index = IPC_INDEX(command);
-	request.type = type;
-	request.length = length;
-	request.data = data;
+    request.mseq = mseq;
+    request.aseq = 0xff;
+    request.group = IPC_GROUP(command);
+    request.index = IPC_INDEX(command);
+    request.type = type;
+    request.length = length;
+    request.data = data;
 
-    ipc_send(&request);
+    _ipc_client_send(client, &request);
 }
 
-int ipc_recv(struct ipc_response *response)
+int ipc_client_recv(struct ipc_client *client, struct ipc_response *response)
 {
-    return ops != NULL && ops->recv != NULL ? ops->recv(response) : -1;
+    return -1;
 }
 

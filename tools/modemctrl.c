@@ -21,43 +21,34 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
-
 #include <radio.h>
 
 void print_help()
 {
-	printf("usage: modemctrl <command>\n");
-	printf("commands:\n");
-	printf("\tbootstrap             bootstrap modem to be ready for processing\n");
-	printf("\tpower-on              power on the modem\n");
-	printf("\tpower-off             power off the modem\n");
+    printf("usage: modemctrl <command>\n");
+    printf("commands:\n");
+    printf("\tbootstrap             bootstrap modem to be ready for processing\n");
+    printf("\tpower-on              power on the modem\n");
+    printf("\tpower-off             power off the modem\n");
 }
 
 int main(int argc, char *argv[])
 {
-	struct ipc_response response;
-	int error;
+    struct ipc_client *client;
+    int error;
 
-	if (argc != 2) {
-		print_help();
-		exit(1);
-	}
+    if (argc != 2) {
+        print_help();
+        exit(1);
+    }
 
-	ipc_init(IPC_CLIENT_TYPE_CRESPO);
+    client = ipc_client_new(IPC_CLIENT_TYPE_CRESPO_FMT);
 
-	if (!strncmp(argv[1], "bootstrap", 9)) {
-		ipc_bootstrap();
-	}
-	else if (!strncmp(argv[1], "power-on", 8)) {
-		ipc_open();
-		ipc_power_on();
-		ipc_close();
-	}
-	else if (!strncmp(argv[1], "power-off", 9)) {
-		ipc_open();
-		ipc_power_off();
-		ipc_close();
-	}
+    if (!strncmp(argv[1], "bootstrap", 9)) {
+        ipc_client_bootstrap_modem(client);
+    }
 
-	return 0;
+    ipc_client_free(client);
+
+    return 0;
 }

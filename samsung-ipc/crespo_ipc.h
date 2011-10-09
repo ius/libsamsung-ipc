@@ -21,25 +21,28 @@
 #ifndef __CRESPO_IPC_H__
 #define __CRESPO_IPC_H__
 
-#define BOOTCORE_VERSION	0xf0
-#define PSI_MAGIC		0x30
-#define PSI_DATA_LEN		0x5000
-#define RADIO_IMG_SIZE		0xd80000
+#define BOOTCORE_VERSION        0xf0
+#define PSI_MAGIC               0x30
+#define PSI_DATA_LEN            0x5000
+#define RADIO_IMG_SIZE          0xd80000
+
+#define MAX_MODEM_DATA_SIZE     0x1000
 
 struct samsung_rfs_msg
 {
-	uint32_t offset;
-	uint32_t size;
+    uint32_t offset;
+    uint32_t size;
 };
 
 struct samsung_rfs_cfrm
 {
-	uint8_t confirmation;
-	struct samsung_rfs_msg msg;
+    uint8_t confirmation;
+    struct samsung_rfs_msg msg;
 };
 
 void *mtd_read(char *mtd_name, int size, int block_size);
 void *file_read(char *file_name, int size, int block_size);
-void wake_lock(char *lock_name, int size);
-void wake_unlock(char *lock_name, int size);
+int wake_lock(char *lock_name, int size);
+int wake_unlock(char *lock_name, int size);
+
 #endif

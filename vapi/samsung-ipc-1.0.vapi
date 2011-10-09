@@ -24,7 +24,8 @@ namespace SamsungIpc
     [CCode (cname = "int", cprefix = "IPC_CLIENT_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
     public enum ClientType
     {
-        CRESPO,
+        CRESPO_FMT,
+        CRESPO_RFS,
         H1,
     }
 
@@ -62,30 +63,21 @@ namespace SamsungIpc
         public uint8[] data;
     }
 
-    [CCode (cname = "ipc_init", cheader_filename = "radio.h")]
-    public int init(ClientType type);
-    [CCode (cname = "ipc_bootstrap", cheader_filename = "radio.h")]
-    public int bootstrap();
-    [CCode (cname = "ipc_open", cheader_filename = "radio.h")]
-    public void open();
-    [CCode (cname = "ipc_close", cheader_filename = "radio.h")]
-    public void close();
-    [CCode (cname = "ipc_fd_set", cheader_filename = "radio.h")]
-    public void fd_set(int fd);
-    [CCode (cname = "ipc_fd_get", cheader_filename = "radio.h")]
-    public int fd_get();
-    [CCode (cname = "ipc_power_on", cheader_filename = "radio.h")]
-    public void power_on();
-    [CCode (cname = "ipc_power_off", cheader_filename = "radio.h")]
-    public void power_off();
-    [CCode (cname = "ipc_send", cheader_filename = "radio.h")]
-    public void send(Request request);
-    [CCode (cname = "ipc_recv", cheader_filename = "radio.h")]
-    public int recv(Response response);
-    [CCode (cname = "ipc_msg_send", cheader_filename = "radio.h")]
-    public void message_send(int command, int type, uint8 data, int length, uint8 mseq);
-    [CCode (cname = "ipc_msg_send_get", cheader_filename = "radio.h")]
-    public void message_send_get(int command, uint8 aseq);
-    [CCode (cname = "ipc_msg_send_exec", cheader_filename = "radio.h")]
-    public void message_send_exec(int command, uint8 aseq);
+    public delegate int TransportCb(uint8[] data);
+
+    [Compact]
+    [CCode (cname = "struct ipc_client", cprefix = "ipc_client_", cheader_filename = "radio.h")]
+    public class Client
+    {
+        public Client(ClientType type);
+        [CCode (delagate_target_pos = 0.9)]
+        public int set_delegates(TransportCb write_cb, TransportCb read_cb);
+        public int bootstrap_modem();
+        public void open();
+        public void close();
+        public int recv(Response response);
+        public void send(int command, int type, uint8 data, int length, uint8 mseq);
+        public void send_get(int command, uint8 aseq);
+        public void send_exec(int command, uint8 aseq);
+    }
 }

@@ -13,7 +13,6 @@ lib_LTLIBRARIES = \
 libsamsung_ipc_la_SOURCES = \
 	crespo_ipc.c \
 	crespo_nv_data.c \
-	h1_ipc.c \
 	ipc.c \
 	ipc_util.c \
 	util.c \

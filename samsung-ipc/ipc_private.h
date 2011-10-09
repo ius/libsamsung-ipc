@@ -21,16 +21,28 @@
 #ifndef __IPC_PRIVATE_H__
 #define __IPC_PRIVATE_H__
 
+struct ipc_client;
+
 struct ipc_ops {
-	int (*bootstrap)(void);
-	int (*open)(void);
-	void (*fd_set)(int);
-	int (*close)(void);
-	void (*power_on)(void);
-	void (*power_off)(void);
-	int (*send)(struct ipc_request*);
-	int (*recv)(struct ipc_response*);
-	int (*fd_get)(void);
+    int (*bootstrap)(struct ipc_client *client);
+    int (*open)(struct ipc_client *client);
+    int (*close)(struct ipc_client *client);
+    int (*send)(struct ipc_client *client, struct ipc_request*);
+    int (*recv)(struct ipc_client *client, struct ipc_response*);
 };
+
+struct ipc_client {
+    int type;
+
+    /* callbacks for transport handling */
+    ipc_client_transport_cb read;
+    void *read_data;
+    ipc_client_transport_cb write;
+    void *write_data;
+
+    struct ipc_ops *ops;
+};
+
+
 
 #endif

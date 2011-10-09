@@ -21,31 +21,31 @@
 #ifndef __RADIO_H__
 #define __RADIO_H__
 
+#include <stdint.h>
+
 #include "types.h"
 #include "util.h"
 
-#define IPC_CLIENT_TYPE_CRESPO      1
-#define IPC_CLIENT_TYPE_H1          2
+#define IPC_CLIENT_TYPE_CRESPO_FMT      1
+#define IPC_CLIENT_TYPE_CRESPO_RFS      2
+#define IPC_CLIENT_TYPE_H1              3
 
 #define IPC_COMMAND(f)	((f->group << 8) | f->index)
 #define IPC_GROUP(m)	(m >> 8)
 #define IPC_INDEX(m)	(m & 0xff)
 
-/* IPC header for use by device specific code*/
 struct ipc_header {
 	unsigned short length;
 	unsigned char mseq, aseq;
 	unsigned char group, index, type;
 } __attribute__((__packed__));
 
-/* Request struct passed as parameter to ipc_send() */
 struct ipc_request {
 	unsigned char mseq, aseq, group, index, type;
 	unsigned int length;
 	unsigned char *data;
 };
 
-/* Response struct returned by ipc_recv() */
 struct ipc_response {
 	unsigned char mseq, aseq;
 	unsigned short command;
@@ -54,22 +54,26 @@ struct ipc_response {
 	unsigned char *data;
 };
 
-int ipc_init(int client_type);
-int ipc_boostrap(void);
-int ipc_open(void);
-int ipc_close(void);
-int ipc_fd_get(void);
+struct ipc_client;
 
-void ipc_power_on(void);
-void ipc_power_off(void);
+typedef int (*ipc_client_transport_cb)(uint8_t *data, unsigned int size, void *user_data);
 
-void ipc_send(struct ipc_request *request);
-int ipc_recv(struct ipc_response *response);
+struct ipc_client *ipc_client_new(int client_type);
+int ipc_client_set_delegates(struct ipc_client *client, ipc_client_transport_cb write, void *write_data,
+                                                        ipc_client_transport_cb read,  void *read_data);
+int ipc_client_free(struct ipc_client *client);
+
+int ipc_client_bootstrap_modem(struct ipc_client *client);
+int ipc_client_open(struct ipc_client *client);
+int ipc_client_close(struct ipc_client *client);
+
+int ipc_client_recv(struct ipc_client *client, struct ipc_response *response);
 
 /* Convenience functions for ipc_send */
-void ipc_msg_send(const int command, const int type, unsigned char *data, const int length, unsigned char mseq);
-void ipc_msg_send_get(const int command, unsigned char aseq);
-void ipc_msg_send_exec(const int command, unsigned char aseq);
+void ipc_client_send(struct ipc_client *client, const int command, const int type, unsigned char *data,
+                     const int length, unsigned char mseq);
+void ipc_client_send_get(struct ipc_client *client, const int command, unsigned char aseq);
+void ipc_client_send_exec(struct ipc_client *client, const int command, unsigned char aseq);
 
 /* Utility functions */
 const char *ipc_str(struct ipc_response *frame);

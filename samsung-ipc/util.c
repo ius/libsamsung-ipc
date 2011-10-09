@@ -21,6 +21,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <mtd/mtd-abi.h>
+#include <fcntl.h>
+#include <string.h>
+#include <sys/ioctl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <asm/types.h>
+#include <stdint.h>
 
 #if defined(ANDROID) && !defined(LOG_STDOUT)
 
@@ -86,33 +94,123 @@ void hex_dump(void *data, int size)
 
 const char *plmn_lookup(const char *plmn)
 {
-	unsigned int mcc, mnc;
-	sscanf(plmn, "%3u%2u", &mcc, &mnc);
+    unsigned int mcc, mnc;
+    sscanf(plmn, "%3u%2u", &mcc, &mnc);
 
-	switch(mcc) {
-		case 204:
-			switch(mnc) {
-				case 1: return "VastMobiel";
-				case 2: return "Tele2";
-				case 4: return "Vodafone";
-				case 8: case 10: return "KPN";
-				case 12: return "Telfort";
-				case 16: case 20: return "T-Mobile";
-			}
-	}
+    switch(mcc) {
+        case 204:
+            switch(mnc) {
+                case 1: return "VastMobiel";
+                case 2: return "Tele2";
+                case 4: return "Vodafone";
+                case 8: case 10: return "KPN";
+                case 12: return "Telfort";
+                case 16: case 20: return "T-Mobile";
+            }
+    }
 
-	return NULL;
+    return NULL;
 }
 
 char *plmn_string(const char *plmn)
 {
-	int length = (plmn[5] == '#') ? 6 : 7;
+    int length = (plmn[5] == '#') ? 6 : 7;
 
-	char *plmn_str = (char*)malloc(length);
+    char *plmn_str = (char*)malloc(length);
 
-	memcpy(plmn_str, plmn, length);
-	plmn_str[length-1] = '\0';
+    memcpy(plmn_str, plmn, length);
+    plmn_str[length-1] = '\0';
 
-	return plmn_str;
+    return plmn_str;
 }
+
+void *mtd_read(char *mtd_name, int size, int block_size)
+{
+    void *mtd_p=NULL;
+    uint8_t *data_p=NULL;
+
+    loff_t offs;
+    int fd;
+    int i;
+
+    if(mtd_name == NULL || size <= 0 || block_size <= 0)
+        goto error;
+
+    printf("mtd_read: reading 0x%x bytes from %s with 0x%x bytes block size\n", size, mtd_name, block_size);
+
+    mtd_p=malloc(size);
+    if(mtd_p == NULL)
+        goto error;
+
+    memset(mtd_p, 0, size);
+
+    data_p=(uint8_t *) mtd_p;
+
+    fd=open(mtd_name, O_RDONLY);
+    if(fd < 0)
+        goto error;
+
+    for(i=0 ; i < size / block_size ; i++)
+    {
+        offs = i * block_size;
+        if(ioctl(fd, MEMGETBADBLOCK, &offs) == 1)
+        {
+            printf("mtd_read: warning: bad block at offset %lld\n", (long long int) offs);
+            data_p+=block_size;
+            continue;
+        }
+
+        read(fd, data_p, block_size);
+        data_p+=block_size;
+    }
+
+    close(fd);
+
+    return mtd_p;
+
+error:
+    printf("%s: something went wrong\n", __func__);
+    return NULL;
+}
+
+void *file_read(char *file_name, int size, int block_size)
+{
+    void *file_p=NULL;
+    uint8_t *data_p=NULL;
+
+    int fd;
+    int i;
+
+    if(file_name == NULL || size <= 0 || block_size <= 0)
+        goto error;
+
+    printf("file_read: reading 0x%x bytes from %s with 0x%x bytes block size\n", size, file_name, block_size);
+
+    file_p=malloc(size);
+    if(file_p == NULL)
+        goto error;
+
+    memset(file_p, 0, size);
+
+    data_p=(uint8_t *) file_p;
+
+    fd=open(file_name, O_RDONLY);
+    if(fd < 0)
+        goto error;
+
+    for(i=0 ; i < size / block_size ; i++)
+    {
+        read(fd, data_p, block_size);
+        data_p+=block_size;
+    }
+
+    close(fd);
+
+    return file_p;
+
+error:
+    printf("%s: something went wrong\n", __func__);
+    return NULL;
+}
+
 
