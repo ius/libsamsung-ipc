@@ -358,7 +358,7 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
         return 1;
     }
 
-    printf("ERROR: crespo_ipc_client_recv: Modem RECV FMT (id=%d cmd=%d size=%d)!\n", modem_data.id, modem_data.cmd, modem_data.size);
+    printf("INFO: crespo_ipc_client_recv: Modem RECV FMT (id=%d cmd=%d size=%d)!\n", modem_data.id, modem_data.cmd, modem_data.size);
 
     if(modem_data.size <= 0 || modem_data.size >= 0x1000 || modem_data.data == NULL)
     {
