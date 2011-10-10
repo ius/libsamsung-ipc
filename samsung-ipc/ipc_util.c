@@ -24,12 +24,12 @@
 
 const char *ipc_response_type(struct ipc_response *frame) {
 	switch(frame->type) {
-		case IPC_TYPE_INDI:
-			return "INDI";
-		case IPC_TYPE_RESP:
-			return "RESP";
-		case IPC_TYPE_NOTI:
-			return "NOTI";
+		case IPC_TYPE_INDICATION:
+			return "INDICATION";
+		case IPC_TYPE_RESPONSE:
+			return "RESPONSE";
+		case IPC_TYPE_NOTIFICATION:
+			return "NOTIFICATION";
 		default:
 			return "UNKNOWN";
 	}

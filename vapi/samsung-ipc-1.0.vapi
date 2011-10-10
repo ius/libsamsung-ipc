@@ -29,6 +29,24 @@ namespace SamsungIpc
         H1,
     }
 
+    [CCode (cname = "int", cprefix = "IPC_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum RequestType
+    {
+        EXEC,
+        GET,
+        SET,
+        CFRM,
+        EVENT,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum ResponseType
+    {
+        INDICATION,
+        RESPONSE,
+        NOTIFICATION,
+    }
+
     [CCode (cname = "struct ipc_header", cheader_filename = "radio.h")]
     public struct Header
     {
@@ -40,7 +58,7 @@ namespace SamsungIpc
         public uint8 type;
     }
 
-    [CCode (cname = "struct ipc_request", cheader_filename = "radio.h")]
+    [CCode (cname = "struct ipc_request", cheader_filename = "radio.h", destroy_function = "")]
     public struct Request
     {
         public uint8 mseq;
@@ -52,7 +70,8 @@ namespace SamsungIpc
         public uint8[] data;
     }
 
-    [CCode (cname = "struct ipc_response", cheader_filename = "radio.h")]
+    [Compact]
+    [CCode (cname = "struct ipc_response", cheader_filename = "radio.h", destroy_function = "")]
     public struct Response
     {
         public uint8 mseq;
@@ -75,7 +94,7 @@ namespace SamsungIpc
         public int bootstrap_modem();
         public void open();
         public void close();
-        public int recv(Response response);
+        public int recv(out Response response);
         public void send(int command, int type, uint8 data, int length, uint8 mseq);
         public void send_get(int command, uint8 aseq);
         public void send_exec(int command, uint8 aseq);
