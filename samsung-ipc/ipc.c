@@ -147,6 +147,11 @@ void ipc_client_send(struct ipc_client *client, const int command, const int typ
 
 int ipc_client_recv(struct ipc_client *client, struct ipc_response *response)
 {
-    return -1;
+    if (client == NULL ||
+        client->ops == NULL ||
+        client->ops->recv == NULL)
+        return -1;
+
+    return client->ops->recv(client, response);
 }
 
