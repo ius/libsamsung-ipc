@@ -63,9 +63,9 @@ int ipc_client_free(struct ipc_client *client)
     return 0;
 }
 
-int ipc_client_transport_callback_set(struct ipc_client *client,
-                                      ipc_client_transport_cb write, void *write_data,
-                                      ipc_client_transport_cb read, void *read_data)
+int ipc_client_set_delegates(struct ipc_client *client,
+                             ipc_client_transport_cb write, void *write_data,
+                             ipc_client_transport_cb read, void *read_data)
 {
     if (client == NULL)
         return -1;
