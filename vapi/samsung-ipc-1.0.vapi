@@ -78,7 +78,8 @@ namespace SamsungIpc
         public uint8 aseq;
         public uint16 command;
         public uint8 type;
-        public uint32 length;
+        public uint32 data_length;
+        [CCode (array_length_cname = "data_length")]
         public uint8[] data;
     }
 
