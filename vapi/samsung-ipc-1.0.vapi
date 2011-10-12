@@ -47,6 +47,203 @@ namespace SamsungIpc
         NOTIFICATION,
     }
 
+    [CCode (cname = "int", cprefix = "IPC_GROUP_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum MessageGroup
+    {
+        PWR,
+        CALL,
+        SMS,
+        SEC,
+        PB,
+        DISP,
+        NET,
+        SND,
+        MISC,
+        SVC,
+        SS,
+        GPRS,
+        SAT,
+        CFG,
+        IMEI,
+        GPS,
+        SAP,
+        GEN
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_PWR_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum PowerMessageType
+    {
+        PHONE_PWR_OFF,
+        PHONE_PWR_UP,
+        PHONE_RESET,
+        BATT_STATUS,
+        BATT_TYPE,
+        BATT_COMP,
+        PHONE_ONLINE,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_PB_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum PhonebookMessageType
+    {
+        ACCESS,
+        STORAGE,
+        STORAGE_LIST,
+        ENTRY_INFO,
+        CAPABILITY_INFO,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_SS_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum SupplementarySevicesMessageType
+    {
+        WAITING,
+        CLI,
+        BARRING,
+        BARRING_PW,
+        FORWARDING,
+        INFO,
+        MANAGE_CALL,
+        USSD,
+        AOC,
+        RELASE_COMPLETE,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_GPRS_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum GprsMessageType
+    {
+        DEFINE_PDP_CONTEXT,
+        QOS,
+        PS,
+        PDP_CONTEXT,
+        SHOW_PDP_ADDR,
+        /* 3G_QUAL_SERVICE_PROFILE, */
+        IP_CONFIGURATION,
+        DEFINE_SEC_PDP_CONTEXT,
+        TFT,
+        HSDPA_STATUS,
+        CURRENT_SESSION_DATA_COUNT,
+        DATA_DORMANT,
+        DUN_PIN_CTRL,
+        CALL_STATUS,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_SAT_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum SatMessageType
+    {
+        PROFILE_DOWNLOAD,
+        ENVELOPE_CMD,
+        PROACTIVE_CMD,
+        TERMINATE_USAT_SESSION,
+        EVENT_DOWNLOAD,
+        PROVIDE_LOCAL_INFO,
+        POLLING,
+        REFRESH,
+        SETUP_EVENT_LIST,
+        CALL_CONTROL_RESULT,
+        IMAGE_CLUT,
+        CALL_PROCESSING,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_IMEI_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum ImeiMessageType
+    {
+        START,
+        CHECK_DEVICE_INFO,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_CALL_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum CallMessageType
+    {
+        OUTGOING,
+        INCOMING,
+        RELEASE,
+        ANSWER,
+        STATUS,
+        LIST,
+        BURST_DTMF,
+        CONT_DTMF,
+        WAITING,
+        LINE_ID,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_CALL_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum CallType
+    {
+        VOICE,
+        DATA,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_CALL_IDENTITY_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum CallIdentity
+    {
+        DEFAULT,
+        HIDE,
+        SHOW,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_CALL_PREFIX_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum CallType
+    {
+        NONE,
+        INTL,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_CALL_STATE_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum CallState
+    {
+        DIALING,
+        IGNORING_INCOMING_STATUS,
+        CONNECTED,
+        RELEASED,
+        CONNECTING,
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_CALL_TERM_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum CallTermination
+    {
+        MO,
+        MT,
+    }
+
+    [CCode (cname = "struct ipc_call_outgoing", cheader_filename = "radio.h")]
+    public struct CallOutgoingMessage
+    {
+        public uint8 type;
+        public uint8 identity;
+        public uint8 length;
+        public uint8 prefix;
+        public uint8[] number;
+    }
+
+    [CCode (cname = "struct ipc_call_incoming", cheader_filename = "radio.h")]
+    public struct CallIncomingMessage
+    {
+        public uint8 type;
+        public uint8 id;
+        public uint8 line;
+    }
+
+    [CCode (cname = "struct ipc_call_list_entry", cheader_filename = "radio.h")]
+    public struct CallListEntryMessage
+    {
+        public uint8 type;
+        public uint8 idx;
+        public uint8 term;
+        public uint8 state;
+        public uint8 mpty;
+        public uint8 number_len;
+        public uint8 unk4;
+    }
+
+    [CCode (cname = "struct ipc_call_status", cheader_filename = "radio.h")]
+    public struct CallStatusMessage
+    {
+        public uint8 type;
+        public uint8 id;
+        public uint8 state;
+        public uint8 reason;
+        public uint8 end_cause;
+    }
+
     [CCode (cname = "struct ipc_header", cheader_filename = "radio.h")]
     public struct Header
     {
