@@ -47,6 +47,9 @@ namespace SamsungIpc
         NOTIFICATION,
     }
 
+    [CCode (cname = "ipc_response_type", cheader_filename = "radio.h")]
+    public string response_type_to_string(ResponseType type);
+
     [CCode (cname = "int", cprefix = "IPC_GROUP_", has_type_id = false, cheader_filename = "radio.h")]
     public enum MessageGroup
     {
@@ -278,6 +281,9 @@ namespace SamsungIpc
         public uint32 data_length;
         [CCode (array_length_cname = "data_length")]
         public uint8[] data;
+
+        [CCode (cname = "ipc_response_type")]
+        public string type_to_string();
     }
 
     public delegate int TransportCb(uint8[] data);
