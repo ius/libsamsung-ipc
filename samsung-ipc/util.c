@@ -185,6 +185,10 @@ void *file_read(char *file_name, int size, int block_size)
 
     printf("file_read: reading 0x%x bytes from %s with 0x%x bytes block size\n", size, file_name, block_size);
 
+    fd=open(file_name, O_RDONLY);
+    if(fd < 0)
+        goto error;
+
     file_p=malloc(size);
     if(file_p == NULL)
         goto error;
@@ -192,10 +196,6 @@ void *file_read(char *file_name, int size, int block_size)
     memset(file_p, 0, size);
 
     data_p=(uint8_t *) file_p;
-
-    fd=open(file_name, O_RDONLY);
-    if(fd < 0)
-        goto error;
 
     for(i=0 ; i < size / block_size ; i++)
     {

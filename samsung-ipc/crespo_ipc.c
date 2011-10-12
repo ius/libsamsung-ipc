@@ -260,6 +260,8 @@ boot_loop_start:
     printf("crespo_ipc_bootstrap: write nv_data to modem_ctl\n");
 
     nv_data_p = file_read("/efs/nv_data.bin", NV_DATA_SIZE, 1024);
+    if (nv_data_p == NULL)
+        goto error;
     data_p = nv_data_p;
 
     lseek(modem_ctl_fd, RADIO_IMG_SIZE, SEEK_SET);
