@@ -138,6 +138,10 @@ void *mtd_read(char *mtd_name, int size, int block_size)
 
     printf("mtd_read: reading 0x%x bytes from %s with 0x%x bytes block size\n", size, mtd_name, block_size);
 
+    fd=open(mtd_name, O_RDONLY);
+    if(fd < 0)
+        goto error;
+
     mtd_p=malloc(size);
     if(mtd_p == NULL)
         goto error;
@@ -145,10 +149,6 @@ void *mtd_read(char *mtd_name, int size, int block_size)
     memset(mtd_p, 0, size);
 
     data_p=(uint8_t *) mtd_p;
-
-    fd=open(mtd_name, O_RDONLY);
-    if(fd < 0)
-        goto error;
 
     for(i=0 ; i < size / block_size ; i++)
     {
@@ -169,7 +169,6 @@ void *mtd_read(char *mtd_name, int size, int block_size)
     return mtd_p;
 
 error:
-    printf("%s: something went wrong\n", __func__);
     return NULL;
 }
 

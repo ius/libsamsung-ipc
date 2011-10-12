@@ -89,6 +89,11 @@ boot_loop_start:
     /* Read the radio.img image. */
     printf("crespo_ipc_bootstrap: reading radio image\n");
     radio_img_p=mtd_read("/dev/mtd/mtd5ro", RADIO_IMG_SIZE, 0x1000);
+    if (radio_img_p == NULL) {
+        radio_img_p = mtd_read("/dev/mtd5ro", RADIO_IMG_SIZE, 0x1000);
+        if (radio_img_p == NULL)
+            goto error;
+    }
     printf("crespo_ipc_bootstrap: radio image read\n");
 
     printf("crespo_ipc_bootstrap: open modem_ctl\n");
