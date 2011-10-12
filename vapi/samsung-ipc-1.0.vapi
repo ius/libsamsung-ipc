@@ -181,7 +181,7 @@ namespace SamsungIpc
     }
 
     [CCode (cname = "int", cprefix = "IPC_CALL_PREFIX_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum CallType
+    public enum CallPrefix
     {
         NONE,
         INTL,
