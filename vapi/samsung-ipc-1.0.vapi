@@ -281,7 +281,8 @@ namespace SamsungIpc
         public uint32 data_length;
         [CCode (array_length_cname = "data_length")]
         public uint8[] data;
-
+        [CCode (cname = "ipc_str")]
+        public string command_to_string();
         [CCode (cname = "ipc_response_type")]
         public string type_to_string();
     }
