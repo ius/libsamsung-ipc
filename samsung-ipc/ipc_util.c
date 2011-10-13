@@ -22,8 +22,8 @@
 
 #define IPC_STR(f)	case f: return #f;
 
-const char *ipc_response_type(struct ipc_response *frame) {
-	switch(frame->type) {
+const char *ipc_response_type_to_str(int type) {
+	switch(type) {
 		case IPC_TYPE_INDICATION:
 			return "INDICATION";
 		case IPC_TYPE_RESPONSE:
@@ -35,8 +35,8 @@ const char *ipc_response_type(struct ipc_response *frame) {
 	}
 }
 
-const char *ipc_str(struct ipc_response *frame) {
-	switch(frame->command) {
+const char *ipc_command_type_to_str(int command) {
+	switch(command) {
 		IPC_STR(IPC_PWR_PHONE_PWR_UP)
 		IPC_STR(IPC_PWR_PHONE_PWR_OFF)
 		IPC_STR(IPC_PWR_PHONE_RESET)

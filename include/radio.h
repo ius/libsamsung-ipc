@@ -76,8 +76,8 @@ void ipc_client_send_get(struct ipc_client *client, const int command, unsigned 
 void ipc_client_send_exec(struct ipc_client *client, const int command, unsigned char aseq);
 
 /* Utility functions */
-const char *ipc_str(struct ipc_response *frame);
-const char *ipc_response_type(struct ipc_response *frame);
+const char *ipc_command_type_to_str(int command);
+const char *ipc_response_type_to_str(int type);
 
 #endif
 

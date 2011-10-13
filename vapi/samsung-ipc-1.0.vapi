@@ -39,6 +39,32 @@ namespace SamsungIpc
         EVENT,
     }
 
+    public string request_type_to_string( int type )
+    {
+        string result = "unknown";
+
+        switch ( (RequestType) type )
+        {
+            case RequestType.EXEC:
+                result = "EXEC";
+                break;
+            case RequestType.GET:
+                result = "GET";
+                break;
+            case RequestType.SET:
+                result = "SET";
+                break;
+            case RequestType.CFRM:
+                result = "CFRM";
+                break;
+            case RequestType.EVENT:
+                result = "EVENT";
+                break;
+        }
+
+        return result;
+    }
+
     [CCode (cname = "int", cprefix = "IPC_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
     public enum ResponseType
     {
@@ -46,9 +72,6 @@ namespace SamsungIpc
         RESPONSE,
         NOTIFICATION,
     }
-
-    [CCode (cname = "ipc_response_type", cheader_filename = "radio.h")]
-    public string response_type_to_string(ResponseType type);
 
     [CCode (cname = "int", cprefix = "IPC_GROUP_", has_type_id = false, cheader_filename = "radio.h")]
     public enum MessageGroup
@@ -71,6 +94,21 @@ namespace SamsungIpc
         GPS,
         SAP,
         GEN
+    }
+
+    [CCode (cname = "int", cprefix = "IPC_PWR_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum GenericMessageType
+    {
+        PHONE_RESPONSE,
+    }
+
+    [CCode (cname = "struct ipc_get_phone_res", cheader_filename = "radio.h")]
+    public struct GenericPhoneResponseMessage
+    {
+        public uint8 group;
+        public uint8 type;
+        public uint16 code;
+        public uint8 unk;
     }
 
     [CCode (cname = "int", cprefix = "IPC_PWR_", has_type_id = false, cheader_filename = "radio.h")]
@@ -258,7 +296,7 @@ namespace SamsungIpc
         public uint8 type;
     }
 
-    [CCode (cname = "struct ipc_request", cheader_filename = "radio.h", destroy_function = "")]
+    [CCode (cname = "struct ipc_request", cheader_filename = "radio.h", destroy_function = "", free_function = "")]
     public struct Request
     {
         public uint8 mseq;
@@ -270,8 +308,7 @@ namespace SamsungIpc
         public uint8[] data;
     }
 
-    [Compact]
-    [CCode (cname = "struct ipc_response", cheader_filename = "radio.h", destroy_function = "")]
+    [CCode (cname = "struct ipc_response", cheader_filename = "radio.h", destroy_function = "", free_function = "", copy_function = "")]
     public struct Response
     {
         public uint8 mseq;
@@ -281,13 +318,15 @@ namespace SamsungIpc
         public uint32 data_length;
         [CCode (array_length_cname = "data_length")]
         public uint8[] data;
-        [CCode (cname = "ipc_str")]
-        public string command_to_string();
-        [CCode (cname = "ipc_response_type")]
-        public string type_to_string();
     }
 
     public delegate int TransportCb(uint8[] data);
+
+    [CCode (cname = "ipc_command_type_to_str", cheader_filename = "radio.h")]
+    public string command_type_to_string( int command );
+
+    [CCode (cname = "ipc_response_type_to_str", cheader_filename = "radio.h")]
+    public string response_type_to_string( int type );
 
     [Compact]
     [CCode (cname = "struct ipc_client", cprefix = "ipc_client_", cheader_filename = "radio.h")]
@@ -300,7 +339,7 @@ namespace SamsungIpc
         public void open();
         public void close();
         public int recv(out Response response);
-        public void send(int command, int type, uint8 data, int length, uint8 mseq);
+        public void send(int command, int type, uint8[] data, uint8 mseq);
         public void send_get(int command, uint8 aseq);
         public void send_exec(int command, uint8 aseq);
     }
