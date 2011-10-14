@@ -139,19 +139,19 @@ boot_loop_start:
 
     /* Get and check bootcore version. */
     read(s3c2410_serial3_fd, &bootcore_version, sizeof(bootcore_version));
-    ipc_client_log(client, "crespo_ipc_bootstrap: got bootcore version: 0x%x\n", bootcore_version);
+    ipc_client_log(client, "crespo_ipc_bootstrap: got bootcore version: 0x%x", bootcore_version);
 
     if(bootcore_version != BOOTCORE_VERSION)
         goto error_loop;
 
     /* Get info_size. */
     read(s3c2410_serial3_fd, &info_size, sizeof(info_size));
-    ipc_client_log(client, "crespo_ipc_bootstrap: got info_size: 0x%x\n", info_size);
+    ipc_client_log(client, "crespo_ipc_bootstrap: got info_size: 0x%x", info_size);
 
     /* Send PSI magic. */
     data=PSI_MAGIC;
     write(s3c2410_serial3_fd, &data, sizeof(data));
-    ipc_client_log(client, "crespo_ipc_bootstrap: sent PSI_MAGIC (0x%x)\n", PSI_MAGIC);
+    ipc_client_log(client, "crespo_ipc_bootstrap: sent PSI_MAGIC (0x%x)", PSI_MAGIC);
 
     /* Send PSI data len. */
     data_16=PSI_DATA_LEN;
@@ -162,7 +162,7 @@ boot_loop_start:
         write(s3c2410_serial3_fd, data_p, 1);
         data_p++;
     }
-    ipc_client_log(client, "crespo_ipc_bootstrap: sent PSI_DATA_LEN (0x%x)\n", PSI_DATA_LEN);
+    ipc_client_log(client, "crespo_ipc_bootstrap: sent PSI_DATA_LEN (0x%x)", PSI_DATA_LEN);
 
     /* Write the first part of modem.img. */
     FD_ZERO(&fds);
@@ -189,7 +189,7 @@ boot_loop_start:
         data_p++;
     }
 
-    ipc_client_log(client, "crespo_ipc_bootstrap: first part of radio.img sent; crc_byte is 0x%x\n", crc_byte);
+    ipc_client_log(client, "crespo_ipc_bootstrap: first part of radio.img sent; crc_byte is 0x%x", crc_byte);
 
     if(select(FD_SETSIZE, NULL, &fds, NULL, &timeout) == 0)
     {
@@ -278,14 +278,14 @@ boot_loop_start:
     goto exit;
 
 error_loop:
-    ipc_client_log(client, "%s: something went wrong\n", __func__);
+    ipc_client_log(client, "%s: something went wrong", __func__);
     boot_tries_count++;
     sleep(2);
 
     goto boot_loop_start;
 
 error:
-    ipc_client_log(client, "%s: something went wrong\n", __func__);
+    ipc_client_log(client, "%s: something went wrong", __func__);
     rc = 1;
 exit:
     ipc_client_log(client, "crespo_ipc_bootstrap: exit");
@@ -364,7 +364,7 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
         return 1;
     }
 
-    ipc_client_log(client, "INFO: crespo_ipc_client_recv: Modem RECV FMT (id=%d cmd=%d size=%d)!\n", modem_data.id, modem_data.cmd, modem_data.size);
+    ipc_client_log(client, "INFO: crespo_ipc_client_recv: Modem RECV FMT (id=%d cmd=%d size=%d)!", modem_data.id, modem_data.cmd, modem_data.size);
 
     if(modem_data.size <= 0 || modem_data.size >= 0x1000 || modem_data.data == NULL)
     {
@@ -379,15 +379,15 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
     response->command = IPC_COMMAND(resphdr);
     response->type = resphdr->type;
     response->data_length = modem_data.size - sizeof(struct ipc_header);
+    response->data = NULL;
+
+    ipc_client_log(client, "INFO: crespo_ipc_client_recv: response: group = %d, index = %d, command = %04x",
+                   resphdr->group, resphdr->index, response->command);
 
     if(response->data_length > 0)
     {
         response->data = malloc(response->data_length);
         memcpy(response->data, (uint8_t *) modem_data.data + sizeof(struct ipc_header), response->data_length);
-    }
-    else
-    {
-        response->data = NULL;
     }
 
     free(modem_data.data);
