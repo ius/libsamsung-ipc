@@ -23,6 +23,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <assert.h>
+#include <stdarg.h>
 
 #include <radio.h>
 
@@ -40,8 +41,14 @@ void log_handler_default(const char *message, void *user_data)
 void ipc_client_log(struct ipc_client *client, const char *message, ...)
 {
     assert(client->log_handler != NULL);
-    // FIXME construct message with additional arguments!
-    client->log_handler(message, client->log_data);
+
+    va_list args;
+    char buffer[4096];
+
+    va_start(args, message);
+    vsprintf(buffer, message, args);
+    client->log_handler(buffer, client->log_data);
+    va_end(args);
 }
 
 struct ipc_client* ipc_client_new(int client_type)
