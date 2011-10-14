@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
 #include <radio.h>
 
@@ -30,6 +31,18 @@
 extern struct ipc_ops crespo_ipc_ops;
 // extern struct ipc_ops h1_ipc_ops;
 
+
+void log_handler_default(const char *message, void *user_data)
+{
+    printf("%s\n", message);
+}
+
+void ipc_client_log(struct ipc_client *client, const char *message, ...)
+{
+    assert(client->log_handler != NULL);
+    // FIXME construct message with additional arguments!
+    client->log_handler(message, client->log_data);
+}
 
 struct ipc_client* ipc_client_new(int client_type)
 {
@@ -52,6 +65,7 @@ struct ipc_client* ipc_client_new(int client_type)
     client = (struct ipc_client*) malloc(sizeof(struct ipc_client));
     client->type = client_type;
     client->ops = ops;
+    client->log_handler = log_handler_default;
 
     return client;
 }
@@ -62,6 +76,16 @@ int ipc_client_free(struct ipc_client *client)
     client = NULL;
     return 0;
 }
+
+int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler_cb log_handler_cb, void *user_data)
+{
+    if (client == NULL)
+        return -1;
+
+    client->log_handler = log_handler_cb;
+    client->log_data = user_data;
+}
+
 
 int ipc_client_set_delegates(struct ipc_client *client,
                              ipc_client_transport_cb write, void *write_data,

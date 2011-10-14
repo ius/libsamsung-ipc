@@ -565,6 +565,7 @@ namespace SamsungIpc
     }
 
     public delegate int TransportCb(uint8[] data);
+    public delegate void LogHandlerCb(string message);
 
     [CCode (cname = "ipc_command_type_to_str", cheader_filename = "radio.h")]
     public string command_type_to_string( int command );
@@ -578,6 +579,7 @@ namespace SamsungIpc
     {
         public Client(ClientType type);
         [CCode (delagate_target_pos = 0.9)]
+        public int set_log_handler(LogHandlerCb log_cb);
         public int set_delegates(TransportCb write_cb, TransportCb read_cb);
         public int bootstrap_modem();
         public void open();

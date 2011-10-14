@@ -23,6 +23,8 @@
 
 struct ipc_client;
 
+void ipc_client_log(struct ipc_client *client, const char *message, ...);
+
 struct ipc_ops {
     int (*bootstrap)(struct ipc_client *client);
     int (*open)(struct ipc_client *client);
@@ -39,6 +41,9 @@ struct ipc_client {
     void *read_data;
     ipc_client_transport_cb write;
     void *write_data;
+
+    ipc_client_log_handler_cb log_handler;
+    void *log_data;
 
     struct ipc_ops *ops;
 };
