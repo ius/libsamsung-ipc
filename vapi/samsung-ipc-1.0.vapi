@@ -74,6 +74,26 @@ namespace SamsungIpc
         NOTIFICATION,
     }
 
+    public string response_type_to_string( ResponseType type )
+    {
+        string result = "unknown";
+
+        switch ( type )
+        {
+            case ResponseType.INDICATION:
+                result = "INDICATION";
+                break;
+            case ResponseType.RESPONSE:
+                result = "RESPONSE";
+                break;
+            case ResponseType.NOTIFICATION:
+                result = "NOTIFICATION";
+                break;
+        }
+
+        return result;
+    }
+
     [CCode (cname = "int", cprefix = "IPC_GROUP_", has_type_id = false, cheader_filename = "radio.h")]
     public enum MessageGroup
     {
@@ -566,12 +586,6 @@ namespace SamsungIpc
 
     public delegate int TransportCb(uint8[] data);
     public delegate void LogHandlerCb(string message);
-
-    [CCode (cname = "ipc_command_type_to_str", cheader_filename = "radio.h")]
-    public string command_type_to_string( int command );
-
-    [CCode (cname = "ipc_response_type_to_str", cheader_filename = "radio.h")]
-    public string response_type_to_string( int type );
 
     [Compact]
     [CCode (cname = "struct ipc_client", cprefix = "ipc_client_", cheader_filename = "radio.h")]
