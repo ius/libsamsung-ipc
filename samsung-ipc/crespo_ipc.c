@@ -77,26 +77,26 @@ int crespo_modem_bootstrap(struct ipc_client *client)
     uint8_t *data_p;
     int i;
 
-    printf("crespo_ipc_bootstrap: enter\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: enter\n");
 
 boot_loop_start:
     if(boot_tries_count > 5)
     {
-        printf("crespo_ipc_bootstrap: boot has failed too many times.\n");
+        ipc_client_log(client, "crespo_ipc_bootstrap: boot has failed too many times.\n");
         goto error;
     }
 
     /* Read the radio.img image. */
-    printf("crespo_ipc_bootstrap: reading radio image\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: reading radio image\n");
     radio_img_p=mtd_read("/dev/mtd/mtd5ro", RADIO_IMG_SIZE, 0x1000);
     if (radio_img_p == NULL) {
         radio_img_p = mtd_read("/dev/mtd5ro", RADIO_IMG_SIZE, 0x1000);
         if (radio_img_p == NULL)
             goto error;
     }
-    printf("crespo_ipc_bootstrap: radio image read\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: radio image read\n");
 
-    printf("crespo_ipc_bootstrap: open modem_ctl\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: open modem_ctl\n");
     modem_ctl_fd=open("/dev/modem_ctl", O_RDWR | O_NDELAY);
     if(modem_ctl_fd < 0)
         goto error_loop;
@@ -105,13 +105,13 @@ boot_loop_start:
     ioctl(modem_ctl_fd, IOCTL_MODEM_RESET);
     usleep(400000);
 
-    printf("crespo_ipc_bootstrap: open s3c2410_serial3\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: open s3c2410_serial3\n");
     s3c2410_serial3_fd=open("/dev/s3c2410_serial3", O_RDWR | O_NDELAY);
     if(s3c2410_serial3_fd < 0)
         goto error_loop;
 
     /* Setup the s3c2410 serial. */
-    printf("crespo_ipc_bootstrap: setup s3c2410_serial3\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: setup s3c2410_serial3\n");
     tcgetattr(s3c2410_serial3_fd, &termios);
 
     cfmakeraw(&termios);
@@ -127,31 +127,31 @@ boot_loop_start:
     tcsetattr(s3c2410_serial3_fd, TCSANOW, &termios); //FIXME
 
     /* Send 'AT' in ASCII. */
-    printf("crespo_ipc_bootstrap: sending AT in ASCII\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: sending AT in ASCII\n");
     for(i=0 ; i < 20 ; i++)
     {
         rc = write(s3c2410_serial3_fd, "AT", 2);
         usleep(50000);
     }
-    printf("crespo_ipc_bootstrap: sending AT in ASCII done\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: sending AT in ASCII done\n");
 
     usleep(50000); //FIXME
 
     /* Get and check bootcore version. */
     read(s3c2410_serial3_fd, &bootcore_version, sizeof(bootcore_version));
-    printf("crespo_ipc_bootstrap: got bootcore version: 0x%x\n", bootcore_version);
+    ipc_client_log(client, "crespo_ipc_bootstrap: got bootcore version: 0x%x\n", bootcore_version);
 
     if(bootcore_version != BOOTCORE_VERSION)
         goto error_loop;
 
     /* Get info_size. */
     read(s3c2410_serial3_fd, &info_size, sizeof(info_size));
-    printf("crespo_ipc_bootstrap: got info_size: 0x%x\n", info_size);
+    ipc_client_log(client, "crespo_ipc_bootstrap: got info_size: 0x%x\n", info_size);
 
     /* Send PSI magic. */
     data=PSI_MAGIC;
     write(s3c2410_serial3_fd, &data, sizeof(data));
-    printf("crespo_ipc_bootstrap: sent PSI_MAGIC (0x%x)\n", PSI_MAGIC);
+    ipc_client_log(client, "crespo_ipc_bootstrap: sent PSI_MAGIC (0x%x)\n", PSI_MAGIC);
 
     /* Send PSI data len. */
     data_16=PSI_DATA_LEN;
@@ -162,7 +162,7 @@ boot_loop_start:
         write(s3c2410_serial3_fd, data_p, 1);
         data_p++;
     }
-    printf("crespo_ipc_bootstrap: sent PSI_DATA_LEN (0x%x)\n", PSI_DATA_LEN);
+    ipc_client_log(client, "crespo_ipc_bootstrap: sent PSI_DATA_LEN (0x%x)\n", PSI_DATA_LEN);
 
     /* Write the first part of modem.img. */
     FD_ZERO(&fds);
@@ -173,13 +173,13 @@ boot_loop_start:
 
     data_p=radio_img_p;
 
-    printf("crespo_ipc_bootstrap: sending the first part of radio.img\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: sending the first part of radio.img\n");
 
     for(i=0 ; i < PSI_DATA_LEN ; i++)
     {
         if(select(FD_SETSIZE, NULL, &fds, NULL, &timeout) == 0)
         {
-            printf("crespo_ipc_bootstrap: select timeout passed\n");
+            ipc_client_log(client, "crespo_ipc_bootstrap: select timeout passed\n");
             goto error_loop;
         }
 
@@ -189,24 +189,24 @@ boot_loop_start:
         data_p++;
     }
 
-    printf("crespo_ipc_bootstrap: first part of radio.img sent; crc_byte is 0x%x\n", crc_byte);
+    ipc_client_log(client, "crespo_ipc_bootstrap: first part of radio.img sent; crc_byte is 0x%x\n", crc_byte);
 
     if(select(FD_SETSIZE, NULL, &fds, NULL, &timeout) == 0)
     {
-        printf("crespo_ipc_bootstrap: select timeout passed\n");
+        ipc_client_log(client, "crespo_ipc_bootstrap: select timeout passed\n");
         goto error_loop;
     }
 
     write(s3c2410_serial3_fd, &crc_byte, sizeof(crc_byte));
 
-    printf("crespo_ipc_bootstrap: crc_byte sent\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: crc_byte sent\n");
 
     data = 0;
     for(i = 0 ; data != 0x01 ; i++)
     {
         if(select(FD_SETSIZE, &fds, NULL, NULL, &timeout) == 0)
         {
-            printf("crespo_ipc_bootstrap: select timeout passed\n");
+            ipc_client_log(client, "crespo_ipc_bootstrap: select timeout passed\n");
             goto error_loop;
         }
 
@@ -214,15 +214,15 @@ boot_loop_start:
 
         if(i > 50)
         {
-            printf("crespo_ipc_bootstrap: fairly too much attempts to get ACK\n");
+            ipc_client_log(client, "crespo_ipc_bootstrap: fairly too much attempts to get ACK\n");
             goto error_loop;
         }
     }
 
-    printf("crespo_ipc_bootstrap: close s3c2410_serial3\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: close s3c2410_serial3\n");
     close(s3c2410_serial3_fd);
 
-    printf("crespo_ipc_bootstrap: writing the rest of radio.img to modem_ctl.\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: writing the rest of radio.img to modem_ctl.\n");
     /* Seek to the begining of modem_ctl_fd (should already be so). */
     lseek(modem_ctl_fd, 0, SEEK_SET);
 
@@ -238,7 +238,7 @@ boot_loop_start:
     {
         if(select(FD_SETSIZE, NULL, &fds, NULL, &timeout) == 0)
         {
-            printf("crespo_ipc_bootstrap: select timeout passed\n");
+            ipc_client_log(client, "crespo_ipc_bootstrap: select timeout passed\n");
             goto error_loop;
         }
 
@@ -257,7 +257,7 @@ boot_loop_start:
     nv_data_md5_check();
 
     /* Write nv_data.bin to modem_ctl. */
-    printf("crespo_ipc_bootstrap: write nv_data to modem_ctl\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: write nv_data to modem_ctl\n");
 
     nv_data_p = file_read("/efs/nv_data.bin", NV_DATA_SIZE, 1024);
     if (nv_data_p == NULL)
@@ -278,17 +278,17 @@ boot_loop_start:
     goto exit;
 
 error_loop:
-    printf("%s: something went wrong\n", __func__);
+    ipc_client_log(client, "%s: something went wrong\n", __func__);
     boot_tries_count++;
     sleep(2);
 
     goto boot_loop_start;
 
 error:
-    printf("%s: something went wrong\n", __func__);
+    ipc_client_log(client, "%s: something went wrong\n", __func__);
     rc = 1;
 exit:
-    printf("crespo_ipc_bootstrap: exit\n");
+    ipc_client_log(client, "crespo_ipc_bootstrap: exit\n");
     return rc;
 }
 
@@ -360,15 +360,15 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
     bread = client->read((uint8_t*) &modem_data, sizeof(struct modem_io) + MAX_MODEM_DATA_SIZE, client->read_data);
     if (bread <= 0)
     {
-        printf("ERROR: crespo_ipc_client_recv: can't receive enough bytes from modem to process incoming response!\n");
+        ipc_client_log(client, "ERROR: crespo_ipc_client_recv: can't receive enough bytes from modem to process incoming response!\n");
         return 1;
     }
 
-    printf("INFO: crespo_ipc_client_recv: Modem RECV FMT (id=%d cmd=%d size=%d)!\n", modem_data.id, modem_data.cmd, modem_data.size);
+    ipc_client_log(client, "INFO: crespo_ipc_client_recv: Modem RECV FMT (id=%d cmd=%d size=%d)!\n", modem_data.id, modem_data.cmd, modem_data.size);
 
     if(modem_data.size <= 0 || modem_data.size >= 0x1000 || modem_data.data == NULL)
     {
-        printf("ERROR: crespo_ipc_client_recv: we retrieve less bytes from the modem than we exepected!\n");
+        ipc_client_log(client, "ERROR: crespo_ipc_client_recv: we retrieve less bytes from the modem than we exepected!\n");
         return 1;
     }
 
