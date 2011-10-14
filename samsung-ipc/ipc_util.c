@@ -19,8 +19,9 @@
  */
 
 #include <radio.h>
+#include <string.h>
 
-#define IPC_STR(f)	case f: return #f;
+#define IPC_STR(f)	case f: return strdup(#f);
 
 const char *ipc_response_type_to_str(int type) {
 	switch(type) {
