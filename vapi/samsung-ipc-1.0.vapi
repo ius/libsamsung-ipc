@@ -1,3 +1,4 @@
+
 /*
  * samsung-ipc-1.0.vapi
  *
@@ -93,7 +94,72 @@ namespace SamsungIpc
         IMEI,
         GPS,
         SAP,
-        GEN
+        GEN,
+    }
+
+    public string message_group_to_string( int group )
+    {
+        string result = "unknown";
+
+        switch ( (MessageGroup) group )
+        {
+            case MessageGroup.PWR:
+                result = "PWR";
+                break;
+            case MessageGroup.CALL:
+                result = "CALL";
+                break;
+            case MessageGroup.SMS:
+                result = "SMS";
+                break;
+            case MessageGroup.SEC:
+                result = "SEC";
+                break;
+            case MessageGroup.PB:
+                result = "PB";
+                break;
+            case MessageGroup.DISP:
+                result = "DISP";
+                break;
+            case MessageGroup.NET:
+                result = "NET";
+                break;
+            case MessageGroup.SND:
+                result = "SND";
+                break;
+            case MessageGroup.MISC:
+                result = "MISC";
+                break;
+            case MessageGroup.SVC:
+                result = "SVC";
+                break;
+            case MessageGroup.SS:
+                result = "SS";
+                break;
+            case MessageGroup.GPRS:
+                result = "GPRS";
+                break;
+            case MessageGroup.SAT:
+                result = "SAT";
+                break;
+            case MessageGroup.CFG:
+                result = "CFG";
+                break;
+            case MessageGroup.IMEI:
+                result = "IMEI";
+                break;
+            case MessageGroup.GPS:
+                result = "GPS";
+                break;
+            case MessageGroup.SAP:
+                result = "SAP";
+                break;
+            case MessageGroup.GEN:
+                result = "GEN";
+                break;
+        }
+
+        return result;
     }
 
     [CCode (cname = "int", cprefix = "IPC_PWR_", has_type_id = false, cheader_filename = "radio.h")]
@@ -111,99 +177,260 @@ namespace SamsungIpc
         public uint8 unk;
     }
 
-    [CCode (cname = "int", cprefix = "IPC_PWR_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum PowerMessageType
+    [CCode (cname = "int", cprefix = "IPC_", has_type_id = false, cheader_filename = "radio.h")]
+    public enum MessageType
     {
-        PHONE_PWR_OFF,
-        PHONE_PWR_UP,
-        PHONE_RESET,
-        BATT_STATUS,
-        BATT_TYPE,
-        BATT_COMP,
-        PHONE_ONLINE,
-    }
-
-    [CCode (cname = "int", cprefix = "IPC_PB_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum PhonebookMessageType
-    {
-        ACCESS,
-        STORAGE,
-        STORAGE_LIST,
-        ENTRY_INFO,
-        CAPABILITY_INFO,
-    }
-
-    [CCode (cname = "int", cprefix = "IPC_SS_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum SupplementarySevicesMessageType
-    {
-        WAITING,
-        CLI,
-        BARRING,
-        BARRING_PW,
-        FORWARDING,
-        INFO,
-        MANAGE_CALL,
-        USSD,
-        AOC,
-        RELASE_COMPLETE,
-    }
-
-    [CCode (cname = "int", cprefix = "IPC_GPRS_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum GprsMessageType
-    {
-        DEFINE_PDP_CONTEXT,
-        QOS,
-        PS,
-        PDP_CONTEXT,
-        SHOW_PDP_ADDR,
-        /* 3G_QUAL_SERVICE_PROFILE, */
-        IP_CONFIGURATION,
-        DEFINE_SEC_PDP_CONTEXT,
-        TFT,
-        HSDPA_STATUS,
-        CURRENT_SESSION_DATA_COUNT,
-        DATA_DORMANT,
-        DUN_PIN_CTRL,
+        PWR_PHONE_PWR_OFF,
+        PWR_PHONE_PWR_UP,
+        PWR_PHONE_RESET,
+        PWR_BATT_STATUS,
+        PWR_BATT_TYPE,
+        PWR_BATT_COMP,
+        PWR_PHONE_ONLINE,
+        PB_ACCESS,
+        PB_STORAGE,
+        PB_STORAGE_LIST,
+        PB_ENTRY_INFO,
+        PB_CAPABILITY_INFO,
+        SS_WAITING,
+        SS_CLI,
+        SS_BARRING,
+        SS_BARRING_PW,
+        SS_FORWARDING,
+        SS_INFO,
+        SS_MANAGE_CALL,
+        SS_USSD,
+        SS_AOC,
+        SS_RELEASE_COMPLETE,
+        GPRS_DEFINE_PDP_CONTEXT,
+        GPRS_QOS,
+        GPRS_PS,
+        GPRS_PDP_CONTEXT,
+        GPRS_SHOW_PDP_ADDR,
+        GPRS_3G_QUAL_SERVICE_PROFILE,
+        GPRS_IP_CONFIGURATION,
+        GPRS_DEFINE_SEC_PDP_CONTEXT,
+        GPRS_TFT,
+        GPRS_HSDPA_STATUS,
+        GPRS_CURRENT_SESSION_DATA_COUNT,
+        GPRS_DATA_DORMANT,
+        GPRS_DUN_PIN_CTRL,
+        GPRS_CALL_STATUS,
+        SAT_PROFILE_DOWNLOAD,
+        SAT_ENVELOPE_CMD,
+        SAT_PROACTIVE_CMD,
+        SAT_TERMINATE_USAT_SESSION,
+        SAT_EVENT_DOWNLOAD,
+        SAT_PROVIDE_LOCAL_INFO,
+        SAT_POLLING,
+        SAT_REFRESH,
+        SAT_SETUP_EVENT_LIST,
+        SAT_CALL_CONTROL_RESULT,
+        SAT_IMAGE_CLUT,
+        SAT_CALL_PROCESSING,
+        IMEI_START,
+        IMEI_CHECK_DEVICE_INFO,
+        CALL_OUTGOING,
+        CALL_INCOMING,
+        CALL_RELEASE,
+        CALL_ANSWER,
         CALL_STATUS,
+        CALL_LIST,
+        CALL_BURST_DTMF,
+        CALL_CONT_DTMF,
+        CALL_WAITING,
+        CALL_LINE_ID,
     }
 
-    [CCode (cname = "int", cprefix = "IPC_SAT_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum SatMessageType
+    public string message_type_to_string( MessageType type )
     {
-        PROFILE_DOWNLOAD,
-        ENVELOPE_CMD,
-        PROACTIVE_CMD,
-        TERMINATE_USAT_SESSION,
-        EVENT_DOWNLOAD,
-        PROVIDE_LOCAL_INFO,
-        POLLING,
-        REFRESH,
-        SETUP_EVENT_LIST,
-        CALL_CONTROL_RESULT,
-        IMAGE_CLUT,
-        CALL_PROCESSING,
-    }
+        string result = "unknown";
 
-    [CCode (cname = "int", cprefix = "IPC_IMEI_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum ImeiMessageType
-    {
-        START,
-        CHECK_DEVICE_INFO,
-    }
+        switch ( type )
+        {
+            case MessageType.PWR_PHONE_PWR_OFF:
+                result = "PWR_PHONE_PWR_OFF";
+                break;
+            case MessageType.PWR_PHONE_PWR_UP:
+                result = "PWR_PHONE_PWR_UP";
+                break;
+            case MessageType.PWR_PHONE_RESET:
+                result = "PWR_PHONE_RESET";
+                break;
+            case MessageType.PWR_BATT_STATUS:
+                result = "PWR_BATT_STATUS";
+                break;
+            case MessageType.PWR_BATT_TYPE:
+                result = "PWR_BATT_TYPE";
+                break;
+            case MessageType.PWR_BATT_COMP:
+                result = "PWR_BATT_COMP";
+                break;
+            case MessageType.PWR_PHONE_ONLINE:
+                result = "WR_PHONE_ONLINE";
+                break;
+            case MessageType.PB_ACCESS:
+                result = "PB_ACCESS";
+                break;
+            case MessageType.PB_STORAGE:
+                result = "PB_STORAGE";
+                break;
+            case MessageType.PB_STORAGE_LIST:
+                result = "PB_STORAGE_LIST";
+                break;
+            case MessageType.PB_ENTRY_INFO:
+                result = "PB_ENTRY_INFO";
+                break;
+            case MessageType.PB_CAPABILITY_INFO:
+                result = "PB_CAPABILITY_INFO";
+                break;
+            case MessageType.SS_WAITING:
+                result = "SS_WAITING";
+                break;
+            case MessageType.SS_CLI:
+                result = "SS_CLI";
+                break;
+            case MessageType.SS_BARRING:
+                result = "SS_BARRING";
+                break;
+            case MessageType.SS_BARRING_PW:
+                result = "SS_BARRING_PW";
+                break;
+            case MessageType.SS_FORWARDING:
+                result = "SS_FORWARDING";
+                break;
+            case MessageType.SS_INFO:
+                result = "SS_INFO";
+                break;
+            case MessageType.SS_MANAGE_CALL:
+                result = "SS_MANAGE_CALL";
+                break;
+            case MessageType.SS_USSD:
+                result = "SS_USSD";
+                break;
+            case MessageType.SS_AOC:
+                result = "SS_AOC";
+                break;
+            case MessageType.SS_RELEASE_COMPLETE:
+                result = "SS_RELEASE_COMPLETE";
+                break;
+            case MessageType.GPRS_DEFINE_PDP_CONTEXT:
+                result = "GPRS_DEFINE_PDP_CONTEXT";
+                break;
+            case MessageType.GPRS_QOS:
+                result = "GPRS_QOS";
+                break;
+            case MessageType.GPRS_PS:
+                result = "GPRS_PS";
+                break;
+            case MessageType.GPRS_PDP_CONTEXT:
+                result = "gPRS_PDP_CONTEXT";
+                break;
+            case MessageType.GPRS_SHOW_PDP_ADDR:
+                result = "GPRS_SHOW_PDP_ADDR";
+                break;
+            case MessageType.GPRS_3G_QUAL_SERVICE_PROFILE:
+                result = "GPRS_3G_QUAL_SERVICE_PROFILE";
+                break;
+            case MessageType.GPRS_IP_CONFIGURATION:
+                result = "GPRS_IP_CONFIGURATION";
+                break;
+            case MessageType.GPRS_DEFINE_SEC_PDP_CONTEXT:
+                result = "GPRS_DEFINE_SEC_PDP_CONTEXT";
+                break;
+            case MessageType.GPRS_TFT:
+                result = "GPRS_TFT";
+                break;
+            case MessageType.GPRS_HSDPA_STATUS:
+                result = "GPRS_HSDPA_STATUS";
+                break;
+            case MessageType.GPRS_CURRENT_SESSION_DATA_COUNT:
+                result = "GPRS_CURRENT_SESSION_DATA_COUNT";
+                break;
+            case MessageType.GPRS_DATA_DORMANT:
+                result = "GPRRS_DATA_DORMANT";
+                break;
+            case MessageType.GPRS_DUN_PIN_CTRL:
+                result = "GPRS_DUN_PIN_CTRL";
+                break;
+            case MessageType.GPRS_CALL_STATUS:
+                result = "GPRS_CALL_STATUS";
+                break;
+            case MessageType.SAT_PROFILE_DOWNLOAD:
+                result = "SAT_PROFILE_DOWNLOAD";
+                break;
+            case MessageType.SAT_ENVELOPE_CMD:
+                result = "SAT_ENVELOPE_CMD";
+                break;
+            case MessageType.SAT_PROACTIVE_CMD:
+                result = "SAT_PROACTIVE_CMD";
+                break;
+            case MessageType.SAT_TERMINATE_USAT_SESSION:
+                result = "SAT_TERMINATE_USAT_SESSION";
+                break;
+            case MessageType.SAT_EVENT_DOWNLOAD:
+                result = "SAT_EVENT_DOWNLOAD";
+                break;
+            case MessageType.SAT_PROVIDE_LOCAL_INFO:
+                result = "SAT_PROVIDE_LOCAL_INFO";
+                break;
+            case MessageType.SAT_POLLING:
+                result = "SAT_POLLING";
+                break;
+            case MessageType.SAT_REFRESH:
+                result = "SAT_REFRESH";
+                break;
+            case MessageType.SAT_SETUP_EVENT_LIST:
+                result = "SAT_SETUP_EVENT_LIST";
+                break;
+            case MessageType.SAT_CALL_CONTROL_RESULT:
+                result = "SAT_CALL_CONTROL_RESULT";
+                break;
+            case MessageType.SAT_IMAGE_CLUT:
+                result = "SAT_IMAGE_CLUT";
+                break;
+            case MessageType.SAT_CALL_PROCESSING:
+                result = "SAT_CALL_PROCESSING";
+                break;
+            case MessageType.IMEI_START:
+                result = "IMEI_START";
+                break;
+            case MessageType.IMEI_CHECK_DEVICE_INFO:
+                result = "IMEI_CHECK_DEVICE_INFO";
+                break;
+            case MessageType.CALL_OUTGOING:
+                result = "CALL_OUTGOING";
+                break;
+            case MessageType.CALL_INCOMING:
+                result = "CALL_INCOMING";
+                break;
+            case MessageType.CALL_RELEASE:
+                result = "CALL_RELEASE";
+                break;
+            case MessageType.CALL_ANSWER:
+                result = "CALL_ANSWER";
+                break;
+            case MessageType.CALL_STATUS:
+                result = "CALL_STATUS";
+                break;
+            case MessageType.CALL_LIST:
+                result = "CALL_LIST";
+                break;
+            case MessageType.CALL_BURST_DTMF:
+                result = "CALL_BURST_DTMF";
+                break;
+            case MessageType.CALL_CONT_DTMF:
+                result = "CALL_CONT_DTMF";
+                break;
+            case MessageType.CALL_WAITING:
+                result = "CALL_WAITING";
+                break;
+            case MessageType.CALL_LINE_ID:
+                result = "CALL_LINE_ID";
+                break;
+        }
 
-    [CCode (cname = "int", cprefix = "IPC_CALL_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum CallMessageType
-    {
-        OUTGOING,
-        INCOMING,
-        RELEASE,
-        ANSWER,
-        STATUS,
-        LIST,
-        BURST_DTMF,
-        CONT_DTMF,
-        WAITING,
-        LINE_ID,
+        return result;
     }
 
     [CCode (cname = "int", cprefix = "IPC_CALL_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
@@ -211,6 +438,23 @@ namespace SamsungIpc
     {
         VOICE,
         DATA,
+    }
+
+    public string call_type_to_string( int type )
+    {
+        string result = "unknown";
+
+        switch ( (CallType) type )
+        {
+            case CallType.VOICE:
+                result = "VOICE";
+                break;
+            case CallType.DATA:
+                result = "DATA";
+                break;
+        }
+
+        return result;
     }
 
     [CCode (cname = "int", cprefix = "IPC_CALL_IDENTITY_", has_type_id = false, cheader_filename = "radio.h")]
