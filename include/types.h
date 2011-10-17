@@ -28,6 +28,7 @@
 #include "net.h"
 #include "sec.h"
 #include "sms.h"
+#include "pwr.h"
 
 /* AP -> Baseband */
 #define IPC_TYPE_EXEC                   0x01
@@ -60,15 +61,6 @@
 #define IPC_GROUP_GPS                               0x11
 #define IPC_GROUP_SAP                               0x12
 #define IPC_GROUP_GEN                               0x80
-
-/* Power */
-#define IPC_PWR_PHONE_PWR_UP                0x0101
-#define IPC_PWR_PHONE_PWR_OFF               0x0102
-#define IPC_PWR_PHONE_RESET             0x0103
-#define IPC_PWR_BATT_STATUS             0x0104
-#define IPC_PWR_BATT_TYPE               0x0105
-#define IPC_PWR_BATT_COMP               0x0106
-#define IPC_PWR_PHONE_STATE                0x0107
 
 /* Pb */
 #define IPC_PB_ACCESS                   0x0601

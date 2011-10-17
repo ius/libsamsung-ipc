@@ -11,6 +11,7 @@ samsung_ipcinclude_HEADERS = \
 	radio.h \
 	sec.h \
 	sms.h \
+	pwr.h \
 	types.h \
 	util.h \
 	$(NULL)

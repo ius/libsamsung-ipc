@@ -1,4 +1,3 @@
-
 /*
  * samsung-ipc-1.0.vapi
  *
@@ -20,9 +19,10 @@
  *
  */
 
+[CCode (cheader_filename = "radio.h")]
 namespace SamsungIpc
 {
-    [CCode (cname = "int", cprefix = "IPC_CLIENT_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
+    [CCode (cname = "int", cprefix = "IPC_CLIENT_TYPE_", has_type_id = false)]
     public enum ClientType
     {
         CRESPO_FMT,
@@ -30,7 +30,7 @@ namespace SamsungIpc
         H1,
     }
 
-    [CCode (cname = "int", cprefix = "IPC_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
+    [CCode (cname = "int", cprefix = "IPC_TYPE_", has_type_id = false)]
     public enum RequestType
     {
         EXEC,
@@ -66,7 +66,7 @@ namespace SamsungIpc
         return result;
     }
 
-    [CCode (cname = "int", cprefix = "IPC_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
+    [CCode (cname = "int", cprefix = "IPC_TYPE_", has_type_id = false)]
     public enum ResponseType
     {
         INDICATION,
@@ -94,7 +94,7 @@ namespace SamsungIpc
         return result;
     }
 
-    [CCode (cname = "int", cprefix = "IPC_GROUP_", has_type_id = false, cheader_filename = "radio.h")]
+    [CCode (cname = "int", cprefix = "IPC_GROUP_", has_type_id = false)]
     public enum MessageGroup
     {
         PWR,
@@ -182,13 +182,13 @@ namespace SamsungIpc
         return result;
     }
 
-    [CCode (cname = "int", cprefix = "IPC_PWR_", has_type_id = false, cheader_filename = "radio.h")]
+    [CCode (cname = "int", cprefix = "IPC_PWR_", has_type_id = false)]
     public enum GenericMessageType
     {
         PHONE_RESPONSE,
     }
 
-    [CCode (cname = "struct ipc_get_phone_res", cheader_filename = "radio.h")]
+    [CCode (cname = "struct ipc_get_phone_res")]
     public struct GenericPhoneResponseMessage
     {
         public uint8 group;
@@ -197,7 +197,7 @@ namespace SamsungIpc
         public uint8 unk;
     }
 
-    [CCode (cname = "int", cprefix = "IPC_", has_type_id = false, cheader_filename = "radio.h")]
+    [CCode (cname = "int", cprefix = "IPC_", has_type_id = false)]
     public enum MessageType
     {
         PWR_PHONE_PWR_OFF,
@@ -575,9 +575,22 @@ namespace SamsungIpc
 
     /* ******************************************************************************** */
 
+    namespace Power
+    {
+        [CCode (cname = "gint8", cprefix = "IPC_PWR_PHONE_STATE_", has_type_id = false)]
+        public enum PhoneState
+        {
+            LPM,
+            NORMAL,
+        }
+    }
+
+
+    /* ******************************************************************************** */
+
     namespace Security
     {
-        [CCode (cname = "uint8", cprefix = "IPC_SEC_PIN_SIM_", has_type_id = false)]
+        [CCode (cname = "gint8", cprefix = "IPC_SEC_PIN_SIM_", has_type_id = false)]
         public enum SimStatus
         {
             INITIALIZING,
@@ -595,7 +608,7 @@ namespace SamsungIpc
             PB_INIT_COMPLETE,
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_SEC_PIN_SIM_LOCK_SC_", has_type_id = false)]
+        [CCode (cname = "gint8", cprefix = "IPC_SEC_PIN_SIM_LOCK_SC_", has_type_id = false)]
         public enum SimLockStatus
         {
             PIN1_REQ,
@@ -603,14 +616,14 @@ namespace SamsungIpc
             CARD_BLOCKED,
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_SEC_PIN_TYPE_", has_type_id = false)]
+        [CCode (cname = "gint8", cprefix = "IPC_SEC_PIN_TYPE_", has_type_id = false)]
         public enum PinType
         {
             PIN1,
             PIN2,
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_SEC_SIM_CARD_TYPE_", has_type_id = false)]
+        [CCode (cname = "gint8", cprefix = "IPC_SEC_SIM_CARD_TYPE_", has_type_id = false)]
         public enum SimCardType
         {
             UNKNOWN,
@@ -621,6 +634,7 @@ namespace SamsungIpc
         [CCode (cname = "struct ipc_sec_pin_status_noti")]
         public struct SimStatusMessage
         {
+            [CCode (cname = "type")]
             public SimStatus status;
             public uint8 key;
         }
@@ -710,7 +724,7 @@ namespace SamsungIpc
 
     namespace Network
     {
-        [CCode (cname = "uint8", cprefix = "IPC_NET_SERVICE_TYPE_", has_type_id = false)]
+        [CCode (cname = "gint8", cprefix = "IPC_NET_SERVICE_TYPE_", has_type_id = false)]
         public enum ServiceType
         {
             GSM,
@@ -720,7 +734,7 @@ namespace SamsungIpc
             UMTS,
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_NET_SERVICE_LEVEL_", has_type_id = false)]
+        [CCode (cname = "gint8", cprefix = "IPC_NET_SERVICE_LEVEL_", has_type_id = false)]
         public enum ServiceLevel
         {
             NONE,
@@ -731,7 +745,7 @@ namespace SamsungIpc
             ROAMING,
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_NET_PLMN_STATUS_", has_type_id = false)]
+        [CCode (cname = "gint8", cprefix = "IPC_NET_PLMN_STATUS_", has_type_id = false)]
         public enum PlmnStatus
         {
             AVAILABLE,
@@ -739,7 +753,7 @@ namespace SamsungIpc
             FORBIDDEN,
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_NET_PLMN_SEL_", has_type_id = false)]
+        [CCode (cname = "gint8", cprefix = "IPC_NET_PLMN_SEL_", has_type_id = false)]
         public enum PlmnSelection
         {
             MANUAL,
@@ -797,7 +811,7 @@ namespace SamsungIpc
 
     namespace Call
     {
-        [CCode (cname = "int", cprefix = "IPC_CALL_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
+        [CCode (cname = "int", cprefix = "IPC_CALL_TYPE_", has_type_id = false)]
         public enum Type
         {
             VOICE,
@@ -821,7 +835,7 @@ namespace SamsungIpc
             return result;
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_CALL_IDENTITY_", has_type_id = false, cheader_filename = "radio.h")]
+        [CCode (cname = "gint8", cprefix = "IPC_CALL_IDENTITY_", has_type_id = false)]
         public enum Identity
         {
             DEFAULT,
@@ -829,14 +843,14 @@ namespace SamsungIpc
             SHOW,
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_CALL_PREFIX_", has_type_id = false, cheader_filename = "radio.h")]
+        [CCode (cname = "gint8", cprefix = "IPC_CALL_PREFIX_", has_type_id = false)]
         public enum Prefix
         {
             NONE,
             INTL,
         }
 
-        [CCode (cname = "uint8", cprefix = "IPC_CALL_STATE_", has_type_id = false, cheader_filename = "radio.h")]
+        [CCode (cname = "gint8", cprefix = "IPC_CALL_STATE_", has_type_id = false)]
         public enum State
         {
             DIALING,
@@ -846,14 +860,14 @@ namespace SamsungIpc
             CONNECTING,
         }
 
-        [CCode (cname = "int", cprefix = "IPC_CALL_TERM_", has_type_id = false, cheader_filename = "radio.h")]
+        [CCode (cname = "int", cprefix = "IPC_CALL_TERM_", has_type_id = false)]
         public enum Termination
         {
             MO,
             MT,
         }
 
-        [CCode (cname = "struct ipc_call_outgoing", cheader_filename = "radio.h")]
+        [CCode (cname = "struct ipc_call_outgoing")]
         public struct OutgoingMessage
         {
             public uint8 type;
@@ -863,7 +877,7 @@ namespace SamsungIpc
             public uint8[] number;
         }
 
-        [CCode (cname = "struct ipc_call_incoming", cheader_filename = "radio.h")]
+        [CCode (cname = "struct ipc_call_incoming")]
         public struct IncomingMessage
         {
             public uint8 type;
@@ -871,7 +885,7 @@ namespace SamsungIpc
             public uint8 line;
         }
 
-        [CCode (cname = "struct ipc_call_list_entry", cheader_filename = "radio.h")]
+        [CCode (cname = "struct ipc_call_list_entry")]
         public struct ListEntryMessage
         {
             public uint8 type;
@@ -883,7 +897,7 @@ namespace SamsungIpc
             public uint8 unk4;
         }
 
-        [CCode (cname = "struct ipc_call_status", cheader_filename = "radio.h")]
+        [CCode (cname = "struct ipc_call_status")]
         public struct StatusMessage
         {
             public uint8 type;
@@ -941,7 +955,7 @@ namespace SamsungIpc
 
     /* ******************************************************************************** */
 
-    [CCode (cname = "struct ipc_header", cheader_filename = "radio.h")]
+    [CCode (cname = "struct ipc_header")]
     public struct Header
     {
         public uint16 length;
@@ -952,7 +966,7 @@ namespace SamsungIpc
         public uint8 type;
     }
 
-    [CCode (cname = "struct ipc_request", cheader_filename = "radio.h", destroy_function = "", free_function = "")]
+    [CCode (cname = "struct ipc_request", destroy_function = "", free_function = "")]
     public struct Request
     {
         public uint8 mseq;
@@ -964,7 +978,7 @@ namespace SamsungIpc
         public uint8[] data;
     }
 
-    [CCode (cname = "struct ipc_response", cheader_filename = "radio.h", destroy_function = "", free_function = "", copy_function = "")]
+    [CCode (cname = "struct ipc_response", destroy_function = "", free_function = "", copy_function = "")]
     public struct Response
     {
         public uint8 mseq;
@@ -980,7 +994,7 @@ namespace SamsungIpc
     public delegate void LogHandlerCb(string message);
 
     [Compact]
-    [CCode (cname = "struct ipc_client", cprefix = "ipc_client_", cheader_filename = "radio.h")]
+    [CCode (cname = "struct ipc_client", cprefix = "ipc_client_")]
     public class Client
     {
         public Client(ClientType type);
