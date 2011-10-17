@@ -68,7 +68,7 @@
 #define IPC_PWR_BATT_STATUS             0x0104
 #define IPC_PWR_BATT_TYPE               0x0105
 #define IPC_PWR_BATT_COMP               0x0106
-#define IPC_PWR_PHONE_ONLINE                0x0107
+#define IPC_PWR_PHONE_STATE                0x0107
 
 /* Pb */
 #define IPC_PB_ACCESS                   0x0601

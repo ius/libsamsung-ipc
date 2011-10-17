@@ -206,7 +206,7 @@ namespace SamsungIpc
         PWR_BATT_STATUS,
         PWR_BATT_TYPE,
         PWR_BATT_COMP,
-        PWR_PHONE_ONLINE,
+        PWR_PHONE_STATE,
         PB_ACCESS,
         PB_STORAGE,
         PB_STORAGE_LIST,
@@ -316,8 +316,8 @@ namespace SamsungIpc
             case MessageType.PWR_BATT_COMP:
                 result = "PWR_BATT_COMP";
                 break;
-            case MessageType.PWR_PHONE_ONLINE:
-                result = "WR_PHONE_ONLINE";
+            case MessageType.PWR_PHONE_STATE:
+                result = "PWR_PHONE_STATE";
                 break;
             case MessageType.PB_ACCESS:
                 result = "PB_ACCESS";
