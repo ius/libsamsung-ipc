@@ -260,6 +260,36 @@ namespace SamsungIpc
         CALL_CONT_DTMF,
         CALL_WAITING,
         CALL_LINE_ID,
+        DISP_ICON_INFO,
+        DISP_HOMEZONE_INFO,
+        DISP_RSSI_INFO,
+        SEC_PIN_STATUS,
+        SEC_PHONE_LOCK,
+        SEC_CHANGE_LOCKING_PW,
+        SEC_SIM_LANG,
+        SEC_RSIM_ACCESS,
+        SEC_GSIM_ACCESS,
+        SEC_SIM_ICC_TYPE,
+        SEC_LOCK_INFO,
+        SEC_ISIM_AUTH,
+        NET_PREF_PLMN,
+        NET_PLMN_SEL,
+        NET_CURRENT_PLMN,
+        NET_PLMN_LIST,
+        NET_REGIST,
+        NET_SUBSCRIBER_NUM,
+        NET_BAND_SEL,
+        NET_SERVICE_DOMAIN_CONFIG,
+        NET_POWERON_ATTACH,
+        NET_MODE_SEL,
+        NET_ACQ_ORDER,
+        NET_IDENTITY,
+        NET_CURRENT_RRC_STATUS,
+        GEN_PHONE_RES,
+        MISC_ME_VERSION,
+        MISC_ME_IMSI,
+        MISC_ME_SN,
+        MISC_TIME_INFO,
     }
 
     public string message_type_to_string( MessageType type )
@@ -344,7 +374,7 @@ namespace SamsungIpc
                 result = "GPRS_PS";
                 break;
             case MessageType.GPRS_PDP_CONTEXT:
-                result = "gPRS_PDP_CONTEXT";
+                result = "GPRS_PDP_CONTEXT";
                 break;
             case MessageType.GPRS_SHOW_PDP_ADDR:
                 result = "GPRS_SHOW_PDP_ADDR";
@@ -448,106 +478,468 @@ namespace SamsungIpc
             case MessageType.CALL_LINE_ID:
                 result = "CALL_LINE_ID";
                 break;
+            case MessageType.DISP_ICON_INFO:
+                result = "DISP_ICON_INFO";
+                break;
+            case MessageType.DISP_HOMEZONE_INFO:
+                result = "DISP_HOMEZONE_INFO";
+                break;
+            case MessageType.DISP_RSSI_INFO:
+                result = "DISP_RSSI_INFO";
+                break;
+            case MessageType.SEC_PIN_STATUS:
+                result = "SEC_PIN_STATUS";
+                break;
+            case MessageType.SEC_PHONE_LOCK:
+                result = "SEC_PHONE_LOCK";
+                break;
+            case MessageType.SEC_CHANGE_LOCKING_PW:
+                result = "SEC_CHANGE_LOCKING_PW";
+                break;
+            case MessageType.SEC_SIM_LANG:
+                result = "SEC_SIM_LANG";
+                break;
+            case MessageType.SEC_RSIM_ACCESS:
+                result = "SEC_RSIM_ACCESS";
+                break;
+            case MessageType.SEC_GSIM_ACCESS:
+                result = "SEC_GSIM_ACCESS";
+                break;
+            case MessageType.SEC_SIM_ICC_TYPE:
+                result = "SEC_SIM_ICC_TYPE";
+                break;
+            case MessageType.SEC_LOCK_INFO:
+                result = "SEC_LOCK_INFO";
+                break;
+            case MessageType.SEC_ISIM_AUTH:
+                result = "SEC_ISIM_AUTH";
+                break;
+            case MessageType.NET_PREF_PLMN:
+                result = "NET_PREF_PLMN";
+                break;
+            case MessageType.NET_PLMN_SEL:
+                result = "NET_PLMN_SEL";
+                break;
+            case MessageType.NET_CURRENT_PLMN:
+                result = "NET_CURRENT_PLMN";
+                break;
+            case MessageType.NET_PLMN_LIST:
+                result = "NET_PLMN_LIST";
+                break;
+            case MessageType.NET_REGIST:
+                result = "NET_REGIST";
+                break;
+            case MessageType.NET_SUBSCRIBER_NUM:
+                result = "NET_SUBSCRIBER_NUM";
+                break;
+            case MessageType.NET_BAND_SEL:
+                result = "NET_BAND_SEL";
+                break;
+            case MessageType.NET_SERVICE_DOMAIN_CONFIG:
+                result = "NET_SERVICE_DOMAIN_CONFIG";
+                break;
+            case MessageType.NET_POWERON_ATTACH:
+                result = "NET_POWERON_ATTACH";
+                break;
+            case MessageType.NET_MODE_SEL:
+                result = "NET_MODE_SEL";
+                break;
+            case MessageType.NET_ACQ_ORDER:
+                result = "NET_ACQ_ORDER";
+                break;
+            case MessageType.NET_IDENTITY:
+                result = "NET_IDENTITY";
+                break;
+            case MessageType.NET_CURRENT_RRC_STATUS:
+                result = "NET_CURRENT_RRC_STATUS";
+                break;
+            case MessageType.GEN_PHONE_RES:
+                result = "GEN_PHONE_RES";
+                break;
+            case MessageType.MISC_ME_VERSION:
+                result = "MISC_ME_VERSION";
+                break;
+            case MessageType.MISC_ME_IMSI:
+                result = "MISC_ME_IMSI";
+                break;
+            case MessageType.MISC_ME_SN:
+                result = "MISC_ME_SN";
+                break;
+            case MessageType.MISC_TIME_INFO:
+                result = "MISC_TIME_INFO";
+                break;
         }
 
         return result;
     }
 
-    [CCode (cname = "int", cprefix = "IPC_CALL_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum CallType
-    {
-        VOICE,
-        DATA,
-    }
+    /* ******************************************************************************** */
 
-    public string call_type_to_string( int type )
+    namespace Security
     {
-        string result = "unknown";
-
-        switch ( (CallType) type )
+        [CCode (cname = "uint8", cprefix = "IPC_SEC_PIN_SIM_", has_type_id = false)]
+        public enum SimStatus
         {
-            case CallType.VOICE:
-                result = "VOICE";
-                break;
-            case CallType.DATA:
-                result = "DATA";
-                break;
+            INITIALIZING,
+            SIM_LOCK_REQUIRED,
+            INSIDE_PF_ERROR,
+            LOCK_SC,
+            LOCK_FD,
+            LOCK_PN,
+            LOCK_PU,
+            LOCK_PP,
+            LOCK_PC,
+            CARD_NOT_PRESENT,
+            CARD_ERROR,
+            INIT_COMPLETE,
+            PB_INIT_COMPLETE,
         }
 
-        return result;
+        [CCode (cname = "uint8", cprefix = "IPC_SEC_PIN_SIM_LOCK_SC_", has_type_id = false)]
+        public enum SimLockStatus
+        {
+            PIN1_REQ,
+            PUK_REQ,
+            CARD_BLOCKED,
+        }
+
+        [CCode (cname = "uint8", cprefix = "IPC_SEC_PIN_TYPE_", has_type_id = false)]
+        public enum PinType
+        {
+            PIN1,
+            PIN2,
+        }
+
+        [CCode (cname = "uint8", cprefix = "IPC_SEC_SIM_CARD_TYPE_", has_type_id = false)]
+        public enum SimCardType
+        {
+            UNKNOWN,
+            SIM,
+            USIM,
+        }
+
+        [CCode (cname = "struct ipc_sec_pin_status_noti")]
+        public struct SimStatusMessage
+        {
+            public SimStatus status;
+            public uint8 key;
+        }
+
+        [CCode (cname = "struct ipc_sec_pin_status_set")]
+        public struct PinStatusSetMessage
+        {
+            public PinType type;
+            public uint8 length1;
+            public uint8 length2;
+            [CCode (array_length_cname = "length1")]
+            public uint8[] pin1; // size = 8
+            [CCode (array_length_cname = "length2")]
+            public uint8[] pin2; // size = 8
+        }
+
+        [CCode (cname = "struct ipc_sec_phone_lock_request")]
+        public struct PhoneLockRequestMessage
+        {
+            public SimStatus lock_type; // FIXME refactor log type from SimStatus in own enum
+        }
+
+        [CCode (cname = "struct ipc_sec_phone_lock_response")]
+        public struct PhoneLockResponseMessage
+        {
+            public uint8 type;
+            public SimLockStatus status;
+        }
+
+        [CCode (cname = "struct ipc_sec_rsim_access_request")]
+        public struct RSimAccessRequestMessage
+        {
+            public uint8 command;
+            public uint16 fileid;
+            public uint8 p1;
+            public uint8 p2;
+            public uint8 p3;
+        }
+
+        [CCode (cname = "struct ipc_sec_rsim_access_response")]
+        public struct RSimAccessResponse
+        {
+            public uint8 sw1;
+            public uint8 sw2;
+            public uint8 len;
+        }
+
+        [CCode (cname = "struct ipc_sec_lock_info_request")]
+        public struct LockInfoRequestMessage
+        {
+            public uint8 unk0;
+            public PinType pin_type;
+        }
+
+        [CCode (cname = "struct ipc_sec_lock_info_response")]
+        public struct LockInfoResponseMessage
+        {
+            public uint8 num;
+            public uint8 type;
+            public uint8 key;
+            public uint8 attempts;
+        }
     }
 
-    [CCode (cname = "int", cprefix = "IPC_CALL_IDENTITY_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum CallIdentity
+    /* ******************************************************************************** */
+
+    namespace Display
     {
-        DEFAULT,
-        HIDE,
-        SHOW,
+        [CCode (cname = "ipc_disp_icon_info")]
+        public struct IconInfoMessage
+        {
+            public uint8 unk;
+            public uint8 rssi;
+            public uint8 battery;
+            public uint8 act;
+            public uint8 reg;
+        }
+
+        [CCode (cname = "struct ipc_disp_rssi_info")]
+        public struct RssiInfo
+        {
+            public uint8 rssi;
+        }
     }
 
-    [CCode (cname = "int", cprefix = "IPC_CALL_PREFIX_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum CallPrefix
+    /* ******************************************************************************** */
+
+    namespace Network
     {
-        NONE,
-        INTL,
+        [CCode (cname = "uint8", cprefix = "IPC_NET_SERVICE_TYPE_", has_type_id = false)]
+        public enum ServiceType
+        {
+            GSM,
+            GSM2,
+            GPRS,
+            EDGE,
+            UMTS,
+        }
+
+        [CCode (cname = "uint8", cprefix = "IPC_NET_SERVICE_LEVEL_", has_type_id = false)]
+        public enum ServiceLevel
+        {
+            NONE,
+            HOME,
+            SEARCHING,
+            EMERGENCY,
+            NONE2,
+            ROAMING,
+        }
+
+        [CCode (cname = "uint8", cprefix = "IPC_NET_PLMN_STATUS_", has_type_id = false)]
+        public enum PlmnStatus
+        {
+            AVAILABLE,
+            CURRENT,
+            FORBIDDEN,
+        }
+
+        [CCode (cname = "uint8", cprefix = "IPC_NET_PLMN_SEL_", has_type_id = false)]
+        public enum PlmnSelection
+        {
+            MANUAL,
+            AUTO,
+        }
+
+        [CCode (cname = "struct ipc_net_regist")]
+        public struct RegistrationMessage
+        {
+            public uint8 act;
+            public uint8 domain;
+            public uint8 status;
+            public uint8 edge;
+            public uint16 lac;
+            public uint32 cid;
+            public uint8 rej_cause;
+        }
+
+        [CCode (cname = "struct ipc_net_regist_set")]
+        public struct RegistrationSetMessage
+        {
+            public uint8 net;
+            public uint8 domain;
+        }
+
+        [CCode (cname = "struct ipc_net_current_plmn")]
+        public struct CurrentPlmnMessage
+        {
+            public uint8 unk;
+            public uint8 slevel;
+            public uint8[] plmn;
+            public uint8 type;
+            public uint16 lac;
+        }
+
+        [CCode (cname = "struct ipc_net_plmn_entry")]
+        public struct PlmnEntryMessage
+        {
+            public PlmnStatus status;
+            public uint8[] plmn;
+            public uint8 type;
+            public uint8[] unk;
+        }
+
+        [CCode (cname = "struct ipc_net_plmn_entries")]
+        public struct PlmnEntriesMessage
+        {
+            public uint8 num;
+            [CCode (cname = "data", array_length_cname = "num")]
+            public PlmnEntriesMessage[] entries;
+        }
     }
 
-    [CCode (cname = "int", cprefix = "IPC_CALL_STATE_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum CallState
+    /* ******************************************************************************** */
+
+    namespace Call
     {
-        DIALING,
-        IGNORING_INCOMING_STATUS,
-        CONNECTED,
-        RELEASED,
-        CONNECTING,
+        [CCode (cname = "int", cprefix = "IPC_CALL_TYPE_", has_type_id = false, cheader_filename = "radio.h")]
+        public enum Type
+        {
+            VOICE,
+            DATA,
+        }
+
+        public string call_type_to_string( Type type )
+        {
+            string result = "unknown";
+
+            switch ( type )
+            {
+                case Type.VOICE:
+                    result = "VOICE";
+                    break;
+                case Type.DATA:
+                    result = "DATA";
+                    break;
+            }
+
+            return result;
+        }
+
+        [CCode (cname = "uint8", cprefix = "IPC_CALL_IDENTITY_", has_type_id = false, cheader_filename = "radio.h")]
+        public enum Identity
+        {
+            DEFAULT,
+            HIDE,
+            SHOW,
+        }
+
+        [CCode (cname = "uint8", cprefix = "IPC_CALL_PREFIX_", has_type_id = false, cheader_filename = "radio.h")]
+        public enum Prefix
+        {
+            NONE,
+            INTL,
+        }
+
+        [CCode (cname = "uint8", cprefix = "IPC_CALL_STATE_", has_type_id = false, cheader_filename = "radio.h")]
+        public enum State
+        {
+            DIALING,
+            IGNORING_INCOMING_STATUS,
+            CONNECTED,
+            RELEASED,
+            CONNECTING,
+        }
+
+        [CCode (cname = "int", cprefix = "IPC_CALL_TERM_", has_type_id = false, cheader_filename = "radio.h")]
+        public enum Termination
+        {
+            MO,
+            MT,
+        }
+
+        [CCode (cname = "struct ipc_call_outgoing", cheader_filename = "radio.h")]
+        public struct OutgoingMessage
+        {
+            public uint8 type;
+            public Identity identity;
+            public uint8 length;
+            public Prefix prefix;
+            public uint8[] number;
+        }
+
+        [CCode (cname = "struct ipc_call_incoming", cheader_filename = "radio.h")]
+        public struct IncomingMessage
+        {
+            public uint8 type;
+            public uint8 id;
+            public uint8 line;
+        }
+
+        [CCode (cname = "struct ipc_call_list_entry", cheader_filename = "radio.h")]
+        public struct ListEntryMessage
+        {
+            public uint8 type;
+            public uint8 idx;
+            public Termination term;
+            public State state;
+            public uint8 mpty;
+            public uint8 number_len;
+            public uint8 unk4;
+        }
+
+        [CCode (cname = "struct ipc_call_status", cheader_filename = "radio.h")]
+        public struct StatusMessage
+        {
+            public uint8 type;
+            public uint8 id;
+            public State state;
+            public uint8 reason;
+            public uint8 end_cause;
+        }
     }
 
-    [CCode (cname = "int", cprefix = "IPC_CALL_TERM_", has_type_id = false, cheader_filename = "radio.h")]
-    public enum CallTermination
+    /* ******************************************************************************** */
+
+    namespace Generic
     {
-        MO,
-        MT,
+        [CCode (cname = "struct ipc_gen_phone_res")]
+        public struct PhoneResponseMessage
+        {
+            public uint8 group;
+            public uint8 type;
+            public uint16 code;
+            public uint8 unk;
+        }
     }
 
-    [CCode (cname = "struct ipc_call_outgoing", cheader_filename = "radio.h")]
-    public struct CallOutgoingMessage
+    /* ******************************************************************************** */
+
+    namespace Misc
     {
-        public uint8 type;
-        public uint8 identity;
-        public uint8 length;
-        public uint8 prefix;
-        public uint8[] number;
+        [CCode (cname = "struct ipc_misc_me_version")]
+        public struct VersionMessage
+        {
+            public uint8[] sw_version;
+            public uint8[] hw_version;
+            public uint8[] cal_data;
+            public uint8[] misc;
+        }
+
+        [CCode (cname = "struct ipc_misc_time_info")]
+        public struct TimeInfoMessage
+        {
+            public uint8 tz_valid;
+            public uint8 daylight_valid;
+            public uint8 year;
+            public uint8 mon;
+            public uint8 day;
+            public uint8 hour;
+            public uint8 min;
+            public uint8 sec;
+            public uint8 tz;
+            public uint8 dl;
+            public uint8 dv;
+            public uint8[] plmn;
+        }
     }
 
-    [CCode (cname = "struct ipc_call_incoming", cheader_filename = "radio.h")]
-    public struct CallIncomingMessage
-    {
-        public uint8 type;
-        public uint8 id;
-        public uint8 line;
-    }
-
-    [CCode (cname = "struct ipc_call_list_entry", cheader_filename = "radio.h")]
-    public struct CallListEntryMessage
-    {
-        public uint8 type;
-        public uint8 idx;
-        public uint8 term;
-        public uint8 state;
-        public uint8 mpty;
-        public uint8 number_len;
-        public uint8 unk4;
-    }
-
-    [CCode (cname = "struct ipc_call_status", cheader_filename = "radio.h")]
-    public struct CallStatusMessage
-    {
-        public uint8 type;
-        public uint8 id;
-        public uint8 state;
-        public uint8 reason;
-        public uint8 end_cause;
-    }
+    /* ******************************************************************************** */
 
     [CCode (cname = "struct ipc_header", cheader_filename = "radio.h")]
     public struct Header

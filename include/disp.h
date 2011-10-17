@@ -21,11 +21,16 @@
 #ifndef __DISP_H__
 #define __DISP_H__
 
-#define IPC_DISP_ICON_INFO				0x0701
-#define IPC_DISP_HOMEZONE_INFO				0x0702
+#define IPC_DISP_ICON_INFO                  0x0701
+#define IPC_DISP_HOMEZONE_INFO              0x0702
+#define IPC_DISP_RSSI_INFO                  0x0706
 
 struct ipc_disp_icon_info {
-	unsigned char unk, rssi, battery, act, reg;
+    unsigned char unk, rssi, battery, act, reg;
+} __attribute__((__packed__));
+
+struct ipc_disp_rssi_info {
+    unsigned char rssi;
 } __attribute__((__packed__));
 
 #endif

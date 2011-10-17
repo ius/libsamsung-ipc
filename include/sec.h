@@ -70,7 +70,11 @@ struct ipc_sec_pin_status_set {
 	unsigned char pin2[8];
 } __attribute__((__packed__));
 
-struct ipc_sec_phone_lock {
+struct ipc_sec_phone_lock_request {
+    unsigned char lock_type;
+};
+
+struct ipc_sec_phone_lock_response {
 	unsigned char type;
 	unsigned char status;
 } __attribute__((__packed__));
@@ -86,7 +90,12 @@ struct ipc_sec_rsim_access_response {
 	unsigned char len;
 } __attribute__((__packed__));
 
-struct ipc_sec_lock_info {
+struct ipc_sec_lock_info_request {
+    unsigned char unk0;
+    unsigned char pin_type;
+} __attribute__((__packed__));
+
+struct ipc_sec_lock_info_response {
 	unsigned char num;
 	unsigned char type;
 	unsigned char key;
