@@ -631,15 +631,16 @@ namespace SamsungIpc
             USIM,
         }
 
-        [CCode (cname = "struct ipc_sec_pin_status_noti")]
+        [CCode (cname = "struct ipc_sec_pin_status_noti", destroy_function = "")]
         public struct SimStatusMessage
         {
             [CCode (cname = "type")]
             public SimStatus status;
-            public uint8 key;
+            [CCode (cname = "key")]
+            public SimLockStatus lock_status;
         }
 
-        [CCode (cname = "struct ipc_sec_pin_status_set")]
+        [CCode (cname = "struct ipc_sec_pin_status_set", destroy_function = "")]
         public struct PinStatusSetMessage
         {
             public PinType type;
@@ -651,20 +652,20 @@ namespace SamsungIpc
             public uint8[] pin2; // size = 8
         }
 
-        [CCode (cname = "struct ipc_sec_phone_lock_request")]
+        [CCode (cname = "struct ipc_sec_phone_lock_request", destroy_function = "")]
         public struct PhoneLockRequestMessage
         {
             public SimStatus lock_type; // FIXME refactor log type from SimStatus in own enum
         }
 
-        [CCode (cname = "struct ipc_sec_phone_lock_response")]
+        [CCode (cname = "struct ipc_sec_phone_lock_response", destroy_function = "")]
         public struct PhoneLockResponseMessage
         {
             public uint8 type;
             public SimLockStatus status;
         }
 
-        [CCode (cname = "struct ipc_sec_rsim_access_request")]
+        [CCode (cname = "struct ipc_sec_rsim_access_request", destroy_function = "")]
         public struct RSimAccessRequestMessage
         {
             public uint8 command;
@@ -674,7 +675,7 @@ namespace SamsungIpc
             public uint8 p3;
         }
 
-        [CCode (cname = "struct ipc_sec_rsim_access_response")]
+        [CCode (cname = "struct ipc_sec_rsim_access_response", destroy_function = "")]
         public struct RSimAccessResponse
         {
             public uint8 sw1;
@@ -682,14 +683,14 @@ namespace SamsungIpc
             public uint8 len;
         }
 
-        [CCode (cname = "struct ipc_sec_lock_info_request")]
+        [CCode (cname = "struct ipc_sec_lock_info_request", destroy_function = "")]
         public struct LockInfoRequestMessage
         {
             public uint8 unk0;
             public PinType pin_type;
         }
 
-        [CCode (cname = "struct ipc_sec_lock_info_response")]
+        [CCode (cname = "struct ipc_sec_lock_info_response", destroy_function = "")]
         public struct LockInfoResponseMessage
         {
             public uint8 num;
@@ -703,7 +704,7 @@ namespace SamsungIpc
 
     namespace Display
     {
-        [CCode (cname = "ipc_disp_icon_info")]
+        [CCode (cname = "ipc_disp_icon_info", destroy_function = "")]
         public struct IconInfoMessage
         {
             public uint8 unk;
@@ -713,7 +714,7 @@ namespace SamsungIpc
             public uint8 reg;
         }
 
-        [CCode (cname = "struct ipc_disp_rssi_info")]
+        [CCode (cname = "struct ipc_disp_rssi_info", destroy_function = "")]
         public struct RssiInfo
         {
             public uint8 rssi;
@@ -760,7 +761,7 @@ namespace SamsungIpc
             AUTO,
         }
 
-        [CCode (cname = "struct ipc_net_regist")]
+        [CCode (cname = "struct ipc_net_regist", destroy_function = "")]
         public struct RegistrationMessage
         {
             public uint8 act;
@@ -772,14 +773,14 @@ namespace SamsungIpc
             public uint8 rej_cause;
         }
 
-        [CCode (cname = "struct ipc_net_regist_set")]
+        [CCode (cname = "struct ipc_net_regist_set", destroy_function = "")]
         public struct RegistrationSetMessage
         {
             public uint8 net;
             public uint8 domain;
         }
 
-        [CCode (cname = "struct ipc_net_current_plmn")]
+        [CCode (cname = "struct ipc_net_current_plmn", destroy_function = "")]
         public struct CurrentPlmnMessage
         {
             public uint8 unk;
@@ -789,7 +790,7 @@ namespace SamsungIpc
             public uint16 lac;
         }
 
-        [CCode (cname = "struct ipc_net_plmn_entry")]
+        [CCode (cname = "struct ipc_net_plmn_entry", destroy_function = "")]
         public struct PlmnEntryMessage
         {
             public PlmnStatus status;
@@ -798,7 +799,7 @@ namespace SamsungIpc
             public uint8[] unk;
         }
 
-        [CCode (cname = "struct ipc_net_plmn_entries")]
+        [CCode (cname = "struct ipc_net_plmn_entries", destroy_function = "")]
         public struct PlmnEntriesMessage
         {
             public uint8 num;
@@ -867,7 +868,7 @@ namespace SamsungIpc
             MT,
         }
 
-        [CCode (cname = "struct ipc_call_outgoing")]
+        [CCode (cname = "struct ipc_call_outgoing", destroy_function = "")]
         public struct OutgoingMessage
         {
             public uint8 type;
@@ -877,7 +878,7 @@ namespace SamsungIpc
             public uint8[] number;
         }
 
-        [CCode (cname = "struct ipc_call_incoming")]
+        [CCode (cname = "struct ipc_call_incoming", destroy_function = "")]
         public struct IncomingMessage
         {
             public uint8 type;
@@ -885,7 +886,7 @@ namespace SamsungIpc
             public uint8 line;
         }
 
-        [CCode (cname = "struct ipc_call_list_entry")]
+        [CCode (cname = "struct ipc_call_list_entry", destroy_function = "")]
         public struct ListEntryMessage
         {
             public uint8 type;
@@ -897,7 +898,7 @@ namespace SamsungIpc
             public uint8 unk4;
         }
 
-        [CCode (cname = "struct ipc_call_status")]
+        [CCode (cname = "struct ipc_call_status", destroy_function = "")]
         public struct StatusMessage
         {
             public uint8 type;
@@ -912,7 +913,7 @@ namespace SamsungIpc
 
     namespace Generic
     {
-        [CCode (cname = "struct ipc_gen_phone_res")]
+        [CCode (cname = "struct ipc_gen_phone_res", destroy_function = "")]
         public struct PhoneResponseMessage
         {
             public uint8 group;
@@ -926,7 +927,7 @@ namespace SamsungIpc
 
     namespace Misc
     {
-        [CCode (cname = "struct ipc_misc_me_version")]
+        [CCode (cname = "struct ipc_misc_me_version", destroy_function = "")]
         public struct VersionMessage
         {
             public uint8[] sw_version;
@@ -935,7 +936,7 @@ namespace SamsungIpc
             public uint8[] misc;
         }
 
-        [CCode (cname = "struct ipc_misc_time_info")]
+        [CCode (cname = "struct ipc_misc_time_info", destroy_function = "")]
         public struct TimeInfoMessage
         {
             public uint8 tz_valid;
@@ -955,7 +956,7 @@ namespace SamsungIpc
 
     /* ******************************************************************************** */
 
-    [CCode (cname = "struct ipc_header")]
+    [CCode (cname = "struct ipc_header", destroy_function = "")]
     public struct Header
     {
         public uint16 length;
