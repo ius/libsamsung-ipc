@@ -193,8 +193,8 @@ namespace SamsungIpc
     {
         public uint8 group;
         public uint8 type;
-        public uint16 code;
         public uint8 unk;
+        public uint16 code;
     }
 
     [CCode (cname = "int", cprefix = "IPC_", has_type_id = false)]

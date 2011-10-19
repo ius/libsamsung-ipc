@@ -21,12 +21,12 @@
 #ifndef __GEN_H__
 #define __GEN_H__
 
-#define IPC_GEN_PHONE_RES				0x8001
+#define IPC_GEN_PHONE_RES               0x8001
 
 struct ipc_gen_phone_res {
-	unsigned char group, type;
-	unsigned short code;
-	unsigned char unk;
+    unsigned char group, type;
+    unsigned char unk;
+    unsigned short code;
 } __attribute__((__packed__));
 
 #endif
