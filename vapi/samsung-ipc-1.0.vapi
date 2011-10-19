@@ -290,6 +290,23 @@ namespace SamsungIpc
         MISC_ME_IMSI,
         MISC_ME_SN,
         MISC_TIME_INFO,
+        SMS_SEND_MSG,
+        SMS_INCOMING_MSG,
+        SMS_READ_MSG,
+        SMS_SAVE_MSG,
+        SMS_DEL_MSG,
+        SMS_DELIVER_REPORT,
+        SMS_DEVICE_READY,
+        SMS_SEL_MEM,
+        SMS_STORED_MSG_COUNT,
+        SMS_SVC_CENTER_ADDR,
+        SMS_SVC_OPTION,
+        SMS_MEM_STATUS,
+        SMS_CBS_MSG,
+        SMS_CBS_CONFIG,
+        SMS_STORED_MSG_STATUS,
+        SMS_PARAM_COUNT,
+        SMS_PARAM,
     }
 
     public string message_type_to_string( MessageType type )
@@ -567,6 +584,57 @@ namespace SamsungIpc
                 break;
             case MessageType.MISC_TIME_INFO:
                 result = "MISC_TIME_INFO";
+                break;
+            case MessageType.SMS_SEND_MSG:
+                result = "SMS_SEND_MSG";
+                break;
+            case MessageType.SMS_INCOMING_MSG:
+                result = "SMS_INCOMING_MSG";
+                break;
+            case MessageType.SMS_READ_MSG:
+                result = "SMS_READ_MSG";
+                break;
+            case MessageType.SMS_SAVE_MSG:
+                result = "SMS_SAVE_MSG";
+                break;
+            case MessageType.SMS_DEL_MSG:
+                result = "SMS_DEL_MSG";
+                break;
+            case MessageType.SMS_DELIVER_REPORT:
+                result = "SMS_DELIVER_REPORT";
+                break;
+            case MessageType.SMS_DEVICE_READY:
+                result = "SMS_DEVICE_READY";
+                break;
+            case MessageType.SMS_SEL_MEM:
+                result = "SMS_SEL_MEM";
+                break;
+            case MessageType.SMS_STORED_MSG_COUNT:
+                result = "SMS_STORED_MSG_COUNT";
+                break;
+            case MessageType.SMS_SVC_CENTER_ADDR:
+                result = "SMS_SVC_CENTER_ADDR";
+                break;
+            case MessageType.SMS_SVC_OPTION:
+                result = "SMS_SVC_OPTION";
+                break;
+            case MessageType.SMS_MEM_STATUS:
+                result = "SMS_MEM_STATUS";
+                break;
+            case MessageType.SMS_CBS_MSG:
+                result = "SMS_CBS_MSG";
+                break;
+            case MessageType.SMS_CBS_CONFIG:
+                result = "SMS_CBS_CONFIG";
+                break;
+            case MessageType.SMS_STORED_MSG_STATUS:
+                result = "SMS_STORED_MSG_STATUS";
+                break;
+            case MessageType.SMS_PARAM_COUNT:
+                result = "SMS_PARAM_COUNT";
+                break;
+            case MessageType.SMS_PARAM:
+                result = "SMS_PARAM";
                 break;
         }
 
