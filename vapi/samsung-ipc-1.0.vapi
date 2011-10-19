@@ -932,7 +932,7 @@ namespace SamsungIpc
         {
             public uint8[] sw_version;
             public uint8[] hw_version;
-            public uint8[] cal_data;
+            public uint8[] cal_date;
             public uint8[] misc;
         }
 
