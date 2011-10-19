@@ -927,7 +927,7 @@ namespace SamsungIpc
 
     namespace Misc
     {
-        [CCode (cname = "struct ipc_misc_me_version", destroy_function = "")]
+        [CCode (cname = "struct ipc_misc_me_version", destroy_function = "", free_function = "")]
         public struct VersionMessage
         {
             public uint8[] sw_version;
