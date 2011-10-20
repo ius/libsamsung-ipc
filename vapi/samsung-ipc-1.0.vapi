@@ -995,6 +995,9 @@ namespace SamsungIpc
 
     namespace Misc
     {
+        [CCode (cname = "ipc_parse_misc_me_imsi")]
+        public string parse_imsi(uint8[] data);
+
         [CCode (cname = "struct ipc_misc_me_version", destroy_function = "", free_function = "")]
         public struct VersionMessage
         {

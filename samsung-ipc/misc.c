@@ -1,7 +1,7 @@
 /**
  * This file is part of libsamsung-ipc.
  *
- * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
+ * Copyright (C) 2011 Simon Busch <morphis@gravedo.de>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,30 +18,17 @@
  *
  */
 
-#ifndef __MISC_H__
-#define __MISC_H__
+#include <radio.h>
+#include <string.h>
 
-#define IPC_MISC_ME_VERSION				0x0A01
-#define IPC_MISC_ME_IMSI				0x0A02
-#define IPC_MISC_ME_SN					0x0A03
-#define IPC_MISC_TIME_INFO				0x0A07
+#define DEFAULT_IMSI_LENGTH         15
 
-struct ipc_misc_me_version {
-	char sw_version[32];
-	char hw_version[32];
-	char cal_date[32];
-	char misc[32];
-} __attribute__((__packed__));
+char* ipc_parse_misc_me_imsi(uint8_t *data, unsigned int size)
+{
+    if (data == NULL || size != DEFAULT_IMSI_LENGTH + 1 || data[0] != DEFAULT_IMSI_LENGTH)
+        return NULL;
 
-struct ipc_misc_time_info {
-	unsigned char tz_valid, daylight_valid;
-	unsigned char year, mon, day;
-	unsigned char hour, min, sec;
-	unsigned char tz, dl, dv;
-	char plmn[6];
-} __attribute__((__packed__));
-
-char* ipc_parse_misc_me_imsi(uint8_t *data, unsigned int size);
-
-#endif
-
+    char *buffer = (char*) malloc(sizeof(char) * DEFAULT_IMSI_LENGTH);
+    memcpy(buffer, &data[1], DEFAULT_IMSI_LENGTH);
+    return buffer;
+}
