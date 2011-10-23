@@ -30,28 +30,32 @@
 #define IPC_CLIENT_TYPE_CRESPO_RFS      2
 #define IPC_CLIENT_TYPE_H1              3
 
-#define IPC_COMMAND(f)	((f->group << 8) | f->index)
-#define IPC_GROUP(m)	(m >> 8)
-#define IPC_INDEX(m)	(m & 0xff)
+#define IPC_COMMAND(f)  ((f->group << 8) | f->index)
+#define IPC_GROUP(m)    (m >> 8)
+#define IPC_INDEX(m)    (m & 0xff)
 
 struct ipc_header {
-	unsigned short length;
-	unsigned char mseq, aseq;
-	unsigned char group, index, type;
+    unsigned short length;
+    unsigned char mseq, aseq;
+    unsigned char group, index, type;
 } __attribute__((__packed__));
 
 struct ipc_request {
-	unsigned char mseq, aseq, group, index, type;
-	unsigned int length;
-	unsigned char *data;
+    unsigned char mseq;
+    unsigned char aseq;
+    unsigned char group;
+    unsigned char index;
+    unsigned char type;
+    unsigned int length;
+    unsigned char *data;
 };
 
 struct ipc_response {
-	unsigned char mseq, aseq;
-	unsigned short command;
-	unsigned char type;
-	unsigned int data_length;
-	unsigned char *data;
+    unsigned char mseq, aseq;
+    unsigned short command;
+    unsigned char type;
+    unsigned int data_length;
+    unsigned char *data;
 };
 
 struct ipc_client;
@@ -72,10 +76,10 @@ int ipc_client_close(struct ipc_client *client);
 int ipc_client_recv(struct ipc_client *client, struct ipc_response *response);
 
 /* Convenience functions for ipc_send */
-void ipc_client_send(struct ipc_client *client, const int command, const int type, unsigned char *data,
+void ipc_client_send(struct ipc_client *client, const unsigned short command, const char type, unsigned char *data,
                      const int length, unsigned char mseq);
-void ipc_client_send_get(struct ipc_client *client, const int command, unsigned char aseq);
-void ipc_client_send_exec(struct ipc_client *client, const int command, unsigned char aseq);
+void ipc_client_send_get(struct ipc_client *client, const unsigned short command, unsigned char aseq);
+void ipc_client_send_exec(struct ipc_client *client, const unsigned short command, unsigned char aseq);
 
 /* Utility functions */
 const char *ipc_command_type_to_str(int command);

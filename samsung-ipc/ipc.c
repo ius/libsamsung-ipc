@@ -152,18 +152,18 @@ int _ipc_client_send(struct ipc_client *client, struct ipc_request *request)
 }
 
 /* Convenience functions for ipc_send */
-inline void ipc_client_send_get(struct ipc_client *client, const int command, unsigned char aseq)
+inline void ipc_client_send_get(struct ipc_client *client, const unsigned short command, unsigned char aseq)
 {
     ipc_client_send(client, command, IPC_TYPE_GET, 0, 0, aseq);
 }
 
-inline void ipc_client_send_exec(struct ipc_client *client, const int command, unsigned char aseq)
+inline void ipc_client_send_exec(struct ipc_client *client, const unsigned short command, unsigned char aseq)
 {
     ipc_client_send(client, command, IPC_TYPE_EXEC, 0, 0, aseq);
 }
 
 /* Wrapper for ipc_send */
-void ipc_client_send(struct ipc_client *client, const int command, const int type, unsigned char *data, const int length, unsigned char mseq)
+void ipc_client_send(struct ipc_client *client, const unsigned short command, const char type, unsigned char *data, const int length, unsigned char mseq)
 {
     struct ipc_request request;
 

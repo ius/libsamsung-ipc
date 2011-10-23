@@ -21,77 +21,76 @@
 #ifndef __NET_H__
 #define __NET_H__
 
-#define IPC_NET_PREF_PLMN				0x0801
-#define IPC_NET_PLMN_SEL				0x0802
-#define IPC_NET_CURRENT_PLMN				0x0803
-#define IPC_NET_PLMN_LIST				0x0804
-#define IPC_NET_REGIST					0x0805
-#define IPC_NET_SUBSCRIBER_NUM				0x0806
-#define IPC_NET_BAND_SEL				0x0807
-#define IPC_NET_SERVICE_DOMAIN_CONFIG			0x0808
-#define IPC_NET_POWERON_ATTACH				0x0809
-#define IPC_NET_MODE_SEL				0x080A
-#define IPC_NET_ACQ_ORDER				0x080B
-#define IPC_NET_IDENTITY				0x080C
-#define IPC_NET_CURRENT_RRC_STATUS			0x080D
+#define IPC_NET_PREF_PLMN                                           0x0801
+#define IPC_NET_PLMN_SEL                                            0x0802
+#define IPC_NET_CURRENT_PLMN                                        0x0803
+#define IPC_NET_PLMN_LIST                                           0x0804
+#define IPC_NET_REGIST                                              0x0805
+#define IPC_NET_SUBSCRIBER_NUM                                      0x0806
+#define IPC_NET_BAND_SEL                                            0x0807
+#define IPC_NET_SERVICE_DOMAIN_CONFIG                               0x0808
+#define IPC_NET_POWERON_ATTACH                                      0x0809
+#define IPC_NET_MODE_SEL                                            0x080A
+#define IPC_NET_ACQ_ORDER                                           0x080B
+#define IPC_NET_IDENTITY                                            0x080C
+#define IPC_NET_CURRENT_RRC_STATUS                                  0x080D
 
-#define IPC_NET_SERVICE_TYPE_GSM			0x01
-#define IPC_NET_SERVICE_TYPE_GSM2			0x02
-#define IPC_NET_SERVICE_TYPE_GPRS			0x03
-#define IPC_NET_SERVICE_TYPE_EDGE			0x04
-#define IPC_NET_SERVICE_TYPE_UMTS			0x05
+#define IPC_NET_PLMN_STATUS_AVAILABLE                               0x02
+#define IPC_NET_PLMN_STATUS_CURRENT                                 0x03
+#define IPC_NET_PLMN_STATUS_FORBIDDEN                               0x04
 
-#define IPC_NET_SERVICE_LEVEL_NONE			0x01
-#define IPC_NET_SERVICE_LEVEL_HOME			0x02
-#define IPC_NET_SERVICE_LEVEL_SEARCHING			0x03
-#define IPC_NET_SERVICE_LEVEL_EMERGENCY			0x04
-#define IPC_NET_SERVICE_LEVEL_NONE2			0x05
-#define IPC_NET_SERVICE_LEVEL_ROAMING			0x06
+#define IPC_NET_PLMN_SEL_MANUAL                                     0x00
+#define IPC_NET_PLMN_SEL_AUTO                                       0x01
 
-#define IPC_NET_PLMN_STATUS_AVAILABLE			2
-#define IPC_NET_PLMN_STATUS_CURRENT			3
-#define IPC_NET_PLMN_STATUS_FORBIDDEN			4
+#define IPC_NET_ACCESS_TECHNOLOGY_UNKNOWN                           0xff
+#define IPC_NET_ACCESS_TECHNOLOGY_GSM                               0x00
+#define IPC_NET_ACCESS_TECHNOLOGY_GPRS                              0x01
+#define IPC_NET_ACCESS_TECHNOLOGY_GPRS2                             0x02
+#define IPC_NET_ACCESS_TECHNOLOGY_EDGE                              0x03
+#define IPC_NET_ACCESS_TECHNOLOGY_UMTS                              0x04
 
-#define IPC_NET_PLMN_SEL_MANUAL				0
-#define IPC_NET_PLMN_SEL_AUTO				1
+#define IPC_NET_REGISTRATION_STATE_NONE                             0x01
+#define IPC_NET_REGISTRATION_STATE_HOME                             0x02
+#define IPC_NET_REGISTRATION_STATE_SEARCHING                        0x03
+#define IPC_NET_REGISTRATION_STATE_EMERGENCY                        0x04
+#define IPC_NET_REGISTRATION_STATE_UNKNOWN                          0x05
+#define IPC_NET_REGISTRATION_STATE_ROAMING                          0x06
 
 struct ipc_net_current_plmn {
-	char unk;
-	unsigned char slevel;
-	char plmn[6];
-	unsigned char type;
-	unsigned short lac;
+    char unk;
+    unsigned char reg_state; // IPC_NET_REGISTRATION_STATE_...
+    char plmn[6];
+    unsigned char type; // IPC_NET_SERVICE_TYPE_... ?
+    unsigned short lac;
 } __attribute__((__packed__));
 
 struct ipc_net_regist_set {
-	unsigned char net;
-	unsigned char domain;
+    unsigned char net;
+    unsigned char domain;
 } __attribute__((__packed__));
 
 
 struct ipc_net_regist {
-	unsigned char act, domain, status, edge;
-	unsigned short lac;
-	unsigned int cid;
-	char rej_cause;
+    unsigned char act; // IPC_NET_ACCESS_TECHNOLOGY_...
+    unsigned char reg_state; // IPC_NET_REGISTRATION_STATE_...
+    unsigned char unk; // domain?
+    unsigned char edge;
+    unsigned short lac;
+    unsigned int cid;
+    char rej_cause;
 } __attribute__((__packed__));
 
 struct ipc_net_plmn_entry {
-	unsigned char status;
-	char plmn[6];
-	unsigned char type;
-	char unk[2];
+    unsigned char status; // IPC_NET_PLMN_STATUS_...
+    char plmn[6];
+    unsigned char type;
+    char unk[2];
 } __attribute__((__packed__));
 
 struct ipc_net_plmn_entries {
-	unsigned char num;
-	struct ipc_net_plmn_entry *data;
+    unsigned char num;
+    struct ipc_net_plmn_entry *data;
 };
-
-void ipc_net_current_plmn(int request_id);
-void ipc_net_plmn_list(int request_id);
-void ipc_net_identity(int request_id);
-void ipc_net_regist(int request_id, unsigned char type);
 
 #endif
 
