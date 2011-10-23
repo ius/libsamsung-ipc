@@ -389,8 +389,8 @@ namespace SamsungIpc
         [CCode (cname = "struct ipc_net_regist", destroy_function = "")]
         public struct RegistrationMessage
         {
-            public uint8 act;
-            public uint8 reg_state;
+            public AccessTechnology act;
+            public RegistrationState reg_state;
             public uint8 unk;
             public uint8 edge;
             public uint16 lac;
