@@ -91,6 +91,8 @@ int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler
 
     client->log_handler = log_handler_cb;
     client->log_data = user_data;
+
+    return 0;
 }
 
 
