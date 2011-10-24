@@ -611,8 +611,10 @@ namespace SamsungIpc
         [CCode (array_length_cname = "data_length")]
         public uint8[] data;
 
-        [CCode (cprefix = "ipc_")]
+        [CCode (cname = "ipc_sec_rsim_access_response_get_file_data")]
         public string sec_rsim_access_response_get_file_data();
+        [CCode (cname = "ipc_misc_me_imsi_response_get_imsi")]
+        public string misc_me_imsi_response_get_imsi();
     }
 
     public delegate int TransportCb(uint8[] data);

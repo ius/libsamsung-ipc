@@ -23,12 +23,12 @@
 
 #define DEFAULT_IMSI_LENGTH         15
 
-char* ipc_parse_misc_me_imsi(uint8_t *data, unsigned int size)
+char* ipc_misc_me_imsi_response_get_imsi(struct ipc_response *response)
 {
-    if (data == NULL || size != DEFAULT_IMSI_LENGTH + 1 || data[0] != DEFAULT_IMSI_LENGTH)
+    if (response == NULL || response->data[0] != DEFAULT_IMSI_LENGTH)
         return NULL;
 
     char *buffer = (char*) malloc(sizeof(char) * DEFAULT_IMSI_LENGTH);
-    memcpy(buffer, &data[1], DEFAULT_IMSI_LENGTH);
+    memcpy(buffer, &response->data[1], DEFAULT_IMSI_LENGTH);
     return buffer;
 }

@@ -20,14 +20,34 @@
 
 #include <radio.h>
 #include <string.h>
+#include <stdlib.h>
 
 char* ipc_sec_rsim_access_response_get_file_data(struct ipc_response *response)
 {
+    int n = 0;
+    int offset = (int) sizeof(struct ipc_sec_rsim_access_response);
+    int size = 0;
+
     if (response == NULL)
         return NULL;
 
     struct ipc_sec_rsim_access_response *rsimresp = (struct ipc_sec_rsim_access_response*) response->data;
     char *file_data = (char*) malloc(sizeof(char) * rsimresp->len);
-    memcpy(file_data, response->data + sizeof(struct ipc_sec_rsim_access_response), rsimresp->len);
+
+    for (n = 0; n < rsimresp->len; n++)
+    {
+        if (response->data[offset + n] == 0x0)
+            continue;
+        else if (response->data[offset + n] == 0xff)
+            break;
+        else {
+            file_data[size] = response->data[offset + n];
+            size++;
+        }
+    }
+
+    if (size < rsimresp->len)
+        file_data = (char*) realloc(file_data, sizeof(char) * size);
+
     return file_data;
 }
