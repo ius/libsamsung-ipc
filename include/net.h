@@ -57,9 +57,10 @@
 #define IPC_NET_REGISTRATION_STATE_ROAMING                          0x06
 
 struct ipc_net_current_plmn {
-    char unk;
+    char unk0;
     unsigned char slevel;
-    char plmn[6];
+    char unk1;
+    unsigned char plmn[5];
     unsigned char type; // IPC_NET_SERVICE_TYPE_... ?
     unsigned short lac;
 } __attribute__((__packed__));

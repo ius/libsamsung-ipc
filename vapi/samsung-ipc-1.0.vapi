@@ -417,8 +417,9 @@ namespace SamsungIpc
         [CCode (cname = "struct ipc_net_current_plmn", destroy_function = "")]
         public struct CurrentPlmnMessage
         {
-            public uint8 unk;
+            public uint8 unk0;
             public uint8 slevel;
+            public uint8 unk1;
             [CCode (array_length_cname = "")]
             public uint8[] plmn;
             public uint8 type;
