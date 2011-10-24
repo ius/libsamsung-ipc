@@ -17,6 +17,7 @@ libsamsung_ipc_la_SOURCES = \
 	ipc_util.c \
 	util.c \
 	misc.c \
+	sec.c \
 	$(NULL)
 
 libsamsung_ipc_la_LIBADD = \

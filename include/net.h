@@ -58,7 +58,7 @@
 
 struct ipc_net_current_plmn {
     char unk;
-    unsigned char reg_state; // IPC_NET_REGISTRATION_STATE_...
+    unsigned char slevel;
     char plmn[6];
     unsigned char type; // IPC_NET_SERVICE_TYPE_... ?
     unsigned short lac;

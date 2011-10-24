@@ -255,6 +255,15 @@ namespace SamsungIpc
             USIM,
         }
 
+        [CCode (cname = "gint8", cprefix = "IPC_SEC_RSIM_COMMAND_", has_type_id = false)]
+        public enum RSimCommandType
+        {
+            READ_BINARY,
+            READ_RECORD,
+            UPDATE_BINARY,
+            STATUS,
+        }
+
         [CCode (cname = "struct ipc_sec_pin_status_noti", destroy_function = "")]
         public struct SimStatusMessage
         {
@@ -292,7 +301,7 @@ namespace SamsungIpc
         [CCode (cname = "struct ipc_sec_rsim_access_request", destroy_function = "")]
         public struct RSimAccessRequestMessage
         {
-            public uint8 command;
+            public RSimCommandType command;
             public uint16 fileid;
             public uint8 p1;
             public uint8 p2;
@@ -410,6 +419,7 @@ namespace SamsungIpc
         {
             public uint8 unk;
             public uint8 slevel;
+            [CCode (array_length_cname = "")]
             public uint8[] plmn;
             public uint8 type;
             public uint16 lac;
@@ -600,6 +610,9 @@ namespace SamsungIpc
         public uint32 data_length;
         [CCode (array_length_cname = "data_length")]
         public uint8[] data;
+
+        [CCode (cprefix = "ipc_")]
+        public string sec_rsim_access_response_get_file_data();
     }
 
     public delegate int TransportCb(uint8[] data);
