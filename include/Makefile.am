@@ -14,4 +14,5 @@ samsung_ipcinclude_HEADERS = \
 	pwr.h \
 	types.h \
 	util.h \
+	gprs.h \
 	$(NULL)

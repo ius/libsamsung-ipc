@@ -29,6 +29,7 @@
 #include "sec.h"
 #include "sms.h"
 #include "pwr.h"
+#include "gprs.h"
 
 /* AP -> Baseband */
 #define IPC_TYPE_EXEC                   0x01
@@ -80,23 +81,6 @@
 #define IPC_SS_USSD                 0x0C08
 #define IPC_SS_AOC                  0x0C09
 #define IPC_SS_RELEASE_COMPLETE             0x0C0A
-
-/* GPRS */
-#define IPC_GPRS_DEFINE_PDP_CONTEXT         0x0D01
-#define IPC_GPRS_QOS                    0x0D02
-#define IPC_GPRS_PS                 0x0D03
-#define IPC_GPRS_PDP_CONTEXT                0x0D04
-#define IPC_GPRS_SHOW_PDP_ADDR              0x0D05
-#define IPC_GPRS_MS_CLASS               0x0D06
-#define IPC_GPRS_3G_QUAL_SERVICE_PROFILE        0x0D07
-#define IPC_GPRS_IP_CONFIGURATION           0x0D08
-#define IPC_GPRS_DEFINE_SEC_PDP_CONTEXT         0x0D09
-#define IPC_GPRS_TFT                    0x0D0A
-#define IPC_GPRS_HSDPA_STATUS               0x0D0B
-#define IPC_GPRS_CURRENT_SESSION_DATA_COUNT     0x0D0C
-#define IPC_GPRS_DATA_DORMANT               0x0D0D
-#define IPC_GPRS_DUN_PIN_CTRL               0x0D0E
-#define IPC_GPRS_CALL_STATUS                0x0D0F
 
 /* Sat */
 #define IPC_SAT_PROFILE_DOWNLOAD            0x0E01

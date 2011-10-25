@@ -578,6 +578,85 @@ namespace SamsungIpc
 
     /* ******************************************************************************** */
 
+    namespace Gprs
+    {
+        [CCode (cname = "gint8", cprefix = "IPC_GPRS_CALL_STATUS_TYPE_", has_type_id = false)]
+        public enum CallStatusType
+        {
+            ON,
+            OFF,
+        }
+
+        [CCode (cname = "gint8", cprefix = "IPC_GPRS_ERROR_", has_type_id = false)]
+        public enum ErrorType
+        {
+            UNAVAILABLE,
+        }
+
+        [CCode (cname = "struct ipc_gprs_define_pdp_context", destroy_function = "")]
+        public struct DefinePdpContextMessage
+        {
+            public uint8[] unk0;
+            public uint8[] apn;
+
+            [CCode (cname = "ipc_gprs_define_pdp_context_setup")]
+            public void setup(string apn);
+        }
+
+        [CCode (cname = "struct ipc_gprs_ip_configuration", destroy_function = "")]
+        public struct IpConfigurationMessage
+        {
+            public uint8 unk0;
+            public uint8 field_flag;
+            public uint8 unk1;
+            public uint8[] ip;
+            public uint8[] dns1;
+            public uint8[] dns2;
+            public uint8[] gateway;
+            public uint8[] subnet_mask;
+        }
+
+        [CCode (name = "struct ipc_gprs_call_status", destroy_function = "")]
+        public struct CallStatusMessage
+        {
+            public uint8 cid;
+            public CallStatusType status;
+            public uint16 reason;
+        }
+
+        [CCode (cname = "struct ipc_gprs_hsdpa_status", destroy_function = "")]
+        public struct HsdpaStatusMessage
+        {
+            public uint8 unk;
+        }
+
+        [CCode (cname = "struct ipc_gprs_pdp_context", destroy_function = "")]
+        public struct PdpContextMessage
+        {
+            public uint8[] unk0;
+            public uint8[] username;
+            public uint8[] password;
+            public uint8[] unk1;
+
+            [CCode (cname = "ipc_gprs_pdp_context_setup")]
+            public void setup(string username, string password);
+        }
+
+        [CCode (cname = "struct ipc_gprs_ps", destroy_function = "")]
+        public struct PsMessage
+        {
+            public uint8[] unk;
+        }
+
+        [CCode (cname = "struct ipc_gprs_current_session_data_counter", destroy_function = "")]
+        public struct CurrentSessionDataCounterMessage
+        {
+            public uint8[] unk;
+        }
+    }
+
+    /* ******************************************************************************** */
+
     [CCode (cname = "struct ipc_header", destroy_function = "")]
     public struct Header
     {
