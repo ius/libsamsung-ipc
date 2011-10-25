@@ -294,6 +294,9 @@ namespace SamsungIpc
             [CCode (array_length_cname = "length2")]
             public uint8[] pin2; // size = 8
 
+            [CCode (cname = "ipc_sec_pin_status_set_setup")]
+            public void setup(PinType pin_type, string pin1, string pin2);
+
             public unowned uint8[] data
             {
                 get

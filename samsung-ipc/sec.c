@@ -21,6 +21,27 @@
 #include <radio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
+
+void ipc_sec_pin_status_set_setup(struct ipc_sec_pin_status_set *message,
+                                  unsigned char pin_type, char *pin1, char *pin2)
+{
+    assert(message != NULL);
+
+    message->type = pin_type;
+
+    if (pin1 != NULL)
+    {
+        strncpy(message->pin1, pin1, 8);
+        message->length1 = strlen(pin1);
+    }
+
+    if (pin2 != NULL)
+    {
+        strncpy(message->pin2, pin2, 8);
+        message->length2 = strlen(pin2);
+    }
+}
 
 char* ipc_sec_rsim_access_response_get_file_data(struct ipc_response *response)
 {

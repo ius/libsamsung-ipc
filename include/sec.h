@@ -111,5 +111,8 @@ struct ipc_sec_lock_info_response {
 
 char* ipc_sec_rsim_access_response_get_file_data(struct ipc_response *response);
 
+void ipc_sec_pin_status_set_setup(struct ipc_sec_pin_status_set *message,
+                                  unsigned char pin_type, char *pin1, char *pin2);
+
 #endif
 
