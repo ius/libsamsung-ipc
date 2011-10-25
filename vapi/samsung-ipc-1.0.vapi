@@ -498,12 +498,19 @@ namespace SamsungIpc
             AUTO,
         }
 
+        [CCode (cname = "gint8", cprefix = "IPC_NET_SERVICE_DOMAIN_", has_type_id = false)]
+        public enum ServiceDomain
+        {
+            GSM,
+            GPRS,
+        }
+
         [CCode (cname = "struct ipc_net_regist", destroy_function = "")]
         public struct RegistrationMessage
         {
             public AccessTechnology act;
+            public ServiceDomain domain;
             public RegistrationState reg_state;
-            public uint8 unk;
             public uint8 edge;
             public uint16 lac;
             public uint32 cid;

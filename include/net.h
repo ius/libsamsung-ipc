@@ -56,6 +56,9 @@
 #define IPC_NET_REGISTRATION_STATE_UNKNOWN                          0x05
 #define IPC_NET_REGISTRATION_STATE_ROAMING                          0x06
 
+#define IPC_NET_SERVICE_DOMAIN_GSM                                  0x02
+#define IPC_NET_SERVICE_DOMAIN_GPRS                                 0x03
+
 struct ipc_net_current_plmn {
     char unk0;
     unsigned char slevel;
@@ -70,11 +73,10 @@ struct ipc_net_regist_set {
     unsigned char domain;
 } __attribute__((__packed__));
 
-
 struct ipc_net_regist {
     unsigned char act; // IPC_NET_ACCESS_TECHNOLOGY_...
+    unsigned char domain; // IPC_NET_SERVICE_DOMAIN_...
     unsigned char reg_state; // IPC_NET_REGISTRATION_STATE_...
-    unsigned char unk; // domain?
     unsigned char edge;
     unsigned short lac;
     unsigned int cid;
