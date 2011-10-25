@@ -28,8 +28,8 @@
 #define IPC_GPRS_SHOW_PDP_ADDR              0x0D05
 #define IPC_GPRS_MS_CLASS                   0x0D06
 #define IPC_GPRS_3G_QUAL_SERVICE_PROFILE    0x0D07
-#define IPC_GPRS_IP_CONFIGURATION           0x0D08
-#define IPC_GPRS_DEFINE_SEC_PDP_CONTEXT     0x0D09
+#define IPC_GPRS_DEFINE_SEC_PDP_CONTEXT     0x0D08
+#define IPC_GPRS_IP_CONFIGURATION           0x0D09
 #define IPC_GPRS_TFT                        0x0D0A
 #define IPC_GPRS_HSDPA_STATUS               0x0D0B
 #define IPC_GPRS_CURRENT_SESSION_DATA_COUNT 0x0D0C
