@@ -59,19 +59,31 @@ struct ipc_response {
 };
 
 struct ipc_client;
+struct ipc_handlers;
 
-typedef int (*ipc_client_transport_cb)(uint8_t *data, unsigned int size, void *user_data);
 typedef void (*ipc_client_log_handler_cb)(const char *message, void *user_data);
 
+typedef void *(*ipc_handler_data_cb)(void);
+typedef int (*ipc_io_handler_cb)(void *data, unsigned int size, void *io_data);
+typedef int (*ipc_handler_cb)(void *data);
+
 struct ipc_client *ipc_client_new(int client_type);
-int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler_cb log_handler_cb, void *user_data);
-int ipc_client_set_delegates(struct ipc_client *client, ipc_client_transport_cb write, void *write_data,
-                                                        ipc_client_transport_cb read,  void *read_data);
 int ipc_client_free(struct ipc_client *client);
+
+int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler_cb log_handler_cb, void *user_data);
+
+int ipc_client_set_handlers(struct ipc_client *client, struct ipc_handlers *handlers);
+int ipc_client_set_io_handlers(struct ipc_client *client, void *io_data,
+                               ipc_io_handler_cb read, ipc_io_handler_cb write,
+                               ipc_io_handler_cb open, ipc_io_handler_cb close);
+void *ipc_client_get_handlers_io_data(struct ipc_client *client);
+int ipc_client_set_handlers_io_data(struct ipc_client *client, void *io_data);
 
 int ipc_client_bootstrap_modem(struct ipc_client *client);
 int ipc_client_open(struct ipc_client *client);
 int ipc_client_close(struct ipc_client *client);
+int ipc_client_power_on(struct ipc_client *client);
+int ipc_client_power_off(struct ipc_client *client);
 
 int ipc_client_recv(struct ipc_client *client, struct ipc_response *response);
 

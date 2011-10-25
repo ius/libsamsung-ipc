@@ -45,4 +45,6 @@ void *file_read(char *file_name, int size, int block_size);
 int wake_lock(char *lock_name, int size);
 int wake_unlock(char *lock_name, int size);
 
+extern struct ipc_handlers crespo_ipc_default_handlers;
+
 #endif

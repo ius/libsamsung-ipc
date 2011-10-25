@@ -274,6 +274,8 @@ boot_loop_start:
 
     free(nv_data_p);
 
+    close(modem_ctl_fd);
+
     rc = 0;
     goto exit;
 
@@ -314,9 +316,9 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_request *reques
     memcpy(modem_data.data, &reqhdr, sizeof(struct ipc_header));
     memcpy((unsigned char *)modem_data.data + sizeof(struct ipc_header), request->data, request->length);
 
-    assert(client->write != NULL);
+    assert(client->handlers->write != NULL);
 
-    rc = client->write((uint8_t*) &modem_data, sizeof(struct modem_io), client->write_data);
+    rc = client->handlers->write((uint8_t*) &modem_data, sizeof(struct modem_io), client->handlers->io_data);
     return rc;
 }
 
@@ -356,9 +358,9 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
 
     wake_lock("secril_fmt-interface", sizeof("secril_fmt-interface") - 1); // FIXME sizeof("...") is ugly!
 
-    assert(client->read != NULL);
-    bread = client->read((uint8_t*) &modem_data, sizeof(struct modem_io) + MAX_MODEM_DATA_SIZE, client->read_data);
-    if (bread <= 0)
+    assert(client->handlers->read != NULL);
+    bread = client->handlers->read((uint8_t*) &modem_data, sizeof(struct modem_io) + MAX_MODEM_DATA_SIZE, client->handlers->io_data);
+    if (bread < 0)
     {
         ipc_client_log(client, "ERROR: crespo_ipc_client_recv: can't receive enough bytes from modem to process incoming response!");
         return 1;
@@ -371,6 +373,8 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
         ipc_client_log(client, "ERROR: crespo_ipc_client_recv: we retrieve less bytes from the modem than we exepected!");
         return 1;
     }
+
+    /* You MUST send back  modem_data */
 
     resphdr = (struct ipc_header *) modem_data.data;
 
@@ -397,11 +401,175 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
     return 0;
 }
 
+int crespo_ipc_open(void *data, unsigned int size, void *io_data)
+{
+    int type=*((int *) data);
+    int fd=-1;
+
+    switch(type)
+    {
+        case IPC_CLIENT_TYPE_CRESPO_FMT:
+            fd = open("/dev/modem_fmt", O_RDWR |  O_NDELAY);
+            printf("crespo_ipc_open: opening /dev/modem_fmt\n");
+            break;
+        case IPC_CLIENT_TYPE_CRESPO_RFS:
+            fd = open("/dev/modem_rfs", O_RDWR |  O_NDELAY);
+            printf("crespo_ipc_open: opening /dev/modem_rfs\n");
+            break;
+        default:
+            break;
+    }
+
+    if(fd < 0)
+        return -1;
+
+    if(io_data == NULL)
+        return -1;
+
+    memcpy(io_data, &fd, sizeof(int));
+
+    return 0;
+}
+
+int crespo_ipc_close(void *data, unsigned int size, void *io_data)
+{
+    int fd = -1;
+
+    if(io_data == NULL)
+        return -1;
+
+    fd = *((int *) io_data);
+
+    if(fd < 0)
+        return -1;
+
+    close(fd);
+
+    return 0;
+}
+
+int crespo_ipc_read(void *data, unsigned int size, void *io_data)
+{
+    int fd = -1;
+    int rc;
+
+    if(io_data == NULL)
+        return -1;
+
+    if(data == NULL)
+        return -1;
+
+    fd = *((int *) io_data);
+
+    if(fd < 0)
+        return -1;
+
+    rc = ioctl(fd, IOCTL_MODEM_RECV, data);
+
+    if(rc < 0)
+        return -1;
+
+    return 0;
+}
+
+int crespo_ipc_write(void *data, unsigned int size, void *io_data)
+{
+    int fd = -1;
+    int rc;
+
+    if(io_data == NULL)
+        return -1;
+
+    fd = *((int *) io_data);
+
+    if(fd < 0)
+        return -1;
+
+    rc = ioctl(fd, IOCTL_MODEM_SEND, data);
+
+    if(rc < 0)
+        return -1;
+
+    return 0;
+}
+
+int crespo_ipc_power_on(void *data)
+{
+    int fd=open("/dev/modem_ctl", O_RDWR);
+    int rc;
+
+/*
+    fd = open("/sys/devices/platform/modemctl/power_mode", O_RDWR);
+    rc = write(fd, "1", 1);
+*/
+
+    if(fd < 0)
+        return -1;
+
+    rc = ioctl(fd, IOCTL_MODEM_START);
+    close(fd);
+
+    if(rc < 0)
+        return -1;
+
+    return 0;
+}
+
+int crespo_ipc_power_off(void *data)
+{
+    int fd=open("/dev/modem_ctl", O_RDWR);
+    int rc;
+
+/*
+    fd = open("/sys/devices/platform/modemctl/power_mode", O_RDWR);
+    rc = write(fd, "0", 1);
+*/
+
+    if(fd < 0)
+        return -1;
+
+    rc = ioctl(fd, IOCTL_MODEM_OFF);
+    close(fd);
+
+    if(rc < 0)
+        return -1;
+
+    return 0;
+}
+
+void *crespo_ipc_io_data_reg(void)
+{
+    void *data = NULL;
+
+    data = malloc(sizeof(int));
+
+    return data;
+}
+
+int crespo_ipc_io_data_unreg(void *data)
+{
+    if(data == NULL)
+        return -1;
+
+    free(data);
+
+    return 0;
+}
+
+struct ipc_handlers crespo_ipc_default_handlers = {
+    .read = crespo_ipc_read,
+    .write = crespo_ipc_write,
+    .open = crespo_ipc_open,
+    .close = crespo_ipc_close,
+    .io_data_reg = crespo_ipc_io_data_reg,
+    .io_data_unreg = crespo_ipc_io_data_unreg,
+    .io_data = NULL,
+    .power_on = crespo_ipc_power_on,
+    .power_off = crespo_ipc_power_off,
+};
+
 struct ipc_ops crespo_ipc_ops = {
-    .open = NULL,
-    .close = NULL,
     .send = crespo_ipc_client_send,
     .recv = crespo_ipc_client_recv,
     .bootstrap = crespo_modem_bootstrap,
 };
-

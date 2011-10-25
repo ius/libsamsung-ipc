@@ -15,7 +15,8 @@ modemctrl_files := tools/modemctrl.c
 
 LOCAL_SRC_FILES := $(samsung-ipc_files) $(modemctrl_files)
 LOCAL_SHARED_LIBRARIES := libutils
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/include \
+	$(LOCAL_PATH)/samsung-ipc
 LOCAL_CFLAGS += -Iexternal/openssl/include
 LOCAL_LDFLAGS += -lcrypto
 

@@ -72,6 +72,7 @@ struct ipc_client* ipc_client_new(int client_type)
     client = (struct ipc_client*) malloc(sizeof(struct ipc_client));
     client->type = client_type;
     client->ops = ops;
+    client->handlers = (struct ipc_handlers *) malloc(sizeof(struct ipc_handlers));
     client->log_handler = log_handler_default;
 
     return client;
@@ -79,6 +80,9 @@ struct ipc_client* ipc_client_new(int client_type)
 
 int ipc_client_free(struct ipc_client *client)
 {
+    if(client->handlers->io_data != NULL)
+        client->handlers->io_data_unreg(client->handlers->io_data);
+    free(client->handlers);
     free(client);
     client = NULL;
     return 0;
@@ -86,7 +90,7 @@ int ipc_client_free(struct ipc_client *client)
 
 int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler_cb log_handler_cb, void *user_data)
 {
-    if (client == NULL)
+    if(client == NULL)
         return -1;
 
     client->log_handler = log_handler_cb;
@@ -95,18 +99,59 @@ int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler
     return 0;
 }
 
-
-int ipc_client_set_delegates(struct ipc_client *client,
-                             ipc_client_transport_cb write, void *write_data,
-                             ipc_client_transport_cb read, void *read_data)
+int ipc_client_set_io_handlers(struct ipc_client *client, void *io_data,
+                               ipc_io_handler_cb read, ipc_io_handler_cb write,
+                               ipc_io_handler_cb open, ipc_io_handler_cb close)
 {
-    if (client == NULL)
+    if(client == NULL)
         return -1;
 
-    client->read = read;
-    client->read_data = read_data;
-    client->write = write;
-    client->write_data = write_data;
+    if(read != NULL)
+        client->handlers->read = read;
+    if(write != NULL)
+        client->handlers->write = write;
+    if(open != NULL)
+        client->handlers->open = open;
+    if(close != NULL)
+        client->handlers->close = close;
+    if(io_data != NULL)
+    {
+        client->handlers->io_data = io_data;
+        if(client->handlers->io_data_reg != NULL)
+            client->handlers->io_data = client->handlers->io_data_reg();
+    }
+
+    return 0;
+}
+
+int ipc_client_set_handlers(struct ipc_client *client, struct ipc_handlers *handlers)
+{
+    if(client == NULL)
+        return -1;
+    if(handlers == NULL)
+        return -1;
+
+    memcpy(client->handlers, handlers, sizeof(struct ipc_handlers));
+
+    if(client->handlers->io_data_reg != NULL)
+        client->handlers->io_data = client->handlers->io_data_reg();
+
+    return 0;
+}
+
+void *ipc_client_get_handlers_io_data(struct ipc_client *client)
+{
+    return client->handlers->io_data;
+}
+
+int ipc_client_set_handlers_io_data(struct ipc_client *client, void *io_data)
+{
+    if(client == NULL)
+        return -1;
+    if(io_data == NULL)
+        return -1;
+
+    client->handlers->io_data=io_data;
 
     return 0;
 }
@@ -123,22 +168,47 @@ int ipc_client_bootstrap_modem(struct ipc_client *client)
 
 int ipc_client_open(struct ipc_client *client)
 {
+    int type;
+    int fd;
+
     if (client == NULL ||
-        client->ops == NULL ||
-        client->ops->open == NULL)
+        client->handlers == NULL ||
+        client->handlers->open == NULL)
         return -1;
 
-    return client->ops->open(client);
+    type = client->type;
+
+    return client->handlers->open(&type, 0, client->handlers->io_data);
 }
 
 int ipc_client_close(struct ipc_client *client)
 {
     if (client == NULL ||
-        client->ops == NULL ||
-        client->ops->close == NULL)
+        client->handlers == NULL ||
+        client->handlers->open == NULL)
         return -1;
 
-    return client->ops->close(client);
+    return client->handlers->close(NULL, 0, client->handlers->io_data);
+}
+
+int ipc_client_power_on(struct ipc_client *client)
+{
+    if (client == NULL ||
+        client->handlers == NULL ||
+        client->handlers->open == NULL)
+        return -1;
+
+    return client->handlers->power_on(NULL);
+}
+
+int ipc_client_power_off(struct ipc_client *client)
+{
+    if (client == NULL ||
+        client->handlers == NULL ||
+        client->handlers->open == NULL)
+        return -1;
+
+    return client->handlers->power_off(NULL);
 }
 
 int _ipc_client_send(struct ipc_client *client, struct ipc_request *request)
