@@ -45,7 +45,7 @@
 struct ipc_gprs_define_pdp_context {
     unsigned char unk0[3];
     unsigned char apn[124];
-} __attribute__((__packed__));
+};
 
 struct ipc_gprs_ip_configuration {
     unsigned char unk0;
@@ -56,32 +56,37 @@ struct ipc_gprs_ip_configuration {
     unsigned char dns2[4];
     unsigned char gateway[4];
     unsigned char subnet_mask[4];
-} __attribute__((__packed__));
+};
+
+struct ipc_gprs_ip_configuration_response {
+    unsigned char unk0[376];
+};
 
 struct ipc_gprs_call_status {
     unsigned char cid;
     unsigned char state; // IPC_GPRS_CALL_STATUS_TYPE_...
     unsigned short reason;
-} __attribute__((__packed__));
+};
 
 struct ipc_gprs_hsdpa_status {
     unsigned char unk;
-} __attribute__((__packed__));
+};
 
 struct ipc_gprs_pdp_context {
     unsigned char unk0[6];
     unsigned char username[32];
     unsigned char password[32];
-    unsigned char unk1[33];
-} __attribute__((__packed__));
+    unsigned char unk1[32];
+    unsigned char unk2;
+};
 
 struct ipc_gprs_ps {
     unsigned char unk[2];
-} __attribute__((__packed__));
+};
 
 struct ipc_gprs_current_session_data_counter {
     unsigned char unk[9];
-} __attribute__((__packed__));
+};
 
 void ipc_gprs_pdp_context_setup(struct ipc_gprs_pdp_context *message, char *username, char *password);
 
