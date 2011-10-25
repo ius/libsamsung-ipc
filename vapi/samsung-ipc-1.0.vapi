@@ -271,6 +271,16 @@ namespace SamsungIpc
             public SimStatus status;
             [CCode (cname = "key")]
             public SimLockStatus lock_status;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( SimStatusMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_sec_pin_status_set", destroy_function = "")]
@@ -283,12 +293,32 @@ namespace SamsungIpc
             public uint8[] pin1; // size = 8
             [CCode (array_length_cname = "length2")]
             public uint8[] pin2; // size = 8
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( PinStatusSetMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_sec_phone_lock_request", destroy_function = "")]
         public struct PhoneLockRequestMessage
         {
             public SimStatus lock_type; // FIXME refactor log type from SimStatus in own enum
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( PhoneLockRequestMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_sec_phone_lock_response", destroy_function = "")]
@@ -296,6 +326,16 @@ namespace SamsungIpc
         {
             public uint8 type;
             public SimLockStatus status;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( PhoneLockResponseMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_sec_rsim_access_request", destroy_function = "")]
@@ -306,14 +346,34 @@ namespace SamsungIpc
             public uint8 p1;
             public uint8 p2;
             public uint8 p3;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( RSimAccessRequestMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_sec_rsim_access_response", destroy_function = "")]
-        public struct RSimAccessResponse
+        public struct RSimAccessResponseMessage
         {
             public uint8 sw1;
             public uint8 sw2;
             public uint8 len;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( RSimAccessResponseMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_sec_lock_info_request", destroy_function = "")]
@@ -321,6 +381,16 @@ namespace SamsungIpc
         {
             public uint8 unk0;
             public PinType pin_type;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( LockInfoRequestMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_sec_lock_info_response", destroy_function = "")]
@@ -330,6 +400,16 @@ namespace SamsungIpc
             public uint8 type;
             public uint8 key;
             public uint8 attempts;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( LockInfoResponseMessage );
+                    return res;
+                }
+            }
         }
     }
 
@@ -345,12 +425,32 @@ namespace SamsungIpc
             public uint8 battery;
             public uint8 act;
             public uint8 reg;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( IconInfoMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_disp_rssi_info", destroy_function = "")]
         public struct RssiInfo
         {
             public uint8 rssi;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( RssiInfo );
+                    return res;
+                }
+            }
         }
     }
 
@@ -405,6 +505,16 @@ namespace SamsungIpc
             public uint16 lac;
             public uint32 cid;
             public uint8 rej_cause;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( RegistrationMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_net_regist_set", destroy_function = "")]
@@ -412,6 +522,16 @@ namespace SamsungIpc
         {
             public uint8 net;
             public uint8 domain;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( RegistrationSetMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_net_current_plmn", destroy_function = "")]
@@ -424,6 +544,16 @@ namespace SamsungIpc
             public uint8[] plmn;
             public uint8 type;
             public uint16 lac;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( CurrentPlmnMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_net_plmn_entry", destroy_function = "")]
@@ -433,6 +563,16 @@ namespace SamsungIpc
             public uint8[] plmn;
             public uint8 type;
             public uint8[] unk;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( PlmnEntryMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_net_plmn_entries", destroy_function = "")]
@@ -441,6 +581,16 @@ namespace SamsungIpc
             public uint8 num;
             [CCode (cname = "data", array_length_cname = "num")]
             public PlmnEntriesMessage[] entries;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( PlmnEntriesMessage );
+                    return res;
+                }
+            }
         }
     }
 
@@ -495,6 +645,16 @@ namespace SamsungIpc
             public uint8 length;
             public Prefix prefix;
             public uint8[] number;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( OutgoingMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_call_incoming", destroy_function = "")]
@@ -503,6 +663,16 @@ namespace SamsungIpc
             public uint8 type;
             public uint8 id;
             public uint8 line;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( IncomingMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_call_list_entry", destroy_function = "")]
@@ -515,6 +685,16 @@ namespace SamsungIpc
             public uint8 mpty;
             public uint8 number_len;
             public uint8 unk4;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( ListEntryMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_call_status", destroy_function = "")]
@@ -525,6 +705,16 @@ namespace SamsungIpc
             public State state;
             public uint8 reason;
             public uint8 end_cause;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( StatusMessage );
+                    return res;
+                }
+            }
         }
     }
 
@@ -539,6 +729,16 @@ namespace SamsungIpc
             public uint8 type;
             public uint16 code;
             public uint8 unk;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( PhoneResponseMessage );
+                    return res;
+                }
+            }
         }
     }
 
@@ -556,6 +756,16 @@ namespace SamsungIpc
             public uint8[] hw_version;
             public uint8[] cal_date;
             public uint8[] misc;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( VersionMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_misc_time_info", destroy_function = "")]
@@ -573,6 +783,16 @@ namespace SamsungIpc
             public uint8 dl;
             public uint8 dv;
             public uint8[] plmn;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( TimeInfoMessage );
+                    return res;
+                }
+            }
         }
     }
 
@@ -601,6 +821,16 @@ namespace SamsungIpc
 
             [CCode (cname = "ipc_gprs_define_pdp_context_setup")]
             public void setup(string apn);
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( DefinePdpContextMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_gprs_ip_configuration", destroy_function = "")]
@@ -614,6 +844,16 @@ namespace SamsungIpc
             public uint8[] dns2;
             public uint8[] gateway;
             public uint8[] subnet_mask;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( IpConfigurationMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (name = "struct ipc_gprs_call_status", destroy_function = "")]
@@ -622,12 +862,32 @@ namespace SamsungIpc
             public uint8 cid;
             public CallStatusType status;
             public uint16 reason;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( CallStatusMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_gprs_hsdpa_status", destroy_function = "")]
         public struct HsdpaStatusMessage
         {
             public uint8 unk;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( HsdpaStatusMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_gprs_pdp_context", destroy_function = "")]
@@ -640,18 +900,48 @@ namespace SamsungIpc
 
             [CCode (cname = "ipc_gprs_pdp_context_setup")]
             public void setup(string username, string password);
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( PdpContextMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_gprs_ps", destroy_function = "")]
         public struct PsMessage
         {
             public uint8[] unk;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( PsMessage );
+                    return res;
+                }
+            }
         }
 
         [CCode (cname = "struct ipc_gprs_current_session_data_counter", destroy_function = "")]
         public struct CurrentSessionDataCounterMessage
         {
             public uint8[] unk;
+
+            public unowned uint8[] data
+            {
+                get
+                {
+                    unowned uint8[] res = (uint8[])(&this);
+                    res.length = (int) sizeof( CurrentSessionDataCounterMessage );
+                    return res;
+                }
+            }
         }
     }
 
@@ -691,6 +981,7 @@ namespace SamsungIpc
         [CCode (array_length_cname = "data_length")]
         public uint8[] data;
 
+        // FIXME this should not be here ...
         [CCode (cname = "ipc_sec_rsim_access_response_get_file_data")]
         public string sec_rsim_access_response_get_file_data();
         [CCode (cname = "ipc_misc_me_imsi_response_get_imsi")]
