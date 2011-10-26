@@ -54,7 +54,7 @@ void ipc_client_log(struct ipc_client *client, const char *message, ...)
 struct ipc_client* ipc_client_new(int client_type)
 {
     struct ipc_client *client;
-    struct ips_ops *ops = NULL;
+    struct ipc_ops *ops = NULL;
 
     switch (client_type)
     {

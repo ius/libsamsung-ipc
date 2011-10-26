@@ -61,7 +61,7 @@ struct ipc_response {
 struct ipc_client;
 
 typedef int (*ipc_client_transport_cb)(uint8_t *data, unsigned int size, void *user_data);
-typedef int (*ipc_client_log_handler_cb)(const char *message, void *user_data);
+typedef void (*ipc_client_log_handler_cb)(const char *message, void *user_data);
 
 struct ipc_client *ipc_client_new(int client_type);
 int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler_cb log_handler_cb, void *user_data);

@@ -312,7 +312,7 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_request *reques
     modem_data.data = malloc(reqhdr.length);
 
     memcpy(modem_data.data, &reqhdr, sizeof(struct ipc_header));
-    memcpy(modem_data.data + sizeof(struct ipc_header), request->data, request->length);
+    memcpy((unsigned char *)modem_data.data + sizeof(struct ipc_header), request->data, request->length);
 
     assert(client->write != NULL);
 
