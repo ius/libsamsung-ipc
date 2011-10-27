@@ -95,6 +95,10 @@ int  h1_ipc_send(struct ipc_client *client, struct ipc_message_info *request)
 	hdlc->ipc.index = request->index;
 	hdlc->ipc.type = request->type;
 
+	ipc_client_log(client, "sending %s %s\n",
+			ipc_command_type_to_str(IPC_COMMAND(request)),
+			ipc_response_type_to_str(request->type));
+
 	hex_dump(frame, frame_length);
 
 	client->handlers->write(frame, frame_length, client->handlers->io_data);
@@ -133,6 +137,12 @@ int h1_ipc_recv(struct ipc_client *client, struct ipc_message_info *response)
 
 			response->data = (unsigned char*)malloc(response->length);
 			memcpy(response->data, (data + sizeof(*ipc)), response->length);
+
+			ipc_client_log(client, "received %s %s\n",
+					ipc_command_type_to_str(IPC_COMMAND(response)),
+					ipc_response_type_to_str(response->type));
+
+			hex_dump(data, num_read-1);
 
 			return 0;
 		}
