@@ -854,6 +854,7 @@ namespace SamsungIpc
             public uint8[] dns2;
             public uint8[] gateway;
             public uint8[] subnet_mask;
+            public uint8[] unk2;
 
             public unowned uint8[] data
             {

@@ -56,6 +56,7 @@ struct ipc_gprs_ip_configuration {
     unsigned char dns2[4];
     unsigned char gateway[4];
     unsigned char subnet_mask[4];
+    unsigned char unk2[4];
 };
 
 struct ipc_gprs_ip_configuration_response {
