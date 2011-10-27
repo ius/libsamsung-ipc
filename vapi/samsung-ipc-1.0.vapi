@@ -650,11 +650,13 @@ namespace SamsungIpc
         [CCode (cname = "struct ipc_call_outgoing", destroy_function = "")]
         public struct OutgoingMessage
         {
-            public uint8 type;
+            public Type type;
             public Identity identity;
             public uint8 length;
             public Prefix prefix;
             public uint8[] number;
+
+            public void setup(Type type, Identity identity, Prefix prefix, string number);
 
             public unowned uint8[] data
             {

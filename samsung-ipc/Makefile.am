@@ -19,6 +19,7 @@ libsamsung_ipc_la_SOURCES = \
 	misc.c \
 	sec.c \
 	gprs.c \
+	call.c \
 	$(NULL)
 
 libsamsung_ipc_la_LIBADD = \
