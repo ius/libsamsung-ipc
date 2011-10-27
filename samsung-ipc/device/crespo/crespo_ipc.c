@@ -344,7 +344,7 @@ int wake_unlock(char *lock_name, int size)
     return rc;
 }
 
-int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *response)
+int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_message_info *response)
 {
     struct modem_io modem_data;
     struct ipc_header *resphdr;
@@ -354,7 +354,7 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
     modem_data.data = malloc(MAX_MODEM_DATA_SIZE);
     modem_data.size = MAX_MODEM_DATA_SIZE;
 
-    memset(response, 0, sizeof(struct ipc_response));
+    memset(response, 0, sizeof(struct ipc_message_info));
 
     wake_lock("secril_fmt-interface", sizeof("secril_fmt-interface") - 1); // FIXME sizeof("...") is ugly!
 
@@ -380,18 +380,19 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
 
     response->mseq = resphdr->mseq;
     response->aseq = resphdr->aseq;
-    response->command = IPC_COMMAND(resphdr);
+    response->group = resphdr->group;
+    response->index = resphdr->index;
     response->type = resphdr->type;
-    response->data_length = modem_data.size - sizeof(struct ipc_header);
+    response->length = modem_data.size - sizeof(struct ipc_header);
     response->data = NULL;
 
-    ipc_client_log(client, "INFO: crespo_ipc_client_recv: response: group = %d, index = %d, command = %04x",
-                   resphdr->group, resphdr->index, response->command);
+    ipc_client_log(client, "INFO: crespo_ipc_client_recv: response: group = %d, index = %d",
+                   resphdr->group, resphdr->index);
 
-    if(response->data_length > 0)
+    if(response->length > 0)
     {
-        response->data = malloc(response->data_length);
-        memcpy(response->data, (uint8_t *) modem_data.data + sizeof(struct ipc_header), response->data_length);
+        response->data = malloc(response->length);
+        memcpy(response->data, (uint8_t *) modem_data.data + sizeof(struct ipc_header), response->length);
     }
 
     free(modem_data.data);
@@ -403,16 +404,16 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_response *respo
 
 int crespo_ipc_open(void *data, unsigned int size, void *io_data)
 {
-    int type=*((int *) data);
-    int fd=-1;
+    int type = *((int *) data);
+    int fd = -1;
 
     switch(type)
     {
-        case IPC_CLIENT_TYPE_CRESPO_FMT:
+        case IPC_CLIENT_TYPE_FMT:
             fd = open("/dev/modem_fmt", O_RDWR |  O_NDELAY);
             printf("crespo_ipc_open: opening /dev/modem_fmt\n");
             break;
-        case IPC_CLIENT_TYPE_CRESPO_RFS:
+        case IPC_CLIENT_TYPE_RFS:
             fd = open("/dev/modem_rfs", O_RDWR |  O_NDELAY);
             printf("crespo_ipc_open: opening /dev/modem_rfs\n");
             break;

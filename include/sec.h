@@ -21,7 +21,7 @@
 #ifndef __SEC_H__
 #define __SEC_H__
 
-struct ipc_response;
+struct ipc_message_info;
 
 #define IPC_SEC_PIN_STATUS              0x0501
 #define IPC_SEC_PHONE_LOCK              0x0502
@@ -109,7 +109,7 @@ struct ipc_sec_lock_info_response {
     unsigned char attempts;
 } __attribute__((__packed__));
 
-char* ipc_sec_rsim_access_response_get_file_data(struct ipc_response *response);
+char* ipc_sec_rsim_access_response_get_file_data(struct ipc_message_info *response);
 
 void ipc_sec_pin_status_set_setup(struct ipc_sec_pin_status_set *message,
                                   unsigned char pin_type, char *pin1, char *pin2);

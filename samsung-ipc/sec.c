@@ -43,7 +43,7 @@ void ipc_sec_pin_status_set_setup(struct ipc_sec_pin_status_set *message,
     }
 }
 
-char* ipc_sec_rsim_access_response_get_file_data(struct ipc_response *response)
+char* ipc_sec_rsim_access_response_get_file_data(struct ipc_message_info *response)
 {
     int n = 0;
     int offset = (int) sizeof(struct ipc_sec_rsim_access_response);

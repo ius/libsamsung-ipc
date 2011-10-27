@@ -21,7 +21,7 @@
 #ifndef __MISC_H__
 #define __MISC_H__
 
-struct ipc_response;
+struct ipc_message_info;
 
 #define IPC_MISC_ME_VERSION				0x0A01
 #define IPC_MISC_ME_IMSI				0x0A02
@@ -43,7 +43,7 @@ struct ipc_misc_time_info {
 	char plmn[6];
 } __attribute__((__packed__));
 
-char* ipc_misc_me_imsi_response_get_imsi(struct ipc_response *response);
+char* ipc_misc_me_imsi_response_get_imsi(struct ipc_message_info *response);
 
 #endif
 
