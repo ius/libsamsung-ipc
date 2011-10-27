@@ -210,7 +210,7 @@ int ipc_client_power_off(struct ipc_client *client)
     return client->handlers->power_off(NULL);
 }
 
-int _ipc_client_send(struct ipc_client *client, struct ipc_request *request)
+int _ipc_client_send(struct ipc_client *client, struct ipc_message_info *request)
 {
     if (client == NULL ||
         client->ops == NULL ||
@@ -234,7 +234,7 @@ inline void ipc_client_send_exec(struct ipc_client *client, const unsigned short
 /* Wrapper for ipc_send */
 void ipc_client_send(struct ipc_client *client, const unsigned short command, const char type, unsigned char *data, const int length, unsigned char mseq)
 {
-    struct ipc_request request;
+    struct ipc_message_info request;
 
     request.mseq = mseq;
     request.aseq = 0xff;
@@ -247,7 +247,7 @@ void ipc_client_send(struct ipc_client *client, const unsigned short command, co
     _ipc_client_send(client, &request);
 }
 
-int ipc_client_recv(struct ipc_client *client, struct ipc_response *response)
+int ipc_client_recv(struct ipc_client *client, struct ipc_message_info *response)
 {
     if (client == NULL ||
         client->ops == NULL ||

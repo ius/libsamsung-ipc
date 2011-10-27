@@ -294,7 +294,7 @@ exit:
     return rc;
 }
 
-int crespo_ipc_client_send(struct ipc_client *client, struct ipc_request *request)
+int crespo_ipc_client_send(struct ipc_client *client, struct ipc_message_info *request)
 {
     struct modem_io modem_data;
     struct ipc_header reqhdr;

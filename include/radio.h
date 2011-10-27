@@ -39,21 +39,13 @@ struct ipc_header {
     unsigned char group, index, type;
 } __attribute__((__packed__));
 
-struct ipc_request {
+struct ipc_message_info {
     unsigned char mseq;
     unsigned char aseq;
     unsigned char group;
     unsigned char index;
     unsigned char type;
     unsigned int length;
-    unsigned char *data;
-};
-
-struct ipc_response {
-    unsigned char mseq, aseq;
-    unsigned short command;
-    unsigned char type;
-    unsigned int data_length;
     unsigned char *data;
 };
 
@@ -84,7 +76,7 @@ int ipc_client_close(struct ipc_client *client);
 int ipc_client_power_on(struct ipc_client *client);
 int ipc_client_power_off(struct ipc_client *client);
 
-int ipc_client_recv(struct ipc_client *client, struct ipc_response *response);
+int ipc_client_recv(struct ipc_client *client, struct ipc_message_info *response);
 
 /* Convenience functions for ipc_send */
 void ipc_client_send(struct ipc_client *client, const unsigned short command, const char type, unsigned char *data,

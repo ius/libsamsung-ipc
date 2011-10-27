@@ -68,7 +68,7 @@ int h1_ipc_power_off()
 	return 0;
 }
 
-int  h1_ipc_send(struct ipc_client *client, struct ipc_request *request)
+int  h1_ipc_send(struct ipc_client *client, struct ipc_message_info *request)
 {
 	struct hdlc_header *hdlc;
 	unsigned char *frame;
@@ -104,7 +104,7 @@ int  h1_ipc_send(struct ipc_client *client, struct ipc_request *request)
 	return 0;
 }
 
-int h1_ipc_recv(struct ipc_client *client, struct ipc_response *response)
+int h1_ipc_recv(struct ipc_client *client, struct ipc_message_info *response)
 {
 	unsigned char buf[4];
 	unsigned char *data;
@@ -126,12 +126,13 @@ int h1_ipc_recv(struct ipc_client *client, struct ipc_response *response)
 			ipc = (struct ipc_header*)data;
 			response->mseq = ipc->mseq;
 			response->aseq = ipc->aseq;
-			response->command = IPC_COMMAND(ipc);
+			response->group = ipc->group;
+			response->index = ipc->index;
 			response->type = ipc->type;
-			response->data_length = (ipc->length - sizeof(*ipc));
+			response->length = (ipc->length - sizeof(*ipc));
 
-			response->data = (unsigned char*)malloc(response->data_length);
-			memcpy(response->data, (data + sizeof(*ipc)), response->data_length);
+			response->data = (unsigned char*)malloc(response->length);
+			memcpy(response->data, (data + sizeof(*ipc)), response->length);
 
 			return 0;
 		}
