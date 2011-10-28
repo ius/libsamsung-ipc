@@ -32,13 +32,13 @@ void ipc_sec_pin_status_set_setup(struct ipc_sec_pin_status_set *message,
 
     if (pin1 != NULL)
     {
-        strncpy(message->pin1, pin1, 8);
+        strncpy((char*)message->pin1, pin1, 8);
         message->length1 = strlen(pin1);
     }
 
     if (pin2 != NULL)
     {
-        strncpy(message->pin2, pin2, 8);
+        strncpy((char*)message->pin2, pin2, 8);
         message->length2 = strlen(pin2);
     }
 }
