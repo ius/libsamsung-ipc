@@ -10,6 +10,7 @@ samsung-ipc_files := \
 	samsung-ipc/util.c \
 	samsung-ipc/gprs.c \
 	samsung-ipc/misc.c \
+	samsung-ipc/net.c \
 	samsung-ipc/sec.c \
 	samsung-ipc/device/$(TARGET_DEVICE)/$(TARGET_DEVICE)_ipc.c
 

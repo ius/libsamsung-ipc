@@ -527,7 +527,7 @@ namespace SamsungIpc
             }
         }
 
-        [CCode (cname = "struct ipc_net_regist_set", destroy_function = "")]
+        [CCode (cname = "struct ipc_net_regist_get", destroy_function = "")]
         public struct RegistrationSetMessage
         {
             public uint8 net;

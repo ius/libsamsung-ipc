@@ -58,7 +58,7 @@
 #define IPC_NET_SERVICE_DOMAIN_GSM                                  0x02
 #define IPC_NET_SERVICE_DOMAIN_GPRS                                 0x03
 
-struct ipc_net_regist_set {
+struct ipc_net_regist_get {
     unsigned char net;
     unsigned char domain;
 } __attribute__((__packed__));
@@ -84,6 +84,8 @@ struct ipc_net_plmn_entries {
     unsigned char num;
     struct ipc_net_plmn_entry *data;
 };
+
+void ipc_net_regist_get(struct ipc_net_regist_get *message, int domain);
 
 #endif
 
