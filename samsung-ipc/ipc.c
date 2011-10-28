@@ -29,9 +29,8 @@
 
 #include "ipc_private.h"
 
-extern struct ipc_ops crespo_ipc_ops;
-// extern struct ipc_ops h1_ipc_ops;
-
+extern struct ipc_ops ipc_ops;
+extern struct ipc_handlers ipc_default_handlers;
 
 void log_handler_default(const char *message, void *user_data)
 {
@@ -58,15 +57,12 @@ struct ipc_client* ipc_client_new(int client_type)
 
     switch (client_type)
     {
-        case IPC_CLIENT_TYPE_CRESPO_FMT:
-        case IPC_CLIENT_TYPE_CRESPO_RFS:
-            ops = &crespo_ipc_ops;
-            break;
-        case IPC_CLIENT_TYPE_H1:
-            // ops = &h1_ipc_ops;
+        case IPC_CLIENT_TYPE_FMT:
+        case IPC_CLIENT_TYPE_RFS:
+            ops = &ipc_ops;
             break;
         default:
-            break;
+            return NULL;
     }
 
     client = (struct ipc_client*) malloc(sizeof(struct ipc_client));
@@ -74,6 +70,9 @@ struct ipc_client* ipc_client_new(int client_type)
     client->ops = ops;
     client->handlers = (struct ipc_handlers *) malloc(sizeof(struct ipc_handlers));
     client->log_handler = log_handler_default;
+
+    /* Set default handlers */
+    ipc_client_set_handlers(client, &ipc_default_handlers);
 
     return client;
 }

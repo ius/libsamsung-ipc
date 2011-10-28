@@ -21,6 +21,8 @@
 #ifndef __IPC_PRIVATE_H__
 #define __IPC_PRIVATE_H__
 
+#include <radio.h>
+
 struct ipc_client;
 
 void ipc_client_log(struct ipc_client *client, const char *message, ...);

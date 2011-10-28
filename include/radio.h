@@ -26,9 +26,8 @@
 #include "types.h"
 #include "util.h"
 
-#define IPC_CLIENT_TYPE_CRESPO_FMT      1
-#define IPC_CLIENT_TYPE_CRESPO_RFS      2
-#define IPC_CLIENT_TYPE_H1              3
+#define IPC_CLIENT_TYPE_FMT      0
+#define IPC_CLIENT_TYPE_RFS      1
 
 #define IPC_COMMAND(f)  ((f->group << 8) | f->index)
 #define IPC_GROUP(m)    (m >> 8)

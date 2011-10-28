@@ -556,7 +556,7 @@ int crespo_ipc_io_data_unreg(void *data)
     return 0;
 }
 
-struct ipc_handlers crespo_ipc_default_handlers = {
+struct ipc_handlers ipc_default_handlers = {
     .read = crespo_ipc_read,
     .write = crespo_ipc_write,
     .open = crespo_ipc_open,
@@ -568,7 +568,7 @@ struct ipc_handlers crespo_ipc_default_handlers = {
     .power_off = crespo_ipc_power_off,
 };
 
-struct ipc_ops crespo_ipc_ops = {
+struct ipc_ops ipc_ops = {
     .send = crespo_ipc_client_send,
     .recv = crespo_ipc_client_recv,
     .bootstrap = crespo_modem_bootstrap,

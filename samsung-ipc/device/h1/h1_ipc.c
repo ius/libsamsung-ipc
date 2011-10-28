@@ -25,6 +25,7 @@
 #include "ipc_private.h"
 #include "h1_ipc.h"
 
+/* FIXME: move to io_data */
 static int fd = 0;
 
 int h1_ipc_open()
@@ -50,25 +51,24 @@ int h1_ipc_close()
 		return close(fd);
 	}
 
-	return 1;
+	return 0;
 }
 
-int h1_ipc_fd_get()
-{
-    return fd;
-}
-
-void h1_ipc_power_on()
+int h1_ipc_power_on()
 {
 	ioctl(fd, IOCTL_PHONE_ON);
+
+	return 0;
 }
 
-void h1_ipc_power_off()
+int h1_ipc_power_off()
 {
 	ioctl(fd, IOCTL_PHONE_OFF);
+
+	return 0;
 }
 
-void h1_ipc_send(struct ipc_request *request)
+int  h1_ipc_send(struct ipc_client *client, struct ipc_request *request)
 {
 	struct hdlc_header *hdlc;
 	unsigned char *frame;
@@ -96,12 +96,15 @@ void h1_ipc_send(struct ipc_request *request)
 	hdlc->ipc.type = request->type;
 
 	hex_dump(frame, frame_length);
-	write(fd, frame, frame_length);
+
+	client->handlers->write(frame, frame_length, client->handlers->io_data);
 
 	free(frame);
+
+	return 0;
 }
 
-int h1_ipc_recv(struct ipc_response *response)
+int h1_ipc_recv(struct ipc_client *client, struct ipc_response *response)
 {
 	unsigned char buf[4];
 	unsigned char *data;
@@ -110,14 +113,14 @@ int h1_ipc_recv(struct ipc_response *response)
 	int num_read;
 	int left;
 
-	num_read = read(fd, buf, sizeof(buf));
+	num_read = client->handlers->read((void*)buf, sizeof(buf), client->handlers->io_data);
 
 	if(num_read == sizeof(buf) && *buf == FRAME_START) {
 		frame_length = (unsigned short*)&buf[1];
 		left = (*frame_length - 3 + 1);
 
 		data = (unsigned char*)malloc(left);
-		num_read = read(fd, data, left);
+		num_read = client->handlers->read((void*)data, left, client->handlers->io_data);
 
 		if(num_read == left && data[left-1] == FRAME_END) {
 			ipc = (struct ipc_header*)data;
@@ -134,15 +137,33 @@ int h1_ipc_recv(struct ipc_response *response)
 		}
 	}
 
-	return 1;
+	return 0;
 }
 
-struct ipc_ops h1_ipc_ops = {
+int h1_ipc_read(void *data, unsigned int size, void *io_data)
+{
+	return read(fd, data, size);
+}
+
+int h1_ipc_write(void *data, unsigned int size, void *io_data)
+{
+	return write(fd, data, size);
+}
+
+struct ipc_handlers ipc_default_handlers = {
     .open = h1_ipc_open,
     .close = h1_ipc_close,
     .power_on = h1_ipc_power_on,
     .power_off = h1_ipc_power_off,
+    .read = h1_ipc_read,
+    .write = h1_ipc_write,
+    .io_data_reg = NULL,
+    .io_data_unreg = NULL,
+    .io_data = NULL,
+};
+
+struct ipc_ops ipc_ops = {
     .send = h1_ipc_send,
     .recv = h1_ipc_recv,
-    .fd_get = h1_ipc_fd_get,
+    .bootstrap = NULL,
 };

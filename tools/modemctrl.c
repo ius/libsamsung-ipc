@@ -82,7 +82,7 @@ int modem_start(struct ipc_client *client)
 {
     int rc;
 
-    ipc_client_set_handlers(client, &crespo_ipc_default_handlers);
+    ipc_client_set_handlers(client, &ipc_default_handlers);
     ipc_client_bootstrap_modem(client);
 
     rc = ipc_client_power_on(client);
@@ -116,8 +116,8 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    crespo_fmt_client = ipc_client_new(IPC_CLIENT_TYPE_CRESPO_FMT);
-    crespo_rfs_client = ipc_client_new(IPC_CLIENT_TYPE_CRESPO_RFS);
+    crespo_fmt_client = ipc_client_new(IPC_CLIENT_TYPE_FMT);
+    crespo_rfs_client = ipc_client_new(IPC_CLIENT_TYPE_RFS);
 
     if (!strncmp(argv[1], "power-on", sizeof("power-on"))) {
         ipc_client_power_on(crespo_fmt_client);
