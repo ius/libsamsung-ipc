@@ -2,6 +2,7 @@
  * This file is part of libsamsung-ipc.
  *
  * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
+ * Copyright (C) 2011 Simon Busch <morphis@gravedo.de>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,16 +19,13 @@
  *
  */
 
-#ifndef __GEN_H__
-#define __GEN_H__
+#ifndef __DEVICE_H1_GEN_H__
+#define __DEVICE_H1_GEN_H__
 
-#if defined(DEVICE_CRESPO)
-#include "device/crespo/gen.h"
-#elif defined(DEVICE_H1)
-#include "device/h1/gen.h"
-#endif
-
-#define IPC_GEN_PHONE_RES               0x8001
+struct ipc_gen_phone_res {
+    unsigned char group, type;
+    unsigned short code;
+    unsigned char unk;
+} __attribute__((__packed__));
 
 #endif
-
