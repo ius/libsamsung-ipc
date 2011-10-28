@@ -687,26 +687,27 @@ namespace SamsungIpc
             }
         }
 
-        [CCode (cname = "struct ipc_call_list_entry", destroy_function = "")]
-        public struct ListEntryMessage
+        [CCode (cname = "struct ipc_response", destroy_function = "")]
+        public struct ListResponseMessage
         {
-            public uint8 type;
+            [CCode (cname = "ipc_call_list_response_get_num_entries")]
+            public uint get_num_entries();
+            [CCode (cname = "ipc_call_list_response_get_entry")]
+            public ListEntry get_entry(uint num);
+            [CCode (cname = "ipc_call_list_response_get_entry_number")]
+            public string get_entry_number(uint num);
+        }
+
+        [CCode (cname = "struct ipc_call_list_entry", destroy_function = "")]
+        public struct ListEntry
+        {
+            public Type type;
             public uint8 idx;
             public Termination term;
-            public State state;
+            public uint8 state;
             public uint8 mpty;
             public uint8 number_len;
             public uint8 unk4;
-
-            public unowned uint8[] data
-            {
-                get
-                {
-                    unowned uint8[] res = (uint8[])(&this);
-                    res.length = (int) sizeof( ListEntryMessage );
-                    return res;
-                }
-            }
         }
 
         [CCode (cname = "struct ipc_call_status", destroy_function = "")]
