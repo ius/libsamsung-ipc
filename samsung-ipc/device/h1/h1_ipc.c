@@ -72,6 +72,7 @@ int  h1_ipc_send(struct ipc_client *client, struct ipc_message_info *request)
 {
 	struct hdlc_header *hdlc;
 	unsigned char *frame;
+	unsigned char *payload;
 	int frame_length;
 
 	/* Frame length: HDLC/IPC header + payload length + HDLC flags (2) */
@@ -87,13 +88,17 @@ int  h1_ipc_send(struct ipc_client *client, struct ipc_message_info *request)
 	hdlc->length = (sizeof(*hdlc) + request->length);
 	hdlc->unknown = 0;
 
-	/* IPC data */
+	/* IPC header */
 	hdlc->ipc.length = (sizeof(hdlc->ipc) + request->length);
 	hdlc->ipc.mseq = request->mseq;
 	hdlc->ipc.aseq = request->aseq;
 	hdlc->ipc.group = request->group;
 	hdlc->ipc.index = request->index;
 	hdlc->ipc.type = request->type;
+
+	/* IPC payload */
+	payload = (frame + 1 + sizeof(*hdlc));
+	memcpy(payload, request->data, request->length);
 
 	ipc_client_log(client, "sending %s %s\n",
 			ipc_command_type_to_str(IPC_COMMAND(request)),
