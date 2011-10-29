@@ -21,19 +21,18 @@
 #ifndef __MISC_H__
 #define __MISC_H__
 
+#if defined(DEVICE_CRESPO)
+#include "device/crespo/misc.h"
+#elif defined(DEVICE_H1)
+#include "device/h1/misc.h"
+#endif
+
 struct ipc_message_info;
 
 #define IPC_MISC_ME_VERSION             0x0A01
 #define IPC_MISC_ME_IMSI                0x0A02
 #define IPC_MISC_ME_SN                  0x0A03
 #define IPC_MISC_TIME_INFO              0x0A07
-
-struct ipc_misc_me_version {
-    char sw_version[32];
-    char hw_version[32];
-    char cal_date[32];
-    char misc[32];
-} __attribute__((__packed__));
 
 struct ipc_misc_time_info {
     unsigned char tz_valid, daylight_valid;

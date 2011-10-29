@@ -39,3 +39,5 @@ struct ipc_net_current_plmn {
 } __attribute__((__packed__));
 
 #endif
+
+// vim:ts=4:sw=4:expandtab

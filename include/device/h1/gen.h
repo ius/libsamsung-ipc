@@ -29,3 +29,5 @@ struct ipc_gen_phone_res {
 } __attribute__((__packed__));
 
 #endif
+
+// vim:ts=4:sw=4:expandtab
