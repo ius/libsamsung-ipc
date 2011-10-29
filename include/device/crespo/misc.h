@@ -29,6 +29,12 @@ struct ipc_misc_me_version {
     char misc[32];
 } __attribute__((__packed__));
 
+struct ipc_misc_me_sn {
+    unsigned char unk;
+    unsigned char length;
+    char imei[32];
+} __attribute__((__packed__));
+
 #endif
 
 // vim:ts=4:sw=4:expandtab
