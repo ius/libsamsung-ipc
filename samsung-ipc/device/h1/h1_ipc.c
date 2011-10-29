@@ -183,3 +183,5 @@ struct ipc_ops ipc_ops = {
     .recv = h1_ipc_recv,
     .bootstrap = NULL,
 };
+
+// vim:ts=4:sw=4:expandtab

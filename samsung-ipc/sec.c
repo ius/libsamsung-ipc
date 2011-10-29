@@ -72,3 +72,5 @@ char* ipc_sec_rsim_access_response_get_file_data(struct ipc_message_info *respon
 
     return file_data;
 }
+
+// vim:ts=4:sw=4:expandtab

@@ -59,6 +59,6 @@ struct ipc_client {
     struct ipc_handlers *handlers;
 };
 
-
-
 #endif
+
+// vim:ts=4:sw=4:expandtab

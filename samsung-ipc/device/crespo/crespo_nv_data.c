@@ -351,3 +351,5 @@ void nv_data_md5_check(void)
 
 	printf("nv_data_md5_check: exit\n");
 }
+
+// vim:ts=4:sw=4:expandtab

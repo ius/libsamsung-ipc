@@ -574,3 +574,5 @@ struct ipc_ops ipc_ops = {
     .recv = crespo_ipc_client_recv,
     .bootstrap = crespo_modem_bootstrap,
 };
+
+// vim:ts=4:sw=4:expandtab

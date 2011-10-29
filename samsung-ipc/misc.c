@@ -32,3 +32,5 @@ char* ipc_misc_me_imsi_response_get_imsi(struct ipc_message_info *response)
     memcpy(buffer, &response->data[1], DEFAULT_IMSI_LENGTH);
     return buffer;
 }
+
+// vim:ts=4:sw=4:expandtab

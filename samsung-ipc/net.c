@@ -25,3 +25,5 @@ void ipc_net_regist_get(struct ipc_net_regist_get *message, int domain)
 	message->net = 0xff;
 	message->domain = domain;
 }
+
+// vim:ts=4:sw=4:expandtab

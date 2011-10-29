@@ -107,4 +107,4 @@ char* ipc_call_list_response_get_entry_number(struct ipc_message_info *response,
     return number;
 }
 
-
+// vim:ts=4:sw=4:expandtab

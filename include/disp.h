@@ -35,3 +35,4 @@ struct ipc_disp_rssi_info {
 
 #endif
 
+// vim:ts=4:sw=4:expandtab

@@ -116,3 +116,4 @@ void ipc_sec_pin_status_set_setup(struct ipc_sec_pin_status_set *message,
 
 #endif
 
+// vim:ts=4:sw=4:expandtab

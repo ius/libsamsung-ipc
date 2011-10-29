@@ -257,3 +257,5 @@ int ipc_client_recv(struct ipc_client *client, struct ipc_message_info *response
     return client->ops->recv(client, response);
 }
 
+// vim:ts=4:sw=4:expandtab
+

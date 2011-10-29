@@ -150,3 +150,5 @@ const char *ipc_command_type_to_str(int command) {
 	}
 }
 
+// vim:ts=4:sw=4:expandtab
+

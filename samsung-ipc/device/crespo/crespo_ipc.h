@@ -48,3 +48,5 @@ int wake_unlock(char *lock_name, int size);
 extern struct ipc_handlers crespo_ipc_default_handlers;
 
 #endif
+
+// vim:ts=4:sw=4:expandtab

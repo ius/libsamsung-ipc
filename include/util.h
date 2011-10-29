@@ -29,3 +29,4 @@ void *file_read(char *file_name, int size, int block_size);
 
 #endif
 
+// vim:ts=4:sw=4:expandtab

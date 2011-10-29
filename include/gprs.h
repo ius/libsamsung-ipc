@@ -94,3 +94,4 @@ void ipc_gprs_pdp_context_setup(struct ipc_gprs_pdp_context *message, char *user
 
 #endif
 
+// vim:ts=4:sw=4:expandtab

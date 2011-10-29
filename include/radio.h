@@ -90,3 +90,4 @@ const char *ipc_response_type_to_str(int type);
 
 #endif
 
+// vim:ts=4:sw=4:expandtab

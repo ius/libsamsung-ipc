@@ -17,6 +17,9 @@
  * along with libsamsung-ipc.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+ 
+ #ifndef _H1_IPC_H_
+ #define _H1_IPC_H_
 
 #include <radio.h>
 
@@ -41,4 +44,8 @@ struct hdlc_header {
 
 	struct ipc_header ipc;
 } __attribute__((__packed__));
+
+#endif
+
+// vim:ts=4:sw=4:expandtab
 
