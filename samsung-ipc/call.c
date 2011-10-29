@@ -39,7 +39,7 @@ void ipc_call_outgoing_setup(struct ipc_call_outgoing *message, unsigned char ty
 /**
  * Retrieve number of calls in list of calls.
  **/
-unsigned int ipc_call_list_response_get_num_entries(struct ipc_response *response)
+unsigned int ipc_call_list_response_get_num_entries(struct ipc_message_info *response)
 {
     unsigned int count = 0, n = 0;
 
@@ -53,7 +53,7 @@ unsigned int ipc_call_list_response_get_num_entries(struct ipc_response *respons
 /**
  * Retrieve one specific entry from a list of calls.
  **/
-struct ipc_call_list_entry* ipc_call_list_response_get_entry(struct ipc_response *response, unsigned int num)
+struct ipc_call_list_entry* ipc_call_list_response_get_entry(struct ipc_message_info *response, unsigned int num)
 {
     unsigned int count = 0, pos = 1, n = 0;
     struct ipc_call_list_entry *entry = NULL;
@@ -77,7 +77,7 @@ struct ipc_call_list_entry* ipc_call_list_response_get_entry(struct ipc_response
 /**
  * Retrieve the number of a call entry in the list of calls
  **/
-char* ipc_call_list_response_get_entry_number(struct ipc_response *response, unsigned int num)
+char* ipc_call_list_response_get_entry_number(struct ipc_message_info *response, unsigned int num)
 {
     unsigned int count = 0, pos = 1, n = 0;
     struct ipc_call_list_entry *entry = NULL;

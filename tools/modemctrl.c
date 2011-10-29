@@ -32,7 +32,6 @@
 #include <pthread.h>
 
 #include <radio.h>
-#include <crespo_ipc.h>
 
 #define RC_CHECK    printf("line %d, rc = %d\n", __LINE__, rc);
 
@@ -47,7 +46,7 @@ void print_help()
 
 int crespo_read_loop(struct ipc_client *client)
 {
-    struct ipc_response resp;
+    struct ipc_message_info resp;
     void *io_data = NULL;
     int fd = -1;
     fd_set fds;
@@ -82,7 +81,7 @@ int modem_start(struct ipc_client *client)
 {
     int rc;
 
-    ipc_client_set_handlers(client, &ipc_default_handlers);
+    // ipc_client_set_handlers(client, &ipc_default_handlers);
     ipc_client_bootstrap_modem(client);
 
     rc = ipc_client_power_on(client);
