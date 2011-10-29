@@ -20,6 +20,11 @@ ifeq ($(TARGET_DEVICE),crespo)
 	device_files := samsung-ipc/device/$(TARGET_DEVICE)/$(TARGET_DEVICE)_nv_data.c
 	LOCAL_CFLAGS += -Iexternal/openssl/include
 	LOCAL_LDFLAGS += -lcrypto
+	LOCAL_CFLAGS += -DDEVICE_CRESPO
+endif
+
+ifeq ($(TARGET_DEVICE),h1)
+	LOCAL_CFLAGS += -DDEVICE_H1
 endif
 
 LOCAL_SRC_FILES := $(samsung-ipc_files) $(device_files) $(modemctrl_files)
