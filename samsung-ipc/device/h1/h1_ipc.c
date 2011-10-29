@@ -25,145 +25,190 @@
 #include "ipc_private.h"
 #include "h1_ipc.h"
 
-/* FIXME: move to io_data */
-static int fd = 0;
-
-int h1_ipc_open()
+int h1_ipc_open(void *io_data)
 {
-	struct termios termios;
+    struct termios termios;
 
-	fd = open(DPRAM_TTY, O_RDWR);
+    int fd = -1;
 
-	if(fd < 0) {
-		return 1;
-	}
+    if(io_data == NULL)
+        return -1;
 
-	tcgetattr(fd, &termios);
-	cfmakeraw(&termios);
-	tcsetattr(fd, TCSANOW, &termios);
+    fd = *((int *) io_data);
 
-	return 0;
+    fd = open(DPRAM_TTY, O_RDWR);
+
+    if(fd < 0) {
+        return 1;
+    }
+
+    tcgetattr(fd, &termios);
+    cfmakeraw(&termios);
+    tcsetattr(fd, TCSANOW, &termios);
+
+    return 0;
 }
 
-int h1_ipc_close()
+int h1_ipc_close(void *io_data)
 {
-	if(fd) {
-		return close(fd);
-	}
+    int fd = -1;
 
-	return 0;
+    if(io_data == NULL)
+        return -1;
+
+    fd = *((int *) io_data);
+
+    if(fd) {
+        return close(fd);
+    }
+
+    return 0;
 }
 
-int h1_ipc_power_on()
+int h1_ipc_power_on(void *data)
 {
-	ioctl(fd, IOCTL_PHONE_ON);
+    int fd = -1;
 
-	return 0;
+    if(data == NULL)
+        return -1;
+
+    fd = *((int *) data);
+
+    ioctl(fd, IOCTL_PHONE_ON);
+
+    return 0;
 }
 
-int h1_ipc_power_off()
+int h1_ipc_power_off(void *data)
 {
-	ioctl(fd, IOCTL_PHONE_OFF);
+    int fd = -1;
 
-	return 0;
+    if(data == NULL)
+        return -1;
+
+    fd = *((int *) data);
+
+    ioctl(fd, IOCTL_PHONE_OFF);
+
+    return 0;
 }
 
-int  h1_ipc_send(struct ipc_client *client, struct ipc_message_info *request)
+int h1_ipc_send(struct ipc_client *client, struct ipc_message_info *request)
 {
-	struct hdlc_header *hdlc;
-	unsigned char *frame;
-	unsigned char *payload;
-	int frame_length;
+    struct hdlc_header *hdlc;
+    unsigned char *frame;
+    unsigned char *payload;
+    int frame_length;
 
-	/* Frame length: HDLC/IPC header + payload length + HDLC flags (2) */
-	frame_length = (sizeof(*hdlc) + request->length + 2);
+    /* Frame length: HDLC/IPC header + payload length + HDLC flags (2) */
+    frame_length = (sizeof(*hdlc) + request->length + 2);
 
-	frame = (unsigned char*)malloc(frame_length);
-	frame[0] = FRAME_START;
-	frame[frame_length-1] = FRAME_END;
+    frame = (unsigned char*)malloc(frame_length);
+    frame[0] = FRAME_START;
+    frame[frame_length-1] = FRAME_END;
 
-	/* Setup HDLC header */
-	hdlc = (struct hdlc_header*)(frame + 1);
+    /* Setup HDLC header */
+    hdlc = (struct hdlc_header*)(frame + 1);
 
-	hdlc->length = (sizeof(*hdlc) + request->length);
-	hdlc->unknown = 0;
+    hdlc->length = (sizeof(*hdlc) + request->length);
+    hdlc->unknown = 0;
 
-	/* IPC header */
-	hdlc->ipc.length = (sizeof(hdlc->ipc) + request->length);
-	hdlc->ipc.mseq = request->mseq;
-	hdlc->ipc.aseq = request->aseq;
-	hdlc->ipc.group = request->group;
-	hdlc->ipc.index = request->index;
-	hdlc->ipc.type = request->type;
+    /* IPC header */
+    hdlc->ipc.length = (sizeof(hdlc->ipc) + request->length);
+    hdlc->ipc.mseq = request->mseq;
+    hdlc->ipc.aseq = request->aseq;
+    hdlc->ipc.group = request->group;
+    hdlc->ipc.index = request->index;
+    hdlc->ipc.type = request->type;
 
-	/* IPC payload */
-	payload = (frame + 1 + sizeof(*hdlc));
-	memcpy(payload, request->data, request->length);
+    /* IPC payload */
+    payload = (frame + 1 + sizeof(*hdlc));
+    memcpy(payload, request->data, request->length);
 
-	ipc_client_log(client, "sending %s %s\n",
-			ipc_command_type_to_str(IPC_COMMAND(request)),
-			ipc_response_type_to_str(request->type));
+    ipc_client_log(client, "sending %s %s\n",
+            ipc_command_type_to_str(IPC_COMMAND(request)),
+            ipc_response_type_to_str(request->type));
 
-	hex_dump(frame, frame_length);
+    hex_dump(frame, frame_length);
 
-	client->handlers->write(frame, frame_length, client->handlers->io_data);
+    client->handlers->write(frame, frame_length, client->handlers->io_data);
 
-	free(frame);
+    free(frame);
 
-	return 0;
+    return 0;
 }
 
 int h1_ipc_recv(struct ipc_client *client, struct ipc_message_info *response)
 {
-	unsigned char buf[4];
-	unsigned char *data;
-	unsigned short *frame_length;
-	struct ipc_header *ipc;
-	int num_read;
-	int left;
+    unsigned char buf[4];
+    unsigned char *data;
+    unsigned short *frame_length;
+    struct ipc_header *ipc;
+    int num_read;
+    int left;
 
-	num_read = client->handlers->read((void*)buf, sizeof(buf), client->handlers->io_data);
+    num_read = client->handlers->read((void*)buf, sizeof(buf), client->handlers->io_data);
 
-	if(num_read == sizeof(buf) && *buf == FRAME_START) {
-		frame_length = (unsigned short*)&buf[1];
-		left = (*frame_length - 3 + 1);
+    if(num_read == sizeof(buf) && *buf == FRAME_START) {
+        frame_length = (unsigned short*)&buf[1];
+        left = (*frame_length - 3 + 1);
 
-		data = (unsigned char*)malloc(left);
-		num_read = client->handlers->read((void*)data, left, client->handlers->io_data);
+        data = (unsigned char*)malloc(left);
+        num_read = client->handlers->read((void*)data, left, client->handlers->io_data);
 
-		if(num_read == left && data[left-1] == FRAME_END) {
-			ipc = (struct ipc_header*)data;
-			response->mseq = ipc->mseq;
-			response->aseq = ipc->aseq;
-			response->group = ipc->group;
-			response->index = ipc->index;
-			response->type = ipc->type;
-			response->length = (ipc->length - sizeof(*ipc));
+        if(num_read == left && data[left-1] == FRAME_END) {
+            ipc = (struct ipc_header*)data;
+            response->mseq = ipc->mseq;
+            response->aseq = ipc->aseq;
+            response->group = ipc->group;
+            response->index = ipc->index;
+            response->type = ipc->type;
+            response->length = (ipc->length - sizeof(*ipc));
 
-			response->data = (unsigned char*)malloc(response->length);
-			memcpy(response->data, (data + sizeof(*ipc)), response->length);
+            response->data = (unsigned char*)malloc(response->length);
+            memcpy(response->data, (data + sizeof(*ipc)), response->length);
 
-			ipc_client_log(client, "received %s %s\n",
-					ipc_command_type_to_str(IPC_COMMAND(response)),
-					ipc_response_type_to_str(response->type));
+            ipc_client_log(client, "received %s %s\n",
+                    ipc_command_type_to_str(IPC_COMMAND(response)),
+                    ipc_response_type_to_str(response->type));
 
-			hex_dump(data, num_read-1);
+            hex_dump(data, num_read-1);
 
-			return 0;
-		}
-	}
+            return 0;
+        }
+    }
 
-	return 0;
+    return 0;
 }
 
 int h1_ipc_read(void *data, unsigned int size, void *io_data)
 {
-	return read(fd, data, size);
+    int fd = -1;
+
+    if(io_data == NULL)
+        return -1;
+
+    fd = *((int *) io_data);
+
+    if(fd < 0)
+        return -1;
+
+    return read(fd, data, size);
 }
 
 int h1_ipc_write(void *data, unsigned int size, void *io_data)
 {
-	return write(fd, data, size);
+    int fd = -1;
+
+    if(io_data == NULL)
+        return -1;
+
+    fd = *((int *) io_data);
+
+    if(fd < 0)
+        return -1;
+
+    return write(fd, data, size);
 }
 
 struct ipc_handlers ipc_default_handlers = {
@@ -173,9 +218,6 @@ struct ipc_handlers ipc_default_handlers = {
     .power_off = h1_ipc_power_off,
     .read = h1_ipc_read,
     .write = h1_ipc_write,
-    .io_data_reg = NULL,
-    .io_data_unreg = NULL,
-    .io_data = NULL,
 };
 
 struct ipc_ops ipc_ops = {

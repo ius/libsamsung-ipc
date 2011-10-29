@@ -36,17 +36,19 @@ struct ipc_ops {
 struct ipc_handlers {
     /* Transport handlers/data */
     ipc_io_handler_cb read;
+    void *read_data;
     ipc_io_handler_cb write;
+    void *write_data;
     ipc_io_handler_cb open;
+    void *open_data;
     ipc_io_handler_cb close;
-
-    ipc_handler_data_cb io_data_reg;
-    ipc_handler_cb io_data_unreg;
-    void *io_data;
+    void *close_data;
 
     /* Power handlers */
     ipc_handler_cb power_on;
+    void *power_on_data;
     ipc_handler_cb power_off;
+    void *power_off_data;
 };
 
 struct ipc_client {

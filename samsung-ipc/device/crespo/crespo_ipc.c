@@ -318,27 +318,27 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_message_info *r
 
     assert(client->handlers->write != NULL);
 
-    rc = client->handlers->write((uint8_t*) &modem_data, sizeof(struct modem_io), client->handlers->io_data);
+    rc = client->handlers->write((uint8_t*) &modem_data, sizeof(struct modem_io), client->handlers->write_data);
     return rc;
 }
 
-int wake_lock(char *lock_name, int size)
+int wake_lock(char *lock_name)
 {
     int rc = 0;
 
     wake_lock_fd = open("/sys/power/wake_lock", O_RDWR);
-    rc = write(wake_lock_fd, lock_name, size);
+    rc = write(wake_lock_fd, lock_name, strlen(lock_name));
     close(wake_lock_fd);
 
     return rc;
 }
 
-int wake_unlock(char *lock_name, int size)
+int wake_unlock(char *lock_name)
 {
     int rc = 0;
 
     wake_lock_fd = open("/sys/power/wake_unlock", O_RDWR);
-    rc = write(wake_unlock_fd, lock_name, size);
+    rc = write(wake_lock_fd, lock_name, strlen(lock_name));
     close(wake_unlock_fd);
 
     return rc;
@@ -356,10 +356,10 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_message_info *r
 
     memset(response, 0, sizeof(struct ipc_message_info));
 
-    wake_lock("secril_fmt-interface", sizeof("secril_fmt-interface") - 1); // FIXME sizeof("...") is ugly!
+    wake_lock("secril_fmt-interface");
 
     assert(client->handlers->read != NULL);
-    bread = client->handlers->read((uint8_t*) &modem_data, sizeof(struct modem_io) + MAX_MODEM_DATA_SIZE, client->handlers->io_data);
+    bread = client->handlers->read((uint8_t*) &modem_data, sizeof(struct modem_io) + MAX_MODEM_DATA_SIZE, client->handlers->read_data);
     if (bread < 0)
     {
         ipc_client_log(client, "ERROR: crespo_ipc_client_recv: can't receive enough bytes from modem to process incoming response!");
@@ -397,7 +397,7 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_message_info *r
 
     free(modem_data.data);
 
-    wake_unlock("secril_fmt-interface", sizeof("secril_fmt-interface") - 1); // FIXME sizeof("...") is ugly!
+    wake_unlock("secril_fmt-interface");
 
     return 0;
 }
@@ -411,11 +411,9 @@ int crespo_ipc_open(void *data, unsigned int size, void *io_data)
     {
         case IPC_CLIENT_TYPE_FMT:
             fd = open("/dev/modem_fmt", O_RDWR |  O_NDELAY);
-            printf("crespo_ipc_open: opening /dev/modem_fmt\n");
             break;
         case IPC_CLIENT_TYPE_RFS:
             fd = open("/dev/modem_rfs", O_RDWR |  O_NDELAY);
-            printf("crespo_ipc_open: opening /dev/modem_rfs\n");
             break;
         default:
             break;
@@ -538,33 +536,11 @@ int crespo_ipc_power_off(void *data)
     return 0;
 }
 
-void *crespo_ipc_io_data_reg(void)
-{
-    void *data = NULL;
-
-    data = malloc(sizeof(int));
-
-    return data;
-}
-
-int crespo_ipc_io_data_unreg(void *data)
-{
-    if(data == NULL)
-        return -1;
-
-    free(data);
-
-    return 0;
-}
-
 struct ipc_handlers ipc_default_handlers = {
     .read = crespo_ipc_read,
     .write = crespo_ipc_write,
     .open = crespo_ipc_open,
     .close = crespo_ipc_close,
-    .io_data_reg = crespo_ipc_io_data_reg,
-    .io_data_unreg = crespo_ipc_io_data_unreg,
-    .io_data = NULL,
     .power_on = crespo_ipc_power_on,
     .power_off = crespo_ipc_power_off,
 };

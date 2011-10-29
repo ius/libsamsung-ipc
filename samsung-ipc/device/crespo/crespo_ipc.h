@@ -42,8 +42,8 @@ struct samsung_rfs_cfrm
 
 void *mtd_read(char *mtd_name, int size, int block_size);
 void *file_read(char *file_name, int size, int block_size);
-int wake_lock(char *lock_name, int size);
-int wake_unlock(char *lock_name, int size);
+int wake_lock(char *lock_name);
+int wake_unlock(char *lock_name);
 
 extern struct ipc_handlers crespo_ipc_default_handlers;
 
