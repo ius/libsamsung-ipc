@@ -2,6 +2,7 @@
  * This file is part of libsamsung-ipc.
  *
  * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
+ * Copyright (C) 2011 Simon Busch <morphis@gravedo.de>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,32 +19,13 @@
  *
  */
 
-#ifndef __MISC_H__
-#define __MISC_H__
+#ifndef __DEVICE_H1_GEN_H__
+#define __DEVICE_H1_GEN_H__
 
-struct ipc_message_info;
-
-#define IPC_MISC_ME_VERSION				0x0A01
-#define IPC_MISC_ME_IMSI				0x0A02
-#define IPC_MISC_ME_SN					0x0A03
-#define IPC_MISC_TIME_INFO				0x0A07
-
-struct ipc_misc_me_version {
-	char sw_version[32];
-	char hw_version[32];
-	char cal_date[32];
-	char misc[32];
+struct ipc_gen_phone_res {
+    unsigned char group, type;
+    unsigned short code;
+    unsigned char unk;
 } __attribute__((__packed__));
-
-struct ipc_misc_time_info {
-	unsigned char tz_valid, daylight_valid;
-	unsigned char year, mon, day;
-	unsigned char hour, min, sec;
-	unsigned char tz, dl, dv;
-	char plmn[6];
-} __attribute__((__packed__));
-
-char* ipc_misc_me_imsi_response_get_imsi(struct ipc_message_info *response);
 
 #endif
-

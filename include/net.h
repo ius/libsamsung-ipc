@@ -21,6 +21,12 @@
 #ifndef __NET_H__
 #define __NET_H__
 
+#if defined(DEVICE_CRESPO)
+#include "device/crespo/net.h"
+#elif defined(DEVICE_H1)
+#include "device/h1/net.h"
+#endif
+
 #define IPC_NET_PREF_PLMN                                           0x0801
 #define IPC_NET_PLMN_SEL                                            0x0802
 #define IPC_NET_CURRENT_PLMN                                        0x0803
@@ -42,13 +48,6 @@
 #define IPC_NET_PLMN_SEL_MANUAL                                     0x00
 #define IPC_NET_PLMN_SEL_AUTO                                       0x01
 
-#define IPC_NET_ACCESS_TECHNOLOGY_UNKNOWN                           0xff
-#define IPC_NET_ACCESS_TECHNOLOGY_GSM                               0x00
-#define IPC_NET_ACCESS_TECHNOLOGY_GSM2                              0x01
-#define IPC_NET_ACCESS_TECHNOLOGY_GPRS                              0x02
-#define IPC_NET_ACCESS_TECHNOLOGY_EDGE                              0x03
-#define IPC_NET_ACCESS_TECHNOLOGY_UMTS                              0x04
-
 #define IPC_NET_REGISTRATION_STATE_NONE                             0x01
 #define IPC_NET_REGISTRATION_STATE_HOME                             0x02
 #define IPC_NET_REGISTRATION_STATE_SEARCHING                        0x03
@@ -59,16 +58,7 @@
 #define IPC_NET_SERVICE_DOMAIN_GSM                                  0x02
 #define IPC_NET_SERVICE_DOMAIN_GPRS                                 0x03
 
-struct ipc_net_current_plmn {
-    char unk0;
-    unsigned char slevel;
-    char unk1;
-    unsigned char plmn[5];
-    unsigned char type; // IPC_NET_SERVICE_TYPE_... ?
-    unsigned short lac;
-} __attribute__((__packed__));
-
-struct ipc_net_regist_set {
+struct ipc_net_regist_get {
     unsigned char net;
     unsigned char domain;
 } __attribute__((__packed__));
@@ -94,6 +84,8 @@ struct ipc_net_plmn_entries {
     unsigned char num;
     struct ipc_net_plmn_entry *data;
 };
+
+void ipc_net_regist_get(struct ipc_net_regist_get *message, int domain);
 
 #endif
 

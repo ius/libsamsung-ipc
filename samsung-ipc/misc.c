@@ -23,7 +23,7 @@
 
 #define DEFAULT_IMSI_LENGTH         15
 
-char* ipc_misc_me_imsi_response_get_imsi(struct ipc_response *response)
+char* ipc_misc_me_imsi_response_get_imsi(struct ipc_message_info *response)
 {
     if (response == NULL || response->data[0] != DEFAULT_IMSI_LENGTH)
         return NULL;

@@ -21,13 +21,13 @@
 #ifndef __GEN_H__
 #define __GEN_H__
 
-#define IPC_GEN_PHONE_RES               0x8001
+#if defined(DEVICE_CRESPO)
+#include "device/crespo/gen.h"
+#elif defined(DEVICE_H1)
+#include "device/h1/gen.h"
+#endif
 
-struct ipc_gen_phone_res {
-    unsigned char group, type;
-    unsigned char unk;
-    unsigned short code;
-} __attribute__((__packed__));
+#define IPC_GEN_PHONE_RES               0x8001
 
 #endif
 

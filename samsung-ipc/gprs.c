@@ -29,7 +29,7 @@ void ipc_gprs_define_pdp_context_setup(struct ipc_gprs_define_pdp_context *messa
     message->unk0[0] = 0x1;
     message->unk0[1] = 0x1;
     message->unk0[2] = 0x2;
-    strncpy(message->apn, apn, 124);
+    strncpy((char*)message->apn, apn, 124);
 }
 
 void ipc_gprs_pdp_context_setup(struct ipc_gprs_pdp_context *message, char *username, char *password)
@@ -39,6 +39,6 @@ void ipc_gprs_pdp_context_setup(struct ipc_gprs_pdp_context *message, char *user
     message->unk0[1] = 0x1;
     message->unk0[2] = 0x13;
     message->unk2 = 0x1;
-    strncpy(message->username, username, 32);
-    strncpy(message->password, password, 32);
+    strncpy((char*)message->username, username, 32);
+    strncpy((char*)message->password, password, 32);
 }

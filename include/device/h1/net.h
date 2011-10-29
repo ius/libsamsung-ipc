@@ -2,6 +2,7 @@
  * This file is part of libsamsung-ipc.
  *
  * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
+ * Copyright (C) 2011 Simon Busch <morphis@gravedo.de>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,32 +19,21 @@
  *
  */
 
-#ifndef __MISC_H__
-#define __MISC_H__
+#ifndef __DEVICE_H1_NET_H__
+#define __DEVICE_H1_NET_H__
 
-struct ipc_message_info;
+#define IPC_NET_ACCESS_TECHNOLOGY_GSM                               0x01
+#define IPC_NET_ACCESS_TECHNOLOGY_GSM2                              0x02
+#define IPC_NET_ACCESS_TECHNOLOGY_GPRS                              0x03
+#define IPC_NET_ACCESS_TECHNOLOGY_EDGE                              0x04
+#define IPC_NET_ACCESS_TECHNOLOGY_UMTS                              0x05
 
-#define IPC_MISC_ME_VERSION				0x0A01
-#define IPC_MISC_ME_IMSI				0x0A02
-#define IPC_MISC_ME_SN					0x0A03
-#define IPC_MISC_TIME_INFO				0x0A07
-
-struct ipc_misc_me_version {
-	char sw_version[32];
-	char hw_version[32];
-	char cal_date[32];
-	char misc[32];
+struct ipc_net_current_plmn {
+    char unk0;
+    unsigned char slevel;
+    unsigned char plmn[6];
+    unsigned char type;
+    unsigned short lac;
 } __attribute__((__packed__));
-
-struct ipc_misc_time_info {
-	unsigned char tz_valid, daylight_valid;
-	unsigned char year, mon, day;
-	unsigned char hour, min, sec;
-	unsigned char tz, dl, dv;
-	char plmn[6];
-} __attribute__((__packed__));
-
-char* ipc_misc_me_imsi_response_get_imsi(struct ipc_message_info *response);
 
 #endif
-

@@ -26,9 +26,8 @@
 #include "types.h"
 #include "util.h"
 
-#define IPC_CLIENT_TYPE_CRESPO_FMT      1
-#define IPC_CLIENT_TYPE_CRESPO_RFS      2
-#define IPC_CLIENT_TYPE_H1              3
+#define IPC_CLIENT_TYPE_FMT      0
+#define IPC_CLIENT_TYPE_RFS      1
 
 #define IPC_COMMAND(f)  ((f->group << 8) | f->index)
 #define IPC_GROUP(m)    (m >> 8)
@@ -40,7 +39,7 @@ struct ipc_header {
     unsigned char group, index, type;
 } __attribute__((__packed__));
 
-struct ipc_request {
+struct ipc_message_info {
     unsigned char mseq;
     unsigned char aseq;
     unsigned char group;
@@ -50,30 +49,34 @@ struct ipc_request {
     unsigned char *data;
 };
 
-struct ipc_response {
-    unsigned char mseq, aseq;
-    unsigned short command;
-    unsigned char type;
-    unsigned int data_length;
-    unsigned char *data;
-};
-
 struct ipc_client;
+struct ipc_handlers;
 
-typedef int (*ipc_client_transport_cb)(uint8_t *data, unsigned int size, void *user_data);
-typedef int (*ipc_client_log_handler_cb)(const char *message, void *user_data);
+typedef void (*ipc_client_log_handler_cb)(const char *message, void *user_data);
+
+typedef void *(*ipc_handler_data_cb)(void);
+typedef int (*ipc_io_handler_cb)(void *data, unsigned int size, void *io_data);
+typedef int (*ipc_handler_cb)(void *data);
 
 struct ipc_client *ipc_client_new(int client_type);
-int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler_cb log_handler_cb, void *user_data);
-int ipc_client_set_delegates(struct ipc_client *client, ipc_client_transport_cb write, void *write_data,
-                                                        ipc_client_transport_cb read,  void *read_data);
 int ipc_client_free(struct ipc_client *client);
+
+int ipc_client_set_log_handler(struct ipc_client *client, ipc_client_log_handler_cb log_handler_cb, void *user_data);
+
+int ipc_client_set_handlers(struct ipc_client *client, struct ipc_handlers *handlers);
+int ipc_client_set_io_handlers(struct ipc_client *client, void *io_data,
+                               ipc_io_handler_cb read, ipc_io_handler_cb write,
+                               ipc_io_handler_cb open, ipc_io_handler_cb close);
+void *ipc_client_get_handlers_io_data(struct ipc_client *client);
+int ipc_client_set_handlers_io_data(struct ipc_client *client, void *io_data);
 
 int ipc_client_bootstrap_modem(struct ipc_client *client);
 int ipc_client_open(struct ipc_client *client);
 int ipc_client_close(struct ipc_client *client);
+int ipc_client_power_on(struct ipc_client *client);
+int ipc_client_power_off(struct ipc_client *client);
 
-int ipc_client_recv(struct ipc_client *client, struct ipc_response *response);
+int ipc_client_recv(struct ipc_client *client, struct ipc_message_info *response);
 
 /* Convenience functions for ipc_send */
 void ipc_client_send(struct ipc_client *client, const unsigned short command, const char type, unsigned char *data,

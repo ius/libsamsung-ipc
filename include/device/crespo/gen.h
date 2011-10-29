@@ -1,7 +1,8 @@
 /**
  * This file is part of libsamsung-ipc.
  *
- * Copyright (C) 2011 Paul Kocialkowski <contact@paulk.fr>
+ * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
+ * Copyright (C) 2011 Simon Busch <morphis@gravedo.de>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,31 +19,13 @@
  *
  */
 
-#ifndef __CRESPO_IPC_H__
-#define __CRESPO_IPC_H__
+#ifndef __DEVICE_CRESPO_GEN_H__
+#define __DEVICE_CRESPO_GEN_H__
 
-#define BOOTCORE_VERSION        0xf0
-#define PSI_MAGIC               0x30
-#define PSI_DATA_LEN            0x5000
-#define RADIO_IMG_SIZE          0xd80000
-
-#define MAX_MODEM_DATA_SIZE     0x1000
-
-struct samsung_rfs_msg
-{
-    uint32_t offset;
-    uint32_t size;
-};
-
-struct samsung_rfs_cfrm
-{
-    uint8_t confirmation;
-    struct samsung_rfs_msg msg;
-};
-
-void *mtd_read(char *mtd_name, int size, int block_size);
-void *file_read(char *file_name, int size, int block_size);
-int wake_lock(char *lock_name, int size);
-int wake_unlock(char *lock_name, int size);
+struct ipc_gen_phone_res {
+    unsigned char group, type;
+    unsigned char unk;
+    unsigned short code;
+} __attribute__((__packed__));
 
 #endif

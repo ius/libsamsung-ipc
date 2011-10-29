@@ -39,9 +39,9 @@
 #define IPC_TYPE_EVENT                  0x05
 
 /* Baseband -> AP */
-#define IPC_TYPE_INDICATION             0x01
-#define IPC_TYPE_RESPONSE               0x02
-#define IPC_TYPE_NOTIFICATION           0x03
+#define IPC_TYPE_INDI			0x01
+#define IPC_TYPE_RESP			0x02
+#define IPC_TYPE_NOTI		        0x03
 
 /* Message groups */
 #define IPC_GROUP_PWR                               0x01

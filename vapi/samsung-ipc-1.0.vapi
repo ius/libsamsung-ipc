@@ -527,7 +527,7 @@ namespace SamsungIpc
             }
         }
 
-        [CCode (cname = "struct ipc_net_regist_set", destroy_function = "")]
+        [CCode (cname = "struct ipc_net_regist_get", destroy_function = "")]
         public struct RegistrationSetMessage
         {
             public uint8 net;
@@ -972,7 +972,7 @@ namespace SamsungIpc
         public uint8 type;
     }
 
-    [CCode (cname = "struct ipc_request", destroy_function = "", free_function = "")]
+    [CCode (cname = "struct ipc_message_info", destroy_function = "", free_function = "")]
     public struct Request
     {
         public uint8 mseq;
