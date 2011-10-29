@@ -2,6 +2,7 @@
  * This file is part of libsamsung-ipc.
  *
  * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
+ * Copyright (C) 2011 Paul Kocialkowski <contact@paulk.fr>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,37 +26,37 @@ struct ipc_message_info;
 
 #define IPC_SEC_PIN_STATUS              0x0501
 #define IPC_SEC_PHONE_LOCK              0x0502
-#define IPC_SEC_CHANGE_LOCKING_PW           0x0503
+#define IPC_SEC_CHANGE_LOCKING_PW       0x0503
 #define IPC_SEC_SIM_LANG                0x0504
 #define IPC_SEC_RSIM_ACCESS             0x0505
 #define IPC_SEC_GSIM_ACCESS             0x0506
-#define IPC_SEC_SIM_ICC_TYPE                0x0507
+#define IPC_SEC_SIM_ICC_TYPE            0x0507
 #define IPC_SEC_LOCK_INFO               0x0508
 #define IPC_SEC_ISIM_AUTH               0x0509
 
 #define IPC_SEC_PIN_SIM_INITIALIZING            0x00
 #define IPC_SEC_PIN_SIM_SIM_LOCK_REQUIRED       0x01
 #define IPC_SEC_PIN_SIM_INSIDE_PF_ERROR         0x02
-#define IPC_SEC_PIN_SIM_LOCK_SC             0x03
-#define IPC_SEC_PIN_SIM_LOCK_FD             0x04
-#define IPC_SEC_PIN_SIM_LOCK_PN             0x05
-#define IPC_SEC_PIN_SIM_LOCK_PU             0x06
-#define IPC_SEC_PIN_SIM_LOCK_PP             0x07
-#define IPC_SEC_PIN_SIM_LOCK_PC             0x08
+#define IPC_SEC_PIN_SIM_LOCK_SC                 0x03
+#define IPC_SEC_PIN_SIM_LOCK_FD                 0x04
+#define IPC_SEC_PIN_SIM_LOCK_PN                 0x05
+#define IPC_SEC_PIN_SIM_LOCK_PU                 0x06
+#define IPC_SEC_PIN_SIM_LOCK_PP                 0x07
+#define IPC_SEC_PIN_SIM_LOCK_PC                 0x08
 #define IPC_SEC_PIN_SIM_CARD_NOT_PRESENT        0x80
-#define IPC_SEC_PIN_SIM_CARD_ERROR          0x81
+#define IPC_SEC_PIN_SIM_CARD_ERROR              0x81
 #define IPC_SEC_PIN_SIM_INIT_COMPLETE           0x82
 #define IPC_SEC_PIN_SIM_PB_INIT_COMPLETE        0x83
 
 /* Key types for the SIM card (SC) facility */
 #define IPC_SEC_PIN_SIM_LOCK_SC_PIN1_REQ        0x01
 #define IPC_SEC_PIN_SIM_LOCK_SC_PUK_REQ         0x02
-#define IPC_SEC_PIN_SIM_LOCK_SC_CARD_BLOCKED        0x05
+#define IPC_SEC_PIN_SIM_LOCK_SC_CARD_BLOCKED    0x05
 
 #define IPC_SEC_PIN_TYPE_PIN1               0x03
 #define IPC_SEC_PIN_TYPE_PIN2               0x09
 
-#define IPC_SEC_SIM_CARD_TYPE_UNKNOWN           0x00
+#define IPC_SEC_SIM_CARD_TYPE_UNKNOWN       0x00
 #define IPC_SEC_SIM_CARD_TYPE_SIM           0x01
 #define IPC_SEC_SIM_CARD_TYPE_USIM          0x02
 
@@ -63,6 +64,12 @@ struct ipc_message_info;
 #define IPC_SEC_RSIM_COMMAND_READ_RECORD    0xc0
 #define IPC_SEC_RSIM_COMMAND_UPDATE_BINARY  0xd6
 #define IPC_SEC_RSIM_COMMAND_STATUS         0xf2
+
+#define IPC_SEC_RSIM_ACCESS_UNKNOWN         0x00
+#define IPC_SEC_RSIM_ACCESS_COMP_NORMAL     0x01
+#define IPC_SEC_RSIM_ACCESS_COMP_WARNING    0x02
+#define IPC_SEC_RSIM_ACCESS_ABORT_EXEC      0x03
+#define IPC_SEC_RSIM_ACCESS_ABORT_CHECK     0x04
 
 struct ipc_sec_pin_status_noti {
     unsigned char type;
@@ -109,7 +116,41 @@ struct ipc_sec_lock_info_response {
     unsigned char attempts;
 } __attribute__((__packed__));
 
+/* 
+ * struct ipc_sec_sim_filesystem_entry
+ * Source: cornucopia fsogsmd/src/lib/consts.vala
+ * Git HEAD: f2e0268075ffb15ef237371cd2e1896561567665
+ *
+ * Copyright (C) 2009-2011 Michael 'Mickey' Lauer <mlauer@vanille-media.de>
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301  USA
+ *
+ */
+
+struct ipc_sec_sim_filesystem_entry
+{
+    uint16_t id;
+    uint16_t parent;
+    char *name;
+};
+
+int ipc_sec_rsim_access_response_get_status(struct ipc_message_info *response);
 char* ipc_sec_rsim_access_response_get_file_data(struct ipc_message_info *response);
+void ipc_sec_rsim_access_request_setup(struct ipc_sec_rsim_access_request *request, 
+                                       unsigned char command, char *entry_name, 
+                                       unsigned char p1, unsigned char p2, unsigned char p3);
 
 void ipc_sec_pin_status_set_setup(struct ipc_sec_pin_status_set *message,
                                   unsigned char pin_type, char *pin1, char *pin2);

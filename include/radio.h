@@ -81,8 +81,8 @@ int ipc_client_recv(struct ipc_client *client, struct ipc_message_info *response
 /* Convenience functions for ipc_send */
 void ipc_client_send(struct ipc_client *client, const unsigned short command, const char type, unsigned char *data,
                      const int length, unsigned char mseq);
-void ipc_client_send_get(struct ipc_client *client, const unsigned short command, unsigned char aseq);
-void ipc_client_send_exec(struct ipc_client *client, const unsigned short command, unsigned char aseq);
+void ipc_client_send_get(struct ipc_client *client, const unsigned short command, unsigned char mseq);
+void ipc_client_send_exec(struct ipc_client *client, const unsigned short command, unsigned char mseq);
 
 /* Utility functions */
 const char *ipc_command_type_to_str(int command);

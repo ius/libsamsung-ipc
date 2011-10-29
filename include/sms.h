@@ -21,29 +21,33 @@
 #ifndef __SMS_H__
 #define __SMS_H__
 
-#define IPC_SMS_SEND_MSG                0x0401
-#define IPC_SMS_INCOMING_MSG                0x0402
-#define IPC_SMS_READ_MSG                0x0403
-#define IPC_SMS_SAVE_MSG                0x0404
-#define IPC_SMS_DEL_MSG                 0x0405
-#define IPC_SMS_DELIVER_REPORT              0x0406
-#define IPC_SMS_DEVICE_READY                0x0407
-#define IPC_SMS_SEL_MEM                 0x0408
-#define IPC_SMS_STORED_MSG_COUNT            0x0409
-#define IPC_SMS_SVC_CENTER_ADDR             0x040A
-#define IPC_SMS_SVC_OPTION              0x040B
-#define IPC_SMS_MEM_STATUS              0x040C
-#define IPC_SMS_CBS_MSG                 0x040D
-#define IPC_SMS_CBS_CONFIG              0x040E
-#define IPC_SMS_STORED_MSG_STATUS           0x040F
-#define IPC_SMS_PARAM_COUNT             0x0410
-#define IPC_SMS_PARAM                   0x0411
+#if defined(DEVICE_CRESPO)
+#include "device/crespo/sms.h"
+#endif
 
-#define IPC_SMS_MSG_MULTIPLE        1
-#define IPC_SMS_MSG_SINGLE      2
+#define IPC_SMS_SEND_MSG				0x0401
+#define IPC_SMS_INCOMING_MSG            0x0402
+#define IPC_SMS_READ_MSG				0x0403
+#define IPC_SMS_SAVE_MSG				0x0404
+#define IPC_SMS_DEL_MSG					0x0405
+#define IPC_SMS_DELIVER_REPORT          0x0406
+#define IPC_SMS_DEVICE_READY            0x0407
+#define IPC_SMS_SEL_MEM					0x0408
+#define IPC_SMS_STORED_MSG_COUNT        0x0409
+#define IPC_SMS_SVC_CENTER_ADDR         0x040A
+#define IPC_SMS_SVC_OPTION				0x040B
+#define IPC_SMS_MEM_STATUS				0x040C
+#define IPC_SMS_CBS_MSG					0x040D
+#define IPC_SMS_CBS_CONFIG				0x040E
+#define IPC_SMS_STORED_MSG_STATUS       0x040F
+#define IPC_SMS_PARAM_COUNT				0x0410
+#define IPC_SMS_PARAM					0x0411
 
-#define IPC_SMS_TYPE_POINT_TO_POINT 1
-#define IPC_SMS_TYPE_STATUS_REPORT  2
+#define IPC_SMS_MSG_MULTIPLE		1
+#define IPC_SMS_MSG_SINGLE		2
+
+#define IPC_SMS_TYPE_POINT_TO_POINT	1
+#define IPC_SMS_TYPE_STATUS_REPORT	2
 
 struct ipc_sms_send_msg {
     unsigned char hint, length;

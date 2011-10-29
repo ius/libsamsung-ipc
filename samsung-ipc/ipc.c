@@ -221,14 +221,14 @@ int _ipc_client_send(struct ipc_client *client, struct ipc_message_info *request
 }
 
 /* Convenience functions for ipc_send */
-inline void ipc_client_send_get(struct ipc_client *client, const unsigned short command, unsigned char aseq)
+inline void ipc_client_send_get(struct ipc_client *client, const unsigned short command, unsigned char mseq)
 {
-    ipc_client_send(client, command, IPC_TYPE_GET, 0, 0, aseq);
+    ipc_client_send(client, command, IPC_TYPE_GET, 0, 0, mseq);
 }
 
-inline void ipc_client_send_exec(struct ipc_client *client, const unsigned short command, unsigned char aseq)
+inline void ipc_client_send_exec(struct ipc_client *client, const unsigned short command, unsigned char mseq)
 {
-    ipc_client_send(client, command, IPC_TYPE_EXEC, 0, 0, aseq);
+    ipc_client_send(client, command, IPC_TYPE_EXEC, 0, 0, mseq);
 }
 
 /* Wrapper for ipc_send */
