@@ -313,7 +313,7 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_message_info *r
     modem_data.data = malloc(reqhdr.length);
 
     memcpy(modem_data.data, &reqhdr, sizeof(struct ipc_header));
-    memcpy((unsigned char *)modem_data.data + sizeof(struct ipc_header), request->data, request->length);
+    memcpy((unsigned char *) (modem_data.data + sizeof(struct ipc_header)), request->data, request->length);
 
     assert(client->handlers->write != NULL);
 
@@ -321,11 +321,13 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_message_info *r
     ipc_client_log(client, "INFO: crespo_ipc_client_send: request: type = %d (%s), group = %d, index = %d (%s)",
                    request->type, ipc_request_type_to_str(request->type), request->group, request->index, ipc_command_type_to_str(IPC_COMMAND(request)));
 
+#ifdef DEBUG
     if(request->length > 0)
     {
         ipc_client_log(client, "INFO: ==== DATA DUMP ====");
         hex_dump((void *) request->data, request->length);
     }
+#endif
 
     ipc_client_log(client, "");
 
@@ -402,8 +404,10 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_message_info *r
 
     if(response->length > 0)
     {
+#ifdef DEBUG
         ipc_client_log(client, "INFO: ==== DATA DUMP ====");
         hex_dump((void *) (modem_data.data + sizeof(struct ipc_header)), response->length);
+#endif
         response->data = malloc(response->length);
         memcpy(response->data, (uint8_t *) modem_data.data + sizeof(struct ipc_header), response->length);
     }
