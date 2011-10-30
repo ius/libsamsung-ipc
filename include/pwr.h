@@ -30,8 +30,8 @@
 #define IPC_PWR_BATT_COMP                   0x0106
 #define IPC_PWR_PHONE_STATE                 0x0107
 
-#define IPC_PWR_PHONE_STATE_LPM             0x0
-#define IPC_PWR_PHONE_STATE_NORMAL          0x2
+#define IPC_PWR_PHONE_STATE_LPM             0x0001
+#define IPC_PWR_PHONE_STATE_NORMAL          0x0202
 
 #endif
 

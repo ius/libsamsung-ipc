@@ -301,7 +301,6 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_message_info *r
     int rc = 0;
 
     memset(&modem_data, 0, sizeof(struct modem_io));
-    modem_data.data = malloc(MAX_MODEM_DATA_SIZE);
     modem_data.size = request->length + sizeof(struct ipc_header);
 
     reqhdr.mseq = request->mseq;
@@ -317,6 +316,18 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_message_info *r
     memcpy((unsigned char *)modem_data.data + sizeof(struct ipc_header), request->data, request->length);
 
     assert(client->handlers->write != NULL);
+
+    ipc_client_log(client, "INFO: crespo_ipc_client_send: Modem SEND FMT (id=%d cmd=%d size=%d)!", modem_data.id, modem_data.cmd, modem_data.size);
+    ipc_client_log(client, "INFO: crespo_ipc_client_send: request: type = %d (%s), group = %d, index = %d (%s)",
+                   request->type, ipc_request_type_to_str(request->type), request->group, request->index, ipc_command_type_to_str(IPC_COMMAND(request)));
+
+    if(request->length > 0)
+    {
+        ipc_client_log(client, "INFO: ==== DATA DUMP ====");
+        hex_dump((void *) request->data, request->length);
+    }
+
+    ipc_client_log(client, "");
 
     rc = client->handlers->write((uint8_t*) &modem_data, sizeof(struct modem_io), client->handlers->write_data);
     return rc;
@@ -386,16 +397,20 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_message_info *r
     response->length = modem_data.size - sizeof(struct ipc_header);
     response->data = NULL;
 
-    ipc_client_log(client, "INFO: crespo_ipc_client_recv: response: group = %d, index = %d",
-                   resphdr->group, resphdr->index);
+    ipc_client_log(client, "INFO: crespo_ipc_client_recv: response: type = %d (%s), group = %d, index = %d (%s)",
+                   resphdr->type, ipc_response_type_to_str(resphdr->type), resphdr->group, resphdr->index, ipc_command_type_to_str(IPC_COMMAND(resphdr)));
 
     if(response->length > 0)
     {
+        ipc_client_log(client, "INFO: ==== DATA DUMP ====");
+        hex_dump((void *) (modem_data.data + sizeof(struct ipc_header)), response->length);
         response->data = malloc(response->length);
         memcpy(response->data, (uint8_t *) modem_data.data + sizeof(struct ipc_header), response->length);
     }
 
     free(modem_data.data);
+
+    ipc_client_log(client, "");
 
     wake_unlock("secril_fmt-interface");
 

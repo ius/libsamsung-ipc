@@ -36,6 +36,23 @@ const char *ipc_response_type_to_str(int type) {
 	}
 }
 
+const char *ipc_request_type_to_str(int type) {
+    switch(type) {
+        case IPC_TYPE_EXEC:
+            return "EXEC";
+        case IPC_TYPE_GET:
+            return "GET";
+        case IPC_TYPE_SET:
+            return "SET";
+        case IPC_TYPE_CFRM:
+            return "CFRM";
+        case IPC_TYPE_EVENT:
+            return "EVENT";
+		default:
+			return "UNKNOWN";
+    }
+}
+
 const char *ipc_command_type_to_str(int command) {
 	switch(command) {
 		IPC_STR(IPC_PWR_PHONE_PWR_UP)

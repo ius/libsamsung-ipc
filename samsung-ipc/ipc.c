@@ -71,6 +71,7 @@ struct ipc_client* ipc_client_new(int client_type)
     client->handlers = (struct ipc_handlers *) malloc(sizeof(struct ipc_handlers));
     client->log_handler = log_handler_default;
 
+    /* FIXME: WE DONT WANT THIS FOR FSO!!! */
     /* Set default handlers */
     ipc_client_set_handlers(client, &ipc_default_handlers);
 

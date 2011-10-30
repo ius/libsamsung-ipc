@@ -85,6 +85,7 @@ void ipc_client_send_exec(struct ipc_client *client, const unsigned short comman
 /* Utility functions */
 const char *ipc_command_type_to_str(int command);
 const char *ipc_response_type_to_str(int type);
+const char *ipc_request_type_to_str(int type);
 
 #endif
 
