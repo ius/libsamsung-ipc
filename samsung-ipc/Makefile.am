@@ -31,12 +31,14 @@ libsamsung_ipc_la_SOURCES += \
 	device/crespo/crespo_ipc.c \
 	device/crespo/crespo_nv_data.c \
 	$(NULL)
+AM_CFLAGS += -DDEVICE_CRESPO
 endif
 
 if WANT_PROTOCOL_VERISON_H1
 libsamsung_ipc_la_SOURCES += \
 	device/h1/h1_ipc.c \
 	$(NULL)
+AM_CFLAGS += -DDEVICE_H1
 endif
 
 libsamsung_ipc_la_LIBADD = \
