@@ -693,11 +693,12 @@ namespace SamsungIpc
             [CCode (cname = "ipc_call_list_response_get_num_entries")]
             public uint get_num_entries();
             [CCode (cname = "ipc_call_list_response_get_entry")]
-            public ListEntry get_entry(uint num);
+            public ListEntry* get_entry(uint num);
             [CCode (cname = "ipc_call_list_response_get_entry_number")]
             public string get_entry_number(uint num);
         }
 
+        [SimpleType]
         [CCode (cname = "struct ipc_call_list_entry", destroy_function = "")]
         public struct ListEntry
         {
