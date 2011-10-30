@@ -48,13 +48,6 @@
 #define IPC_NET_PLMN_SEL_MANUAL                                     0x00
 #define IPC_NET_PLMN_SEL_AUTO                                       0x01
 
-#define IPC_NET_ACCESS_TECHNOLOGY_UNKNOWN                           0xff
-#define IPC_NET_ACCESS_TECHNOLOGY_GSM                               0x00
-#define IPC_NET_ACCESS_TECHNOLOGY_GSM2                              0x01
-#define IPC_NET_ACCESS_TECHNOLOGY_GPRS                              0x02
-#define IPC_NET_ACCESS_TECHNOLOGY_EDGE                              0x03
-#define IPC_NET_ACCESS_TECHNOLOGY_UMTS                              0x04
-
 #define IPC_NET_REGISTRATION_STATE_NONE                             0x01
 #define IPC_NET_REGISTRATION_STATE_HOME                             0x02
 #define IPC_NET_REGISTRATION_STATE_SEARCHING                        0x03
