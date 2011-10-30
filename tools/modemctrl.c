@@ -46,6 +46,7 @@ void print_help()
 
 int crespo_read_loop(struct ipc_client *client)
 {
+#if 0
     struct ipc_message_info resp;
     void *io_data = NULL;
     int fd = -1;
@@ -75,6 +76,8 @@ int crespo_read_loop(struct ipc_client *client)
                 free(resp.data);
         }
     }
+#endif
+    return 0;
 }
 
 int modem_start(struct ipc_client *client)
