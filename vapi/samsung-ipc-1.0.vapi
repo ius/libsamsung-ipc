@@ -25,9 +25,8 @@ namespace SamsungIpc
     [CCode (cname = "int", cprefix = "IPC_CLIENT_TYPE_", has_type_id = false)]
     public enum ClientType
     {
-        CRESPO_FMT,
-        CRESPO_RFS,
-        H1,
+        FMT,
+        RFS,
     }
 
     [CCode (cname = "int", cprefix = "IPC_TYPE_", has_type_id = false)]
@@ -43,9 +42,9 @@ namespace SamsungIpc
     [CCode (cname = "unsigned char", cprefix = "IPC_TYPE_", has_type_id = false)]
     public enum ResponseType
     {
-        INDICATION,
-        RESPONSE,
-        NOTIFICATION,
+        INDI,
+        RESP,
+        NOTI,
     }
 
     [CCode (cname = "int", cprefix = "IPC_GROUP_", has_type_id = false)]
@@ -69,21 +68,6 @@ namespace SamsungIpc
         GPS,
         SAP,
         GEN,
-    }
-
-    [CCode (cname = "int", cprefix = "IPC_PWR_", has_type_id = false)]
-    public enum GenericMessageType
-    {
-        PHONE_RESPONSE,
-    }
-
-    [CCode (cname = "struct ipc_get_phone_res")]
-    public struct GenericPhoneResponseMessage
-    {
-        public uint8 group;
-        public uint8 type;
-        public uint8 unk;
-        public uint16 code;
     }
 
     [CCode (cname = "unsigned short", cprefix = "IPC_", has_type_id = false)]
@@ -377,6 +361,9 @@ namespace SamsungIpc
                     return res;
                 }
             }
+
+            [CCode (cname = "ipc_sec_rsim_access_response_get_file_data")]
+            public static string get_file_data( Response response );
         }
 
         [CCode (cname = "struct ipc_sec_lock_info_request", destroy_function = "")]
@@ -687,7 +674,7 @@ namespace SamsungIpc
             }
         }
 
-        [CCode (cname = "struct ipc_response", destroy_function = "")]
+        [CCode (cname = "struct ipc_message_info", destroy_function = "")]
         public struct ListResponseMessage
         {
             [CCode (cname = "ipc_call_list_response_get_num_entries")]
@@ -780,6 +767,13 @@ namespace SamsungIpc
                     return res;
                 }
             }
+        }
+
+        [CCode (cname = "struct ipc_message_info")]
+        public struct MeResponseMessage
+        {
+            [CCode (cname = "ipc_misc_me_imsi_response_get_imsi")]
+            public static string get_imsi( Response response );
         }
 
         [CCode (cname = "struct ipc_misc_time_info", destroy_function = "")]
@@ -962,17 +956,6 @@ namespace SamsungIpc
 
     /* ******************************************************************************** */
 
-    [CCode (cname = "struct ipc_header", destroy_function = "")]
-    public struct Header
-    {
-        public uint16 length;
-        public uint8 mseq;
-        public uint8 aseq;
-        public uint8 group;
-        public uint8 index;
-        public uint8 type;
-    }
-
     [CCode (cname = "struct ipc_message_info", destroy_function = "", free_function = "")]
     public struct Request
     {
@@ -982,25 +965,33 @@ namespace SamsungIpc
         public uint8 index;
         public RequestType type;
         public uint32 length;
+        [CCode (array_length_cname = "length")]
         public uint8[] data;
+
+        public MessageType command
+        {
+            get { return (MessageType) ((group << 8) | index); }
+            set { group = value >> 8; index = value & 0xff; }
+        }
     }
 
-    [CCode (cname = "struct ipc_response", destroy_function = "", free_function = "", copy_function = "")]
+    [CCode (cname = "struct ipc_message_info", destroy_function = "", free_function = "", copy_function = "")]
     public struct Response
     {
         public uint8 mseq;
         public uint8 aseq;
-        public MessageType command;
+        public uint8 group;
+        public uint8 index;
         public ResponseType type;
-        public uint32 data_length;
-        [CCode (array_length_cname = "data_length")]
+        public uint32 length;
+        [CCode (array_length_cname = "length")]
         public uint8[] data;
 
-        // FIXME this should not be here ...
-        [CCode (cname = "ipc_sec_rsim_access_response_get_file_data")]
-        public string sec_rsim_access_response_get_file_data();
-        [CCode (cname = "ipc_misc_me_imsi_response_get_imsi")]
-        public string misc_me_imsi_response_get_imsi();
+        public MessageType command
+        {
+            get { return (MessageType) ((group << 8) | index); }
+            set { group = value >> 8; index = value & 0xff; }
+        }
     }
 
     public delegate int TransportCb(uint8[] data);
@@ -1013,7 +1004,7 @@ namespace SamsungIpc
         public Client(ClientType type);
         [CCode (delagate_target_pos = 0.9)]
         public int set_log_handler(LogHandlerCb log_cb);
-        public int set_delegates(TransportCb write_cb, TransportCb read_cb);
+        public int set_io_handlers(TransportCb write_cb, TransportCb read_cb);
         public int bootstrap_modem();
         public void open();
         public void close();
