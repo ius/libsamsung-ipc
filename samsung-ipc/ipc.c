@@ -70,7 +70,7 @@ struct ipc_client* ipc_client_new(int client_type)
     client->ops = ops;
     client->handlers = (struct ipc_handlers *) malloc(sizeof(struct ipc_handlers));
     client->log_handler = log_handler_default;
-
+memcpy(client->handlers, &ipc_default_handlers, sizeof(struct ipc_handlers));
     return client;
 }
 

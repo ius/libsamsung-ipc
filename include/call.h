@@ -21,6 +21,12 @@
 #ifndef __CALL_H__
 #define __CALL_H__
 
+#if defined(DEVICE_CRESPO)
+#include "device/crespo/call.h"
+#elif defined(DEVICE_H1)
+#include "device/h1/call.h"
+#endif
+
 /* Message types */
 #define IPC_CALL_OUTGOING               0x0201
 #define IPC_CALL_INCOMING               0x0202
@@ -55,14 +61,6 @@
 #define IPC_CALL_TERM_MT                0x02
 
 struct ipc_message_info;
-
-struct ipc_call_outgoing {
-    unsigned char type; // IPC_CALL_TYPE_...
-    unsigned char identity; // IPC_CALL_IDENTITY_...
-    unsigned char length;
-    unsigned char prefix; // IPC_CALL_PREFIX_...
-    unsigned char number[86];
-} __attribute__((__packed__));
 
 struct ipc_call_incoming {
     unsigned char type; // IPC_CALL_TYPE_...

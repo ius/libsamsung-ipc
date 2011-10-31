@@ -335,23 +335,23 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_message_info *r
     return rc;
 }
 
-int wake_lock(char *lock_name)
+int wake_lock(char *lock_name, int len)
 {
     int rc = 0;
 
     wake_lock_fd = open("/sys/power/wake_lock", O_RDWR);
-    rc = write(wake_lock_fd, lock_name, strlen(lock_name));
+    rc = write(wake_lock_fd, lock_name, len);
     close(wake_lock_fd);
 
     return rc;
 }
 
-int wake_unlock(char *lock_name)
+int wake_unlock(char *lock_name, int len)
 {
     int rc = 0;
 
     wake_lock_fd = open("/sys/power/wake_unlock", O_RDWR);
-    rc = write(wake_lock_fd, lock_name, strlen(lock_name));
+    rc = write(wake_lock_fd, lock_name, len);
     close(wake_unlock_fd);
 
     return rc;
@@ -369,7 +369,7 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_message_info *r
 
     memset(response, 0, sizeof(struct ipc_message_info));
 
-    wake_lock("secril_fmt-interface");
+    wake_lock("secril_fmt-interface", 20);
 
     assert(client->handlers->read != NULL);
     bread = client->handlers->read((uint8_t*) &modem_data, sizeof(struct modem_io) + MAX_MODEM_DATA_SIZE, client->handlers->read_data);
@@ -416,7 +416,7 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_message_info *r
 
     ipc_client_log(client, "");
 
-    wake_unlock("secril_fmt-interface");
+    wake_unlock("secril_fmt-interface", 20);
 
     return 0;
 }
@@ -429,10 +429,10 @@ int crespo_ipc_open(void *data, unsigned int size, void *io_data)
     switch(type)
     {
         case IPC_CLIENT_TYPE_FMT:
-            fd = open("/dev/modem_fmt", O_RDWR |  O_NDELAY);
+            fd = open("/dev/modem_fmt", O_RDWR | O_NOCTTY | O_NONBLOCK);
             break;
         case IPC_CLIENT_TYPE_RFS:
-            fd = open("/dev/modem_rfs", O_RDWR |  O_NDELAY);
+            fd = open("/dev/modem_rfs", O_RDWR | O_NOCTTY | O_NONBLOCK);
             break;
         default:
             break;

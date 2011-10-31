@@ -52,6 +52,8 @@ struct ipc_message_info {
 struct ipc_client;
 struct ipc_handlers;
 
+extern struct ipc_handlers ipc_default_handlers;
+
 typedef void (*ipc_client_log_handler_cb)(const char *message, void *user_data);
 
 typedef int (*ipc_io_handler_cb)(void *data, unsigned int size, void *io_data);
