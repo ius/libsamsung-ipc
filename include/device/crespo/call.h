@@ -31,6 +31,15 @@ struct ipc_call_outgoing {
     unsigned char number[86];
 } __attribute__((__packed__));
 
+struct ipc_call_status {
+    unsigned char unk;
+    unsigned char type;
+    unsigned char id;
+    unsigned char state;
+    unsigned char reason;
+    unsigned char end_cause;
+} __attribute__((__packed__));
+
 #endif
 
 // vim:ts=4:sw=4:expandtab

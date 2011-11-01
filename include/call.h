@@ -78,14 +78,6 @@ struct ipc_call_list_entry {
     unsigned char unk4;
 } __attribute__((__packed__));
 
-struct ipc_call_status {
-    unsigned char type;
-    unsigned char id;
-    unsigned char state;
-    unsigned char reason;
-    unsigned char end_cause;
-} __attribute__((__packed__));
-
 void ipc_call_outgoing_setup(struct ipc_call_outgoing *message, unsigned char type,
                              unsigned char identity, unsigned char prefix, char *number);
 
