@@ -19,7 +19,6 @@
  * along with libsamsung-ipc.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <unistd.h>
@@ -251,10 +250,10 @@ boot_loop_start:
     /* nv_data part. */
 
     /* Check if all the nv_data files are ok. */
-    nv_data_check();
+    nv_data_check(client);
 
     /* Check if the MD5 is ok. */
-    nv_data_md5_check();
+    nv_data_md5_check(client);
 
     /* Write nv_data.bin to modem_ctl. */
     ipc_client_log(client, "crespo_ipc_bootstrap: write nv_data to modem_ctl");

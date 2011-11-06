@@ -21,18 +21,20 @@
 #ifndef __CRESPO_NV_DATA_H__
 #define __CRESPO_NV_DATA__
 
+#include <radio.h>
+
 #define	NV_DATA_MD5_SECRET	"Samsung_Android_RIL"
 #define NV_DATA_SIZE		0x200000
 
 #define MD5_STRING_SIZE		MD5_DIGEST_LENGTH * 2 + 1
 
 void md5hash2string(char *out, uint8_t *in);
-void nv_data_generate(void);
+void nv_data_generate(struct ipc_client *client);
 void nv_data_md5_compute(void *data_p, int size, void *hash);
-void nv_data_backup_create(void);
-void nv_data_backup_restore(void);
-void nv_data_check(void);
-void nv_data_md5_check(void);
+void nv_data_backup_create(struct ipc_client *client);
+void nv_data_backup_restore(struct ipc_client *client);
+void nv_data_check(struct ipc_client *client);
+void nv_data_md5_check(struct ipc_client *client);
 
 #endif
 

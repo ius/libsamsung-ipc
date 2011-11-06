@@ -28,6 +28,7 @@
 
 #include <openssl/md5.h>
 
+#include <radio.h>
 #include "crespo_nv_data.h"
 #include "crespo_ipc.h"
 
@@ -47,9 +48,9 @@ void md5hash2string(char *out, uint8_t *in)
 	}
 }
 
-void nv_data_generate(void)
+void nv_data_generate(struct ipc_client *client)
 {
-	printf("This feature isn't present yet\n");
+	ipc_client_log(client, "This feature isn't present yet\n");
 
 //	nv_data_backup_create();
 }
@@ -66,7 +67,7 @@ void nv_data_md5_compute(void *data_p, int size, void *hash)
 	MD5_Final(hash, &ctx);
 }
 
-void nv_data_backup_create(void)
+void nv_data_backup_create(struct ipc_client *client)
 {
 	uint8_t nv_data_md5_hash[MD5_DIGEST_LENGTH];
 	char *nv_data_md5_hash_string;
@@ -79,12 +80,12 @@ void nv_data_backup_create(void)
 	int fd;
 	int i;
 
-	printf("nv_data_backup_create: enter\n");
+	ipc_client_log(client, "nv_data_backup_create: enter\n");
 
 	if(stat("/efs/nv_data.bin", &nv_stat) < 0)
 	{
-		printf("nv_data_check: nv_data.bin missing\n");
-		nv_data_generate();
+		ipc_client_log(client, "nv_data_check: nv_data.bin missing\n");
+		nv_data_generate(client);
 	}
 
 	/* Read the content of nv_data.bin. */
@@ -115,7 +116,7 @@ void nv_data_backup_create(void)
 	nv_data_md5_compute(nv_data_p, NV_DATA_SIZE, nv_data_md5_hash);
 	md5hash2string(nv_data_md5_hash_string, nv_data_md5_hash);
 
-	printf("nv_data_backup_create: new MD5 hash is %s\n", nv_data_md5_hash_string);
+	ipc_client_log(client, "nv_data_backup_create: new MD5 hash is %s\n", nv_data_md5_hash_string);
 
 	free(nv_data_p);
 
@@ -135,10 +136,10 @@ void nv_data_backup_create(void)
 
 	close(fd);
 
-	printf("nv_data_backup_create: exit\n");
+	ipc_client_log(client, "nv_data_backup_create: exit\n");
 }
 
-void nv_data_backup_restore(void)
+void nv_data_backup_restore(struct ipc_client *client)
 {
 	uint8_t nv_data_md5_hash[MD5_DIGEST_LENGTH];
 	char *nv_data_md5_hash_string;
@@ -152,21 +153,21 @@ void nv_data_backup_restore(void)
 	int fd;
 	int i;
 
-	printf("nv_data_backup_restore: enter\n");
+	ipc_client_log(client, "nv_data_backup_restore: enter\n");
 
 	if(stat("/efs/.nv_data.bak", &nv_stat) < 0)
 	{
-		printf("nv_data_backup_restore: .nv_data.bak missing\n");
-		nv_data_generate();
-		nv_data_backup_create();
+		ipc_client_log(client, "nv_data_backup_restore: .nv_data.bak missing\n");
+		nv_data_generate(client);
+		nv_data_backup_create(client);
 		return;
 	}
 
 	if(nv_stat.st_size != NV_DATA_SIZE)
 	{
-		printf("nv_data_backup_restore: wrong .nv_data.bak size\n");
-		nv_data_generate();
-		nv_data_backup_create();
+		ipc_client_log(client, "nv_data_backup_restore: wrong .nv_data.bak size\n");
+		nv_data_generate(client);
+		nv_data_backup_create(client);
 		return;
 	}
 
@@ -212,15 +213,15 @@ void nv_data_backup_restore(void)
 	/* Add 0x0 to end the string: not sure this is part of the file. */
 	nv_data_md5_hash_read[MD5_STRING_SIZE - 1]='\0';
 
-	printf("nv_data_backup_restore: computed MD5: %s read MD5: %s\n",
+	ipc_client_log(client, "nv_data_backup_restore: computed MD5: %s read MD5: %s\n",
 		nv_data_md5_hash_string, nv_data_md5_hash_read);
 
 	/* Make sure both hashes are the same. */
 	if(strcmp(nv_data_md5_hash_string, nv_data_md5_hash_read) != 0)
 	{
-		printf("nv_data_md5_check: MD5 hash mismatch\n");
-		nv_data_generate();
-		nv_data_backup_create();
+		ipc_client_log(client, "nv_data_md5_check: MD5 hash mismatch\n");
+		nv_data_generate(client);
+		nv_data_backup_create(client);
 		return;
 	}
 
@@ -243,48 +244,48 @@ void nv_data_backup_restore(void)
 
 	close(fd);
 
-	printf("nv_data_backup_create: exit\n");
+	ipc_client_log(client, "nv_data_backup_create: exit\n");
 }
 
-void nv_data_check(void)
+void nv_data_check(struct ipc_client *client)
 {
 	struct stat nv_stat;
 	int nv_state_fd=-1;
 	int nv_state=0;
 
-	printf("nv_data_check: enter\n");
+	ipc_client_log(client, "nv_data_check: enter\n");
 
 	if(stat("/efs/nv_data.bin", &nv_stat) < 0)
 	{
-		printf("nv_data_check: nv_data.bin missing\n");
-		nv_data_backup_restore();
+		ipc_client_log(client, "nv_data_check: nv_data.bin missing\n");
+		nv_data_backup_restore(client);
 		stat("/efs/nv_data.bin", &nv_stat);
 	}
 
 	if(nv_stat.st_size != NV_DATA_SIZE)
 	{
-		printf("nv_data_check: wrong nv_data.bin size\n");
-		nv_data_backup_restore();
+		ipc_client_log(client, "nv_data_check: wrong nv_data.bin size\n");
+		nv_data_backup_restore(client);
 	}
 
 	if(stat("/efs/.nv_data.bak", &nv_stat) < 0)
 	{
-		printf("nv_data_check: .nv_data.bak missing\n");
-		nv_data_backup_create();
+		ipc_client_log(client, "nv_data_check: .nv_data.bak missing\n");
+		nv_data_backup_create(client);
 	}
 
 	if(stat("/efs/nv_data.bin.md5", &nv_stat) < 0)
 	{
-		printf("nv_data_check: nv_data.bin.md5 missing\n");
-		nv_data_backup_create();
+		ipc_client_log(client, "nv_data_check: nv_data.bin.md5 missing\n");
+		nv_data_backup_create(client);
 	}
 
 	nv_state_fd=open("/efs/.nv_state", O_RDONLY);
 
 	if(nv_state_fd < 0 || fstat(nv_state_fd, &nv_stat) < 0)
 	{
-		printf("nv_data_check: .nv_state missing\n");
-		nv_data_backup_restore();
+		ipc_client_log(client, "nv_data_check: .nv_state missing\n");
+		nv_data_backup_restore(client);
 	}
 
 	read(nv_state_fd, &nv_state, sizeof(nv_state));
@@ -293,15 +294,15 @@ void nv_data_check(void)
 
 	if(nv_state != '1')
 	{
-		printf("nv_data_check: bad nv_state\n");
-		nv_data_backup_restore();
+		ipc_client_log(client, "nv_data_check: bad nv_state\n");
+		nv_data_backup_restore(client);
 	}
 
-	printf("nv_data_check: everything should be alright\n");
-	printf("nv_data_check: exit\n");
+	ipc_client_log(client, "nv_data_check: everything should be alright\n");
+	ipc_client_log(client, "nv_data_check: exit\n");
 }
 
-void nv_data_md5_check(void)
+void nv_data_md5_check(struct ipc_client *client)
 {
 	struct stat nv_stat;
 	uint8_t nv_data_md5_hash[MD5_DIGEST_LENGTH];
@@ -312,7 +313,7 @@ void nv_data_md5_check(void)
 	int fd;
 	uint8_t *data_p;
 
-	printf("nv_data_md5_check: enter\n");
+	ipc_client_log(client, "nv_data_md5_check: enter\n");
 
 	nv_data_md5_hash_string=malloc(MD5_STRING_SIZE);
 	nv_data_md5_hash_read=malloc(MD5_STRING_SIZE);
@@ -337,19 +338,19 @@ void nv_data_md5_check(void)
 	/* Add 0x0 to end the string: not sure this is part of the file. */
 	nv_data_md5_hash_read[MD5_STRING_SIZE - 1]='\0';
 
-	printf("nv_data_md5_check: computed MD5: %s read MD5: %s\n", 
+	ipc_client_log(client, "nv_data_md5_check: computed MD5: %s read MD5: %s\n", 
 		nv_data_md5_hash_string, nv_data_md5_hash_read);
 
 	if(strcmp(nv_data_md5_hash_string, nv_data_md5_hash_read) != 0)
 	{
-		printf("nv_data_md5_check: MD5 hash mismatch\n");
-		nv_data_backup_restore();
+		ipc_client_log(client, "nv_data_md5_check: MD5 hash mismatch\n");
+		nv_data_backup_restore(client);
 	}
 
 	free(nv_data_md5_hash_string);
 	free(nv_data_md5_hash_read);
 
-	printf("nv_data_md5_check: exit\n");
+	ipc_client_log(client, "nv_data_md5_check: exit\n");
 }
 
 // vim:ts=4:sw=4:expandtab
