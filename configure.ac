@@ -32,7 +32,7 @@ AM_CONDITIONAL([WANT_PROTOCOL_VERISON_H1], [test x"$protocol_version" = x"h1"])
 #------------------------------------------------------------------------------
 # openssl
 
-PKG_CHECK_MODULES(OPENSSL, openssl >= OPENSSL_REQUIRED)
+PKG_CHECK_MODULES(OPENSSL, openssl >= $OPENSSL_REQUIRED)
 AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS)
 
