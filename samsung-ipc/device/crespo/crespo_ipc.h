@@ -40,8 +40,6 @@ struct samsung_rfs_cfrm
     struct samsung_rfs_msg msg;
 };
 
-void *mtd_read(char *mtd_name, int size, int block_size);
-void *file_read(char *file_name, int size, int block_size);
 int wake_lock(char *lock_name, int len);
 int wake_unlock(char *lock_name, int len);
 

@@ -87,9 +87,9 @@ boot_loop_start:
 
     /* Read the radio.img image. */
     ipc_client_log(client, "crespo_ipc_bootstrap: reading radio image");
-    radio_img_p=mtd_read("/dev/mtd/mtd5ro", RADIO_IMG_SIZE, 0x1000);
+    radio_img_p = ipc_mtd_read(client, "/dev/mtd/mtd5ro", RADIO_IMG_SIZE, 0x1000);
     if (radio_img_p == NULL) {
-        radio_img_p = mtd_read("/dev/mtd5ro", RADIO_IMG_SIZE, 0x1000);
+        radio_img_p = ipc_mtd_read(client, "/dev/mtd5ro", RADIO_IMG_SIZE, 0x1000);
         if (radio_img_p == NULL)
             goto error;
     }
@@ -118,12 +118,13 @@ boot_loop_start:
     cfsetospeed(&termios, B115200);
 
     tcsetattr(s3c2410_serial3_fd, TCSANOW, &termios);
-
+/*
     ioctl(s3c2410_serial3_fd, TIOCMGET, &serial); //FIXME
     ioctl(s3c2410_serial3_fd, TIOCMSET, &serial); //FIXME
 
     tcgetattr(s3c2410_serial3_fd, &termios); //FIXME
     tcsetattr(s3c2410_serial3_fd, TCSANOW, &termios); //FIXME
+*/
 
     /* Send 'AT' in ASCII. */
     ipc_client_log(client, "crespo_ipc_bootstrap: sending AT in ASCII");
@@ -258,7 +259,7 @@ boot_loop_start:
     /* Write nv_data.bin to modem_ctl. */
     ipc_client_log(client, "crespo_ipc_bootstrap: write nv_data to modem_ctl");
 
-    nv_data_p = file_read("/efs/nv_data.bin", NV_DATA_SIZE, 1024);
+    nv_data_p = ipc_file_read(client, "/efs/nv_data.bin", NV_DATA_SIZE, 1024);
     if (nv_data_p == NULL)
         goto error;
     data_p = nv_data_p;
@@ -324,7 +325,7 @@ int crespo_ipc_client_send(struct ipc_client *client, struct ipc_message_info *r
     if(request->length > 0)
     {
         ipc_client_log(client, "INFO: ==== DATA DUMP ====");
-        hex_dump((void *) request->data, request->length);
+        ipc_hex_dump(client, (void *) request->data, request->length);
     }
 #endif
 
@@ -405,7 +406,7 @@ int crespo_ipc_client_recv(struct ipc_client *client, struct ipc_message_info *r
     {
 #ifdef DEBUG
         ipc_client_log(client, "INFO: ==== DATA DUMP ====");
-        hex_dump((void *) (modem_data.data + sizeof(struct ipc_header)), response->length);
+        ipc_hex_dump(client, (void *) (modem_data.data + sizeof(struct ipc_header)), response->length);
 #endif
         response->data = malloc(response->length);
         memcpy(response->data, (uint8_t *) modem_data.data + sizeof(struct ipc_header), response->length);

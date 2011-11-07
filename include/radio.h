@@ -88,6 +88,9 @@ void ipc_client_send_exec(struct ipc_client *client, const unsigned short comman
 const char *ipc_command_type_to_str(int command);
 const char *ipc_response_type_to_str(int type);
 const char *ipc_request_type_to_str(int type);
+void ipc_hex_dump(struct ipc_client *client, void *data, int size);
+void *ipc_mtd_read(struct ipc_client *client, char *mtd_name, int size, int block_size);
+void *ipc_file_read(struct ipc_client *client, char *file_name, int size, int block_size);
 
 #endif
 

@@ -21,11 +21,8 @@
 #ifndef _UTIL_H_
 #define _UTIL_H_
 
-void hex_dump(void *data, int size);
 const char *plmn_lookup(const char *plmn);
 char *plmn_string(const char *plmn);
-void *mtd_read(char *mtd_name, int size, int block_size);
-void *file_read(char *file_name, int size, int block_size);
 
 #endif
 
