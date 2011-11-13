@@ -643,6 +643,7 @@ namespace SamsungIpc
             public Prefix prefix;
             public uint8[] number;
 
+            [CCode (cname = "ipc_call_outgoing_setup")]
             public void setup(Type type, Identity identity, Prefix prefix, string number);
 
             public unowned uint8[] data
