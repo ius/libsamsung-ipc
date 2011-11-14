@@ -30,10 +30,16 @@ void ipc_call_outgoing_setup(struct ipc_call_outgoing *message, unsigned char ty
 {
     assert(message != NULL);
 
+    memset(message, 0, sizeof(struct ipc_call_outgoing));
+
     message->type = type;
     message->identity = identity;
     message->prefix = prefix;
-    strncpy(message->number, number, OUTGOING_NUMBER_MAX_LENGTH);
+    message->length = strlen(number);
+
+    assert(message->length <= OUTGOING_NUMBER_MAX_LENGTH);
+
+    strncpy(message->number, number, message->length);
 }
 
 /**
