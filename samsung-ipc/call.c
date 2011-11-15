@@ -71,7 +71,7 @@ struct ipc_call_list_entry* ipc_call_list_response_get_entry(struct ipc_message_
     if (num > count)
         return NULL;
 
-    for (n = 0; n < num; n++)
+    for (n = 0; n < num + 1; n++)
     {
         entry = (struct ipc_call_list_entry*) (response->data + pos);
         pos += (unsigned int) (sizeof(struct ipc_call_list_entry) + entry->number_len);
