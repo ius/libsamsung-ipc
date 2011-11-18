@@ -40,6 +40,18 @@ struct ipc_call_status {
     unsigned char end_cause;
 } __attribute__((__packed__));
 
+struct ipc_call_list_entry {
+    unsigned char unk0;
+    unsigned char type; // IPC_CALL_TYPE_...
+    unsigned char idx;
+    unsigned char term; // IPC_CALL_TERM_...
+    unsigned char state; // IPC_CALL_LIST_ENTRY_STATE_...
+    unsigned char mpty;
+    unsigned char number_len;
+    unsigned char unk4;
+} __attribute__((__packed__));
+
+
 #endif
 
 // vim:ts=4:sw=4:expandtab
