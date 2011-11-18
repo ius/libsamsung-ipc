@@ -57,6 +57,13 @@
 #define IPC_CALL_STATE_RELEASED                     0x04
 #define IPC_CALL_STATE_CONNECTING                   0x05
 
+#define IPC_CALL_LIST_ENTRY_STATE_ACTIVE            0x01
+#define IPC_CALL_LIST_ENTRY_STATE_HOLDING           0x02
+#define IPC_CALL_LIST_ENTRY_STATE_DIALING           0x03
+#define IPC_CALL_LIST_ENTRY_STATE_ALERTING          0x04
+#define IPC_CALL_LIST_ENTRY_STATE_INCOMING          0x05
+#define IPC_CALL_LIST_ENTRY_STATE_WAITING           0x06
+
 #define IPC_CALL_TERM_MO                0x01
 #define IPC_CALL_TERM_MT                0x02
 
@@ -72,7 +79,7 @@ struct ipc_call_list_entry {
     unsigned char type; // IPC_CALL_TYPE_...
     unsigned char idx;
     unsigned char term; // IPC_CALL_TERM_...
-    unsigned char state;
+    unsigned char state; // IPC_CALL_LIST_ENTRY_STATE_...
     unsigned char mpty;
     unsigned char number_len;
     unsigned char unk4;

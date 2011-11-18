@@ -627,6 +627,17 @@ namespace SamsungIpc
             CONNECTING,
         }
 
+        [CCode (cname = "gint8", cprefix = "IPC_CALL_LIST_ENTRY_STATE_", has_type_id = false)]
+        public enum State2
+        {
+            ACTIVE,
+            HOLDING,
+            DIALING,
+            ALERTING,
+            INCOMING,
+            WAITING
+        }
+
         [CCode (cname = "int", cprefix = "IPC_CALL_TERM_", has_type_id = false)]
         public enum Termination
         {
@@ -693,7 +704,7 @@ namespace SamsungIpc
             public Type type;
             public uint8 idx;
             public Termination term;
-            public uint8 state;
+            public State2 state;
             public uint8 mpty;
             public uint8 number_len;
             public uint8 unk4;
