@@ -180,6 +180,11 @@ namespace SamsungIpc
         SMS_STORED_MSG_STATUS,
         SMS_PARAM_COUNT,
         SMS_PARAM,
+        SND_SPKR_VOLUME_CTRL,
+        SND_MIC_MUTE_CTRL,
+        SND_AUDIO_PATH_CTRL,
+        SND_RINGBACK_TONE_CTRL,
+        SND_CLOCK_CTRL,
     }
 
     /* ******************************************************************************** */
