@@ -46,6 +46,30 @@ const char *plmn_lookup(const char *plmn)
                 case 12: return "Telfort";
                 case 16: case 20: return "T-Mobile";
             }
+        break;
+        case 208:
+            switch(mnc) {
+                case 0: return "Orange";
+                case 1: return "Orange";
+                case 2: return "Orange";
+                case 5: case 6: case 7: return "Globalstar Europe";
+                case 9: return "SFR";
+                case 10: return "SFR";
+                case 11: return "SFR";
+                case 13: return "SFR";
+                case 14: return "Free Mobile";
+                case 15: return "Free Mobile";
+                case 20: return "Bouygues";
+                case 21: return "Bouygues";
+                case 22: return "Transatel Mobile";
+                case 23: return "Virgin Mobile";
+                case 25: return "Lycamobile";
+                case 26: return "NRJ Mobile";
+                case 27: return "Afone Mobile";
+                case 88: return "Bouygues";
+                case 90: return "Association Images & Réseaux";
+            }
+        break;
     }
 
     return NULL;

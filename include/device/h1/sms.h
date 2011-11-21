@@ -1,8 +1,7 @@
 /**
  * This file is part of libsamsung-ipc.
  *
- * Copyright (C) 2010-2011 Joerie de Gram <j.de.gram@gmail.com>
- *               2011 Simon Busch <morphis@gravedo.de>
+ * Copyright (C) 2011 Paul Kocialkowski <contact@paulk.fr>
  *
  * libsamsung-ipc is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,21 +18,22 @@
  *
  */
 
-#ifndef __PWR_H__
-#define __PWR_H__
+#ifndef __DEVICE_H1_SMS_H__
+#define __DEVICE_H1_SMS_H__
 
-#define IPC_PWR_R(f)    (f & 0xff)
+#define IPC_SMS_ACK_NO_ERROR            0x0000
+#define IPC_SMS_ACK_PDA_FULL_ERROR      0x8080
+#define IPC_SMS_ACK_MALFORMED_REQ_ERROR 0x8061
+#define IPC_SMS_ACK_UNSPEC_ERROR        0x806F
 
-#define IPC_PWR_PHONE_PWR_UP                0x0101
-#define IPC_PWR_PHONE_PWR_OFF               0x0102
-#define IPC_PWR_PHONE_RESET                 0x0103
-#define IPC_PWR_BATT_STATUS                 0x0104
-#define IPC_PWR_BATT_TYPE                   0x0105
-#define IPC_PWR_BATT_COMP                   0x0106
-#define IPC_PWR_PHONE_STATE                 0x0107
+struct ipc_sms_incoming_msg {
+    unsigned char type, unk, length;
+} __attribute__((__packed__));
 
-#define IPC_PWR_PHONE_STATE_LPM             0x0001
-#define IPC_PWR_PHONE_STATE_NORMAL          0x0202
+struct ipc_sms_send_msg {
+    unsigned char hint, length;
+} __attribute__((__packed__));
+
 
 #endif
 

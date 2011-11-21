@@ -23,6 +23,8 @@
 
 #if defined(DEVICE_CRESPO)
 #include "device/crespo/sms.h"
+#elif defined(DEVICE_H1)
+#include "device/h1/sms.h"
 #endif
 
 #define IPC_SMS_SEND_MSG				0x0401
@@ -43,19 +45,12 @@
 #define IPC_SMS_PARAM_COUNT				0x0410
 #define IPC_SMS_PARAM					0x0411
 
-#define IPC_SMS_MSG_MULTIPLE		1
-#define IPC_SMS_MSG_SINGLE		2
+#define IPC_SMS_MSG_MULTIPLE        1
+#define IPC_SMS_MSG_SINGLE          2
 
-#define IPC_SMS_TYPE_POINT_TO_POINT	1
-#define IPC_SMS_TYPE_STATUS_REPORT	2
-
-struct ipc_sms_send_msg {
-    unsigned char hint, length;
-} __attribute__((__packed__));
-
-struct ipc_sms_incoming_msg {
-    unsigned char type, unk, length;
-} __attribute__((__packed__));
+#define IPC_SMS_TYPE_POINT_TO_POINT 1
+#define IPC_SMS_TYPE_STATUS_REPORT  2
+#define IPC_SMS_TYPE_OUTGOING       2
 
 void ipc_sms_send_msg(unsigned char *data, unsigned char length, int request_id);
 void ipc_sms_deliver_report(int request_id);

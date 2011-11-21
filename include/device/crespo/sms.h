@@ -21,9 +21,31 @@
 #ifndef __DEVICE_CRESPO_SMS_H__
 #define __DEVICE_CRESPO_SMS_H__
 
-#define IPC_SMS_ACK_NO_ERROR        0x0000
-#define IPC_SMS_ACK_PDA_FULL_ERROR  0x8080
-#define IPC_SMS_ACK_UNSPEC_ERROR    0x806F
+#define IPC_SMS_ACK_NO_ERROR            0x0000
+#define IPC_SMS_ACK_PDA_FULL_ERROR      0x8080
+#define IPC_SMS_ACK_MALFORMED_REQ_ERROR 0x8061
+#define IPC_SMS_ACK_UNSPEC_ERROR        0x806F
+
+struct ipc_sms_incoming_msg {
+    unsigned char msg_type;
+    unsigned char type;
+    unsigned short sim_index;
+    unsigned char msg_tpid;
+    unsigned char length;
+} __attribute__((__packed__));
+
+/*
+ * This is followed by:
+ * smsc_string (variable length, 1st byte is length)
+ * pdu (variable length)
+ */
+struct ipc_sms_send_msg {
+    unsigned char type;
+    unsigned char msg_type;
+    unsigned char unk;
+    unsigned char length;
+    unsigned char smsc_len;
+} __attribute__((__packed__));
 
 struct ipc_sms_deliv_report_msg {
     unsigned char type;
@@ -33,3 +55,5 @@ struct ipc_sms_deliv_report_msg {
 } __attribute__((__packed__));
 
 #endif
+
+// vim:ts=4:sw=4:expandtab

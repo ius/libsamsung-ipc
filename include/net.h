@@ -82,7 +82,6 @@ struct ipc_net_plmn_entry {
 
 struct ipc_net_plmn_entries {
     unsigned char num;
-    struct ipc_net_plmn_entry *data;
 };
 
 void ipc_net_regist_get(struct ipc_net_regist_get *message, int domain);
