@@ -40,8 +40,8 @@
 #include "crespo_ipc.h"
 #include "ipc_private.h"
 
-int wake_lock_fd=   -1;
-int wake_unlock_fd= -1;
+int wake_lock_fd =      -1;
+int wake_unlock_fd =    -1;
 
 int crespo_modem_bootstrap(struct ipc_client *client)
 {
@@ -339,9 +339,10 @@ int wake_lock(char *lock_name, int len)
 {
     int rc = 0;
 
-    wake_lock_fd = open("/sys/power/wake_lock", O_RDWR);
+    if(wake_lock_fd < 0)
+        wake_lock_fd = open("/sys/power/wake_lock", O_RDWR);
+
     rc = write(wake_lock_fd, lock_name, len);
-    close(wake_lock_fd);
 
     return rc;
 }
@@ -350,9 +351,10 @@ int wake_unlock(char *lock_name, int len)
 {
     int rc = 0;
 
-    wake_lock_fd = open("/sys/power/wake_unlock", O_RDWR);
-    rc = write(wake_lock_fd, lock_name, len);
-    close(wake_unlock_fd);
+    if(wake_unlock_fd < 0)
+        wake_unlock_fd = open("/sys/power/wake_unlock", O_RDWR);
+
+    rc = write(wake_unlock_fd, lock_name, len);
 
     return rc;
 }
