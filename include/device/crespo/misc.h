@@ -30,9 +30,9 @@ struct ipc_misc_me_version {
 } __attribute__((__packed__));
 
 struct ipc_misc_me_sn {
-    unsigned char unk;
+    unsigned char type; // IPC_MISC_ME_SN_SERIAL_NUM*
     unsigned char length;
-    char imei[32];
+    char data[32];
 } __attribute__((__packed__));
 
 #endif

@@ -34,6 +34,11 @@ struct ipc_message_info;
 #define IPC_MISC_ME_SN                  0x0A03
 #define IPC_MISC_TIME_INFO              0x0A07
 
+#define IPC_MISC_ME_SN_SERIAL_NUM                   0x01
+#define IPC_MISC_ME_SN_SERIAL_NUM_SERIAL            0x04
+#define IPC_MISC_ME_SN_SERIAL_NUM_MANUFACTURE_DATE  0x05
+#define IPC_MISC_ME_SN_SERIAL_NUM_BARCODE           0x06
+
 struct ipc_misc_time_info {
     unsigned char tz_valid, daylight_valid;
     unsigned char year, mon, day;
